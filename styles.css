@@ -6,7 +6,14 @@
 	box-sizing: border-box;
 }
 
-body {background:#FEFEFE;}
+body {background:#c6c9b9;}
+
+img {max-width: 150px;
+justify-items: center;}
+
+article img {
+	max-width: 300px;
+}
 
 .menu_bar {
 	display:none;
@@ -14,18 +21,18 @@ body {background:#FEFEFE;}
 
 header {
 	width: 100%;
-    background:#023859;
+    background:#025939;
 }
 
-header h1 {
- text-align: center;
- color:#fff;
- 
-}
 
+
+.logo {
+	max-width: 150px;
+	height: auto;
+}
 
 header nav {
-	background:#023859;
+	background:#025939;
 	z-index:1000;
 	max-width: 10000px;
 	width:100%;
@@ -42,7 +49,7 @@ header nav ul li {
 }
 
 header nav ul li:hover {
-	background:#E6344A;
+	background:#99b165;
 }
 
 header nav ul li a {
