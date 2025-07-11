@@ -7,7 +7,7 @@
 
 body {
   font-family: 'Segoe UI', sans-serif;
-  background-color: #f0f4f8;
+  background-color: #c6c9b9;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -24,11 +24,11 @@ body {
 
 
 .perfil {
-  border: 3px solid #023859;
+  border: 3px solid #025939;
   border-radius: 20px;
   padding: 50px;
   width: 700px;
-  background-color: #ffffff;
+  background-color: #c6c9b9;
   text-align: center;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
 }
@@ -40,7 +40,7 @@ body {
   border-radius: 50%;
   object-fit: cover;
   margin-bottom: 15px;
-  border: 3px solid #023859;
+  border: 3px solid #025939;
 }
 
 
@@ -51,7 +51,7 @@ body {
 }
 
 .gmail {
-  color: #666;
+  color: #000000;
   margin-bottom: 20px;
 }
 
@@ -73,22 +73,22 @@ body {
 }
 
 .btneditar {
-  background-color: #023859;
-  color: white;
+  background-color: #025939;
+  color: #c6c9b9;
 }
 
 .btneditar:hover {
-  background-color: #023859;
+  background-color: #025939;
 }
 
 .btncerrar {
-  background-color: #ccc;
+  background-color: #c6c9b9;
   color: #333;
 }
 
 .btncerrar:hover {
   background-color: #999;
-  color: white;
+  color: #c6c9b9;
 }
 
 .footer-curvo {
@@ -102,18 +102,18 @@ body {
 
 header {
 	width: 100%;
-    background:#023859;
+    background:#025939;
 }
 
 header h1 {
  text-align: center;
- color:#fff;
+ color:#c6c9b9;
  
 }
 
 
 header nav {
-	background:#023859;
+	background:#025939;
 	z-index:1000;
 	max-width: 10000px;
 	width:100%;
@@ -134,7 +134,7 @@ header nav ul li:hover {
 }
 
 header nav ul li a {
-	color:#fff;
+	color:#c6c9b9;
 	display:block;
 	text-decoration:none;
 	padding: 20px;
@@ -150,7 +150,7 @@ header nav ul li:hover .children {
 
 header nav ul li .children {
 	display: none;
-	background:#011826;
+	background:#025939;
 	position: absolute;
 	width: 150%;
 	z-index:1000;
