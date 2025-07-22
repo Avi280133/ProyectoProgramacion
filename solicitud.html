@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formulario de Solicitud | ServiciosPro</title>
+  <link rel="stylesheet" href="soli.css">
+</head>
+<body>
+
+  <header class="encabezado-sitio">
+    <div class="contenedor-navegacion">
+      <div class="logo-sitio">ServiciosPro</div>
+      <nav class="menu-principal">
+        <ul class="lista-navegacion">
+          <li><a href="index.html">Inicio</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Sección del formulario de solicitud -->
+  <main class="seccion-formulario-solicitud">
+    <div class="contenedor-formulario">
+      <h2 class="titulo-formulario">Solicitá tu Servicio</h2>
+      
+      <form action="#" method="POST" class="formulario-servicio">
+
+        <label for="nombre" class="etiqueta-campo">Nombre completo:</label>
+        <input type="text" id="nombre" name="nombre" class="campo-formulario" required>
+
+        <label for="email" class="etiqueta-campo">Correo electrónico:</label>
+        <input type="email" id="email" name="email" class="campo-formulario" required>
+
+        <label for="telefono" class="etiqueta-campo">Teléfono de contacto:</label>
+        <input type="tel" id="telefono" name="telefono" class="campo-formulario">
+
+        <label for="servicio" class="etiqueta-campo">Servicio que necesitás:</label>
+        <select id="servicio" name="servicio" class="campo-formulario" required>
+          <option value="">--Seleccioná--</option>
+          <option value="Soporte Técnico">Soporte Técnico</option>
+          <option value="Mantenimiento">Mantenimiento</option>
+          <option value="Consultoría">Consultoría</option>
+        </select>
+
+        <label for="descripcion" class="etiqueta-campo">Descripción del trabajo:</label>
+        <textarea id="descripcion" name="descripcion" rows="5" class="campo-formulario" required></textarea>
+
+    
+        <button type="button" class="boton-adjuntar-cv">📎 Adjuntá tu CV</button>
+
+        
+        <button type="submit" class="boton-enviar-formulario">📩 Enviar Solicitud</button>
+      </form>
+    </div>
+  </main>
+
+  
+  <footer class="pie-de-pagina">
+    <div class="contenedor-pie">
+      <p>&copy; 2025 ServiciosPro. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+</body>
+</html>
