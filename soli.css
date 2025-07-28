@@ -98,13 +98,13 @@ a {
   display: inline-block;
   margin-top: 25px;
   padding: 14px 32px;
-  background: linear-gradient(135deg, #0078d4, #005ea6);
+  background: linear-gradient(135deg, #00d412, #56a600);
   color: white;
   font-size: 16px;
   font-weight: 600;
   border: none;
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 120, 212, 0.4);
+  box-shadow: 0 4px 12px rgba(0, 212, 127, 0.4);
   transition: transform 0.2s, box-shadow 0.3s;
   cursor: pointer;
   text-align: center;
@@ -118,7 +118,7 @@ a {
 }
 
 .pie-de-pagina {
-  background-color: #0a3d62;
+  background-color: #0eb27c;
   color: white;
   padding: 20px 0;
   text-align: center;
