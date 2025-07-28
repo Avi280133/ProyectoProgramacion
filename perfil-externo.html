@@ -1,72 +1,104 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ServiciosPro | Soluciones Profesionales</title>
-  <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="publi.css">
-  <link rel="icon" type="image/png" href="img/favicon_SkillMatch.png">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juan Martínez | SkillMatch</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="prov-perfil.css">
+    <link rel="icon" type="image/png" href="img/favicon_SkillMatch.png">
 </head>
 <body>
-  <header class="main-header">
-      <div class="menu-left">
-          <a href="#" class="menu-icon">
-              <i class="fa-solid fa-magnifying-glass" style="color: #ffffff;"></i>
-          </a>
-      </div>
-      <div class="logo-center">
-          <a href="index.html"><img src="imgInicio/logo-SkillMatch-v3.png" alt="SkillMatch Logo"></a>
-      </div>
-      <div class="actions-right">
-          <i class="fa-solid fa-magnifying-glass" style="color: #ffffff;"></i>
-          <i class="fa-solid fa-plus" style="color: #ffffff;"></i>
-          <a href="perfil.html"><i class="fa-solid fa-user" style="color: #ffffff;"></i></a>
-      </div>
-  </header>
-  
-<main class="pagina-servicio">
-  <section class="tarjeta-completa">
-      <div class="bloque-servicio">
-          <h2 class="titulo-servicio">Asistencia Técnica a Domicilio</h2>
-          <ul class="lista-beneficios">
-              <li>✔ Diagnóstico en el sitio</li>
-              <li>✔ Revisión de red y periféricos</li>
-              <li>✔ Asesoramiento post-visita</li>
-            </ul>
+    <header class="main-header">
+        <div class="menu-left">
+            <a href="#" class="menu-icon">
+                <i class="fa-solid fa-bars" style="color: #ffffff;"></i>
+            </a>
         </div>
-        <div class="bloque-proveedor">
-            <img src="img/usuario-juan.jpg" alt="Foto de Juan" class="foto-proveedor" />
-            <a href="perfil-externo.html"><h3 class="nombre-proveedor">Juan Martínez</h3></a>
-            <div class="rating">★ ★ ★ </div>
-                <p class="ubicacion">Zona: Pocitos, Montevideo</p>
-                <div class="botones-accion">
-                    <a href="solicitud.html"><button class="btn-solicitar">Solicitar Servicio</button></a>
-                    <a href="mensajeria.html"><button class="btn-mensaje">Enviar Mensaje</button></a>
+
+        <div class="logo-center">
+            <a href="index.html"><img src="imgInicio/logo-SkillMatch-v3.png" alt="SkillMatch Logo"></a>
+        </div>
+
+        <div class="actions-right">
+            <i class="fa-solid fa-magnifying-glass" style="color: #ffffff;"></i>
+            <a href="publicar.html"><i class="fa-solid fa-plus" style="color: #ffffff;"></i>
+            <a href="perfil.html"><i class="fa-solid fa-user" style="color: #ffffff;"></i></a>
+        </div>
+    </header>
+
+    <section class="juan-profile">
+        <div class="container">
+            <div class="profile-header">
+                <div class="profile-image">
+                    <img src="img/usuario-juan.jpg" alt="Juan Martínez">
                 </div>
+                <h1 class="profile-name">Juan Martínez</h1>
+                <div class="rating">
+                    <span class="stars">★★★</span>
+                </div>
+                <p class="location">Zona: Pocitos, Montevideo</p>
+            </div>
+            <div class="action-buttons">
+                <button class="btn btn-primary">Calificar</button>
+                <button class="btn btn-secondary" onclick="window.location.href='mensajeria.html'">Mensajería</button>
+            </div>
+            <div class="services-section">
+            <h2 class="services-title">Servicios Disponibles</h2>
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-image">
+                        <div class="service-icon">🔧</div>
+                    </div>
+                    <div class="service-content">
+                        <h3 class="service-title">Mecánicos</h3>
+                        <p class="service-description">Servicios mecánicos especializados para todo tipo de vehículos. Reparaciones, mantenimiento y diagnósticos.</p>
+                        <button class="service-btn">Ver Más</button>
+                    </div>
+                </div>
+                <div class="service-card">
+                    <div class="service-image">
+                        <div class="service-icon">⚡</div>
+                    </div>
+                    <div class="service-content">
+                        <h3 class="service-title">Electricidad</h3>
+                        <p class="service-description">Instalaciones eléctricas, reparaciones y mantenimiento. Trabajo certificado y de calidad.</p>
+                        <button class="service-btn">Ver Más</button>
+                    </div>
+                </div>
+                <div class="service-card">
+                    <div class="service-image">
+                        <div class="service-icon">🔧</div>
+                    </div>
+                    <div class="service-content">
+                        <h3 class="service-title">Plomería</h3>
+                        <p class="service-description">Servicios de plomería completos. Reparaciones, instalaciones y emergencias 24/7.</p>
+                        <button class="service-btn">Ver Más</button>
+                    </div>
+                </div>
+                <div class="service-card">
+                    <div class="service-image">
+                        <div class="service-icon">🌱</div>
+                    </div>
+                    <div class="service-content">
+                        <h3 class="service-title">Jardinería</h3>
+                        <p class="service-description">Mantenimiento de jardines, poda, diseño paisajístico y cuidado de plantas.</p>
+                        <button class="service-btn">Ver Más</button>
+                    </div>
+                </div>
+                
             </div>
         </div>
-      <div class="detalle-contexto">
-        <p>
-          Solicitud desde una oficina en Ciudad Vieja que funciona como cowork abierto. 
-          El espacio tiene PCs, impresoras y red interna para revisar. Se valora trato profesional, discreto 
-          y capacidad de resolución sin interrumpir el trabajo de los demás usuarios. El requerimiento viene de la administradora del espacio.
-        </p>
-      </div>
-  </section>
-</main>
-
-<footer class="footer">
+    </div>
+    </section>
+    <footer class="footer">
         <div class="glow-effect"></div>
         <div class="footer-content">
-            
             <div class="footer-links">
                 <a href="#politicas">Políticas de Seguridad</a>
                 <a href="#acerca">Acerca de Nosotros</a>
                 <a href="#trabajo">Sé Parte de Nuestra Empresa</a>
             </div>
-
             <div class="social-icons">
                 <a href="#facebook" class="social-icon" title="Facebook">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">

@@ -7,7 +7,7 @@
 
 body {
   font-family: 'Segoe UI', sans-serif;
-  background-color: #c6c9b9;
+  background-color: #ffffff;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -16,6 +16,7 @@ body {
 
 .contenedor {
   flex: 1;
+  background-color: white;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -24,13 +25,13 @@ body {
 
 
 .perfil {
-  border: 3px solid #025939;
+  border: 3px solid #aec3bb;
   border-radius: 20px;
   padding: 50px;
   width: 700px;
-  background-color: #c6c9b9;
+  background-color: #fbfcfa;
   text-align: center;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 6px 16px rgba(27, 81, 16, 0.548);
 }
 
 
@@ -73,8 +74,8 @@ body {
 }
 
 .btneditar {
-  background-color: #025939;
-  color: #c6c9b9;
+  background-color: #11be7f;
+  color: #fcfdfb;
 }
 
 .btneditar:hover {
