@@ -124,3 +124,45 @@ a {
   text-align: center;
   margin-top: 60px;
 }
+
+.imagen-equipo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background-color: #f9f9fc;
+  border: 1px solid #dadde5;
+  border-radius: 12px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  font-family: 'Inter', sans-serif;
+}
+
+.imagen-equipo label {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #3c3f4a;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.imagen-equipo label:hover {
+  color: #4a60ff;
+}
+
+.imagen-equipo i {
+  font-size: 1.2rem;
+  color: #717794;
+}
+
+.imagen-equipo input[type="file"] {
+  padding: 0.5rem;
+  background-color: #fff;
+  border: 1px solid #c8ccdb;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  color: #404457;
+}
