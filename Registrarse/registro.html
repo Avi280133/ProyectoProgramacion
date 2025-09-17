@@ -6,22 +6,67 @@
     <title>Welcome to SkillMatch</title>
     <link rel="stylesheet" href="register-styles.css">
     <link rel="icon" type="image/png" href="imagenes/favicon_SkillMatch.png">
+    <link rel="conexion" href="conexion/controllerUsuario.php">
 </head>
 <body>
     <div class="signup-container">
         <img src="car-IMG/logo-SkillMatch-v3.png" alt="logoSM" class="Logo">
-        <h1 class="Subtitle">Welcome to SkillMatch</h1>
+        
+        <h1 class="form-title">¡Bienvenido a SkillMatch!</h1>
+        <form action="conexion/controllerUsuario.php" method="POST">
         <div class="form-container">
-            <form id="regForm">
-                <input type="email" id="email" name="email" placeholder="Email">
-            </form>
+                <div class="client-type">
+                    <h3>Seleccione su tipo de cliente</h3>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="cliente" name="clientType" value="cliente" checked>
+                            <label for="cliente" class="radio-button">Cliente</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="proveedor" name="clientType" value="proveedor">
+                            <label for="proveedor" class="radio-button">Proveedor</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <input type="text" id="cedula" name="cedula" placeholder="Cédula" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <input type="text" id="nombre" name="nombre" placeholder="Nombre" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="apellido" name="apellido" placeholder="Apellido" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input type="text" id="username" name="username" placeholder="Nombre de usuario" required>
+                </div>
+
+                <div class="form-group full-width">
+                    <input type="number" id="edad" name="edad" placeholder="Edad" min="18" max="120" required>
+                </div>
+
+                <div class="form-group full-width">
+                    <input type="email" id="email" name="email" placeholder="Email" required>
+                </div>
+
+                <div class="form-group full-width">
+                    <input type="password" id="contrasna" name="contrasena" placeholder="Contraseña" required>
+                </div>
+
+                <div class="form-group full-width">
+                    <input type="password" id="confirmContrasena" name="confirmContrasena" placeholder="Confirmar contraseña" required>
+                </div>
+
         </div>
-        <div class="btn">
-            <div class="buttons">
-                <a href="tipo-ClienteReg.html" class="btn-r">Cancel</a>
-                <a href="reg-v2.html" class="btn-v">Continue</a>
-            </div>
+
+        <div class="buttons">
+            <a href="#" class="btn-cancel">Cancelar</a>
+            <a href="../index.html"><button type="submit" class="btn-register" name="accion" value="registrar">Registrarse</button></a>
         </div>
     </div>
+</form>
 </body>
 </html>

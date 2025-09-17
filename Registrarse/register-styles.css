@@ -18,15 +18,14 @@ body {
 
 .signup-container {
     background: white;
-    padding: 30px;
     border-radius: 20px;
+    padding: 40px;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 400px;
+    width: 90%;
+    max-width: 450px;
     text-align: center;
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
+    position: relative;
+    z-index: 10;
 }
 
 
@@ -237,4 +236,401 @@ body {
     margin-top: 12px;
     text-align: center;
     display: block;
+}
+
+.form-container {
+            margin-bottom: 30px;
+        }
+
+        .client-type {
+            margin-bottom: 30px;
+        }
+
+        .client-type h3 {
+            color: #2c3e50;
+            font-size: 1rem;
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+.radio-group {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.radio-option {
+    position: relative;
+    cursor: pointer;
+}
+
+.form-container {
+    margin-bottom: 30px;
+}
+
+.client-type {
+    margin-bottom: 30px;
+}
+
+.client-type h3 {
+    color: #2c3e50;
+    font-size: 1rem;
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.radio-group {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.radio-option {
+    position: relative;
+    cursor: pointer;
+}
+
+.radio-option input[type="radio"] {
+    display: none;
+}
+
+.radio-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 24px;
+    background: #f8f9fa;
+    border: 2px solid #e9ecef;
+    border-radius: 50px;
+    font-weight: 600;
+    color: #6c757d;
+    transition: all 0.3s ease;
+    min-width: 120px;
+}
+
+        .radio-option input[type="radio"]:checked + .radio-button {
+            background: linear-gradient(135deg, #27AE60, #2ECC71);
+            border-color: #27AE60;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(39, 174, 96, 0.3);
+        }
+
+        .radio-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            flex: 1;
+        }
+
+        .form-group.full-width {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="date"] {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="password"]:focus,
+        input[type="date"]:focus {
+            border-color: #27AE60;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(39, 174, 96, 0.1);
+            transform: translateY(-1px);
+        }
+
+        input[type="date"] {
+            color: #6c757d;
+        }
+
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            color: #27AE60;
+            cursor: pointer;
+        }
+
+.buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.btn-cancel,
+.btn-register {
+    padding: 15px 30px;
+    border: none;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s ease;
+    min-width: 120px;
+}
+
+.btn-cancel {
+    background: #f8f9fa;
+    color: #6c757d;
+    border: 2px solid #e9ecef;
+}
+
+.btn-cancel:hover {
+    background: #e9ecef;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+
+.btn-register {
+    background: linear-gradient(135deg, #27AE60, #2ECC71);
+    color: white;
+    border: 2px solid #27AE60;
+}
+
+.btn-register:hover {
+    background: linear-gradient(135deg, #229954, #27AE60);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(39, 174, 96, 0.3);
+}
+
+.form-title {
+    color: #2c3e50;
+    font-size: 1.3rem;
+    margin-bottom: 25px;
+    font-weight: 600;
+}
+
+@media (max-width: 480px) {
+    .signup-container {
+        padding: 30px 20px;
+        margin: 20px;
+    }
+
+    .form-row {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .radio-group {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .buttons {
+        flex-direction: column;
+    }
+
+    .btn-cancel,
+    .btn-register {
+        width: 100%;
+    }
+}        .radio-option input[type="radio"] {
+    display: none;
+}
+
+.radio-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 24px;
+    background: #f8f9fa;
+    border: 2px solid #e9ecef;
+    border-radius: 50px;
+    font-weight: 600;
+    color: #6c757d;
+    transition: all 0.3s ease;
+    min-width: 120px;
+}
+
+.radio-option input[type="radio"]:checked + .radio-button {
+    background: linear-gradient(135deg, #27AE60, #2ECC71);
+    border-color: #27AE60;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(39, 174, 96, 0.3);
+}
+
+.radio-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.form-row {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.form-group {
+    flex: 1;
+}
+
+.form-group.full-width {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="date"] {
+    width: 100%;
+    padding: 15px;
+    border: 2px solid #e9ecef;
+    border-radius: 10px;
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.3s ease;
+    background: #f8f9fa;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="date"]:focus {
+    border-color: #27AE60;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(39, 174, 96, 0.1);
+    transform: translateY(-1px);
+}
+
+input[type="date"] {
+    color: #6c757d;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    color: #27AE60;
+    cursor: pointer;
+}
+
+.buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.btn-cancel,
+.btn-register {
+    padding: 15px 30px;
+    border: none;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s ease;
+    min-width: 120px;
+}
+
+.btn-cancel {
+    background: #f8f9fa;
+    color: #6c757d;
+    border: 2px solid #e9ecef;
+}
+
+.btn-cancel:hover {
+    background: #e9ecef;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+
+.btn-register {
+    background: linear-gradient(135deg, #27AE60, #2ECC71);
+    color: white;
+    border: 2px solid #27AE60;
+}
+
+.btn-register:hover {
+    background: linear-gradient(135deg, #229954, #27AE60);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(39, 174, 96, 0.3);
+}
+
+.form-title {
+    color: #2c3e50;
+    font-size: 1.3rem;
+    margin-bottom: 25px;
+    font-weight: 600;
+}
+
+@media (max-width: 480px) {
+    .signup-container {
+        padding: 30px 20px;
+        margin: 20px;
+    }
+
+    .form-row {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .radio-group {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .buttons {
+        flex-direction: column;
+    }
+
+    .btn-cancel,
+    .btn-register {
+        width: 100%;
+    }
+}
+
+/* Espacio entre Cédula y form-row */
+#cedula {
+    margin-bottom: 20px;
+}
+
+/* Espacio entre Nombre de usuario y Fecha de nacimiento */
+#username {
+    margin-bottom: 20px;
+}
+
+/* Estilo para el campo de edad */
+#edad {
+    width: 100%;
+    font-family: 'Montserrat', Arial, sans-serif;
+    font-size: 1em;
+    padding: 10px 14px;
+    border-radius: 6px;
+    border: 1.5px solid #e0e0e0;
+    background: #f8f9fa;
+    margin-bottom: 18px;
+    transition: border 0.2s;
+    outline: none;
+    color: #333;
+}
+
+#edad:focus {
+    border-color: #28a745;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1);
 }

@@ -41,7 +41,7 @@ function login() {
 
 function register() {
     setUserLoggedIn();
-    window.location.href = 'Registrarse/tipo-ClienteReg.html';
+    window.location.href = 'Registrarse/registro.html';
     hideModal();
 }
 
