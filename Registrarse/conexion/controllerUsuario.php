@@ -7,7 +7,7 @@ echo "</pre>";
 require_once('modelUsuario.php');  // Incluir el modelo Usuario
 require_once('ClaseConexion.php'); // Incluir la clase de conexión
 // Registrar Usuario
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['accion'] === 'registrar') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Comprobar si se han recibido los datos necesarios para el registro
     if (isset($_POST['cedula']) && !empty($_POST['cedula']) &&
         isset($_POST['nombre']) && !empty($_POST['nombre']) &&
