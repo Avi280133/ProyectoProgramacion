@@ -32,9 +32,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['accion'] === 'registrar') {
         // Registrar el usuario en la base de datos
         $resultado = $usuario->registrar();
 
-        if ($resultado > 0) {
-            Header('Location: ../index.html');  // Redirigir al index si el registro fue exitoso
-        }
+       // if ($resultado > 0) {
+         //   Header('Location: ../index.html');  // Redirigir al index si el registro fue exitoso
+       // }
     }
 }
 
