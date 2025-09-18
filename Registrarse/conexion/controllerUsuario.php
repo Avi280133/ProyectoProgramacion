@@ -77,19 +77,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cedula']) && !empty($
 }
 
 // Eliminar Usuario
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cedula']) && !empty($_POST['cedula'])) {
+//if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cedula']) && !empty($_POST['cedula'])) {
     // Obtener la cédula del formulario para eliminar
-    $cedula = $_POST['cedula'];
+ //   $cedula = $_POST['cedula'];
 
     // Llamar al método eliminar
-    $resultado = Usuario::eliminar($cedula);
+ //   $resultado = Usuario::eliminar($cedula);
 
-    if ($resultado > 0) {
-        Header('Location: index.html');  // Redirigir al index si la eliminación fue exitosa
-    } else {
-        echo "Error al eliminar el usuario.";
-    }
-}
+  //  if ($resultado > 0) {
+  //      Header('Location: index.html');  // Redirigir al index si la eliminación fue exitosa
+   // } else {
+  //      echo "Error al eliminar el usuario.";
+   // }
+//}
 
 // Buscar Usuario por Cédula
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['cedula']) && !empty($_GET['cedula'])) {
