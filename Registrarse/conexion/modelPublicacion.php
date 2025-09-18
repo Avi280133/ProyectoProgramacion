@@ -1,0 +1,30 @@
+<?php
+require_once('ClaseConexion.php');
+
+class Servicio {
+    private $idservicio,$titulo,$ubicacion,$precio,$descripcion;
+
+    public function __construct($idservicio,$titulo,$ubicacion,$precio,$descripcion){
+        $this->idservicio=$idservicio; $this->titulo=$titulo; $this->ubicacion=$ubicacion; $this->precio=$precio;
+        $this->descripcion=$descripcion;
+    }
+    public function getIdServicio(){return $this->idservicio;} 
+    public function getTitulo(){return $this->titulo;}
+    public function getUbicacion(){return $this->ubicacion;} 
+    public function getPrecio(){return $this->precio;}
+    public function getDescripcion(){return $this->descripcion;} 
+
+    public function setTitulo($v){$this->titulo=$v;} 
+    public function setUbicacion($v){$this->ubicacion=$v;}
+    public function setPrecio($v){$this->precio=$v;}
+    public function setDescrpcion($v){$this->descripcion=$v;}
+    
+    public function publicarServicio(){
+        $cx=(new ClaseConexion())->getConexion();
+        $sql="INSERT INTO servicio(titulo,ubicacion,precio,descripcion)
+              VALUES(?,?,?,?)";
+        $st=$cx->prepare($sql);
+        $st->bind_param("ssis",$this->titulo,$this->ubicacion,$this->precio,$this->descripcion);
+        $st->execute(); $n=$st->affected_rows; $cx->close(); return $n;
+    }
+}
