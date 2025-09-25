@@ -24,7 +24,22 @@ class Servicio {
         $sql="INSERT INTO servicio(titulo,ubicacion,precio,descripcion)
               VALUES(?,?,?,?)";
         $st=$cx->prepare($sql);
-        $st->bind_param("ssis",$this->titulo,$this->ubicacion,$this->precio,$this->descripcion);
+        $st->bind_param("ssds",$this->titulo,$this->ubicacion,$this->precio,$this->descripcion);
         $st->execute(); $n=$st->affected_rows; $cx->close(); return $n;
     }
+
+
+    public static function buscarPorTitulo($titulo) {
+    $cx = (new ClaseConexion())->getConexion();
+    $sql = "SELECT * FROM servicio WHERE titulo LIKE ?";
+    $st = $cx->prepare($sql);
+    $likeTitulo = "%$titulo%";
+    $st->bind_param("s", $likeTitulo);
+    $st->execute();
+    $result = $st->get_result();
+    $servicios = $result->fetch_all(MYSQLI_ASSOC);
+    $cx->close();
+    return $servicios;
 }
+}
+

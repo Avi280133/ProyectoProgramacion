@@ -113,5 +113,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['cedula']) && !empty($_G
     } else {
         echo "Usuario no encontrado.";
     }
+
+// Iniciar Sesión Usuario
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Comprobar si se han recibido los datos necesarios para el registro
+    if (
+        isset($_POST['email']) && !empty($_POST['email']) &&
+        isset($_POST['contrasena']) && !empty($_POST['contrasena'])) {
+
+        // Obtener los valores del formulario
+       
+        $email = $_POST['email'];
+        $contrasena = $_POST['contrasena'];
+        
+        // Crear una nueva instancia de Usuario
+       $resultados = Servicio::login($email, $contrasena);
+       // if ($resultado > 0) {
+         //   Header('Location: ../index.html');  // Redirigir al index si el registro fue exitoso
+       // }
+    }
+}
+
 }
 ?>

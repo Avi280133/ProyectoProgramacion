@@ -6,7 +6,7 @@
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-image: url(car-IMG/2819346192asc.jpg);
+    background-image: url(Registrarse/car-IMG/2819346192asc.jpg);
     background-size: cover;
     min-height: 100vh;
     display: flex;
@@ -82,4 +82,9 @@ button:hover {
     border-radius: 4px;
     font-size: 16px;
     box-sizing: border-box;
+}
+
+#email,
+#pwd {
+    margin-bottom: 18px;
 }

@@ -1,12 +1,12 @@
 <?php
-//ControllerUsuario.php
+//ControllerPublicacion.php
 echo "<pre>Datos recibidos:\n";
 print_r($_POST);
 echo "</pre>";
 
 require_once('modelPublicacion.php');  // Incluir el modelo Usuario
 require_once('ClaseConexion.php'); // Incluir la clase de conexión
-// Registrar Usuario
+// Registrar Publicacion
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Comprobar si se han recibido los datos necesarios para el registro
     if  (isset($_POST['titulo']) && !empty($_POST['titulo']) &&
@@ -30,4 +30,13 @@ echo "entro a publicar";
          //   Header('Location: ../index.html');  // Redirigir al index si el registro fue exitoso
        // }
     }
+}
+
+
+// Registrar Publicacion
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['titulo']) && !empty($_POST['titulo'])) {
+    $titulo = $_POST['titulo'];
+    $resultados = Servicio::buscarPorTitulo($titulo);
+    echo "entro a buscar";
+    print_r($resultados); // Muestra los resultados
 }
