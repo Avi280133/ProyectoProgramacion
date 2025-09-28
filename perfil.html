@@ -7,48 +7,117 @@
    <link rel="stylesheet" href="styles.css">
    <link rel="icon" type="image/png" href="img/favicon_SkillMatch.png">
   <link rel="stylesheet" href="perfil.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
-     <header class="main-header">
+    <header class="main-header">
         <div class="menu-left">
             <a href="#" class="menu-icon">
                 <i class="fa-solid fa-bars" style="color: #ffffff;"></i>
             </a>
         </div>
-
+        
         <div class="logo-center">
             <a href="index.html"><img src="imgInicio/logo-SkillMatch-v3.png" alt="SkillMatch Logo"></a>
         </div>
-
+        
         <div class="actions-right">
             <i class="fa-solid fa-magnifying-glass" style="color: #ffffff;"></i>
             <a href="publicar.html"><i class="fa-solid fa-plus" style="color: #ffffff;"></i>
-            <a href="perfil.html"><i class="fa-solid fa-user" style="color: #ffffff;"></i></a>
-        </div>
+                <a href="perfil.html"><i class="fa-solid fa-user" style="color: #ffffff;"></i></a>
+            </div>
     </header>
 
 
-  <div class="contenedor">
-    <div class="perfil">
-      <img src="mujercita.jpeg" alt="Foto de perfil" class="redonda" />
-      <h2 class="nombre-usuario">Alexandra Gim</h2>
-      <p class="gmail">alexandraG@gmail.com</p>
-      <p>Programadora</p>
-      <p>Trabajo responsable con 3 años de experiencia</p>
-      <br>
+    <div class="contenedor">
+        <div class="perfil">
+            <img src="mujercita.jpeg" alt="Foto de perfil" class="redonda" />
+            <h2 class="nombre-usuario">Alexandra Gim</h2>
+            <p class="gmail">alexandraG@gmail.com</p>
+            <p>Programadora</p>
+            <p>Trabajo responsable con 3 años de experiencia</p>
+            <br>
+            
+            <div class="botones">
+                <button class="btneditar" >Editar perfil</button>
+                <a href="registro.html" class="btncerrar">Cerrar Sesion</a>
+            </div>
+    </div>
+</div>
 
-      <div class="botones">
-        <button class="btneditar">Editar perfil</button>
-        <a href="registro.html" class="btncerrar">Cerrar Sesion</a>
-      </div>
+<div class="modal-overlay-edit" id="editProfileModalOverlay">
+    <div class="modal-edit">
+        <div class="modal-header-edit">
+            <h2 class="modal-title-edit">Editar Perfil</h2>
+            <button class="close-btn-edit" id="closeModalBtn">×</button>
+        </div>
+
+        <div class="modal-content-edit">
+            <div class="form-section-edit">
+                <div class="form-group-edit">
+                    <label class="form-label-edit">Localidad</label>
+                    <select class="form-select-edit" id="locationSelect">
+                        <option>Ciudades</option>
+                        <option>Montevideo</option>
+                        <option>Salto</option>
+                        <option>Paysandú</option>
+                        <option>Las Piedras</option>
+                        <option>Rivera</option>
+                        <option>Maldonado</option>
+                        <option>Tacuarembó</option>
+                        <option>Melo</option>
+                        <option>Mercedes</option>
+                        <option>Artigas</option>
+                        <option>Minas</option>
+                        <option>San José de Mayo</option>
+                        <option>Durazno</option>
+                        <option>Florida</option>
+                        <option>Treinta y Tres</option>
+                        <option>Rocha</option>
+                        <option>Colonia del Sacramento</option>
+                        <option>Fray Bentos</option>
+                        <option>Canelones</option>
+                        <option>Young</option>
+                        <option>Carmelo</option>
+                        <option>Trinidad</option>
+                    </select>
+                </div>
+
+                <div class="form-group-edit">
+                    <label class="form-label-edit">Habilidades</label>
+                    <textarea class="form-textarea-edit" id="skillsTextarea" placeholder="Describe tus principales habilidades y competencias..."></textarea>
+                </div>
+
+                <div class="form-group-edit">
+                    <label class="form-label-edit">Experiencia</label>
+                    <textarea class="form-textarea-edit" id="experienceTextarea" placeholder="Cuéntanos sobre tu experiencia profesional..."></textarea>
+                </div>
+            </div>
+
+            <div class="profile-section-edit">
+                <div class="profile-photo-container-edit" id="photoContainer">
+                    <div class="upload-overlay-edit">
+                        <i class="fa-solid fa-image upload-icon-edit"></i>
+                    </div>
+                    <input type="file" id="photoInput" accept="image/*" style="display: none;">
+                </div>
+
+                <div class="profile-inputs-edit">
+                    <input type="text" class="form-input-edit" id="nameInput" placeholder="Alexandra Gim" value="Alexandra Gim" disabled>
+                    <input type="text" class="form-input-edit" id="usernameInput" placeholder="username" value="username">
+                </div>
+
+                <button class="save-btn-edit" id="saveBtn">Guardar</button>
+            </div>
+        </div>
     </div>
   </div>
 
 <footer class="footer">
-        <div class="glow-effect"></div>
-        <div class="footer-content">
-            <div class="footer-links">
-                <a href="#politicas">Políticas de Seguridad</a>
+    <div class="glow-effect"></div>
+    <div class="footer-content">
+        <div class="footer-links">
+            <a href="#politicas">Políticas de Seguridad</a>
                 <a href="#acerca">Acerca de Nosotros</a>
                 <a href="#trabajo">Sé Parte de Nuestra Empresa</a>
             </div>
@@ -81,5 +150,13 @@
             </div>
         </div>
     </footer>
+<script>
+  document.querySelector('.btneditar').onclick = function() {
+    document.getElementById('editProfileModalOverlay').classList.add('active');
+  };
+  document.getElementById('closeModalBtn').onclick = function() {
+    document.getElementById('editProfileModalOverlay').classList.remove('active');
+  };
+</script>
 </body>
 </html>

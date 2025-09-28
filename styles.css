@@ -90,47 +90,150 @@ img {
     transition: transform 0.2s ease;
 }
 
+/* Contenedor del formulario de búsqueda */
 .search-container {
+    position: relative;
     display: flex;
     align-items: center;
-    position: relative;
+    max-width: 400px;
+    margin: 0;
+    height: 45px;
 }
 
-.search-icon {
-    font-size: 18px;
-    color: white;
-    cursor: pointer;
-    transition: transform 0.3s ease;
-    z-index: 2;
+.search-container form {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 100%;
 }
 
 .search-input {
     width: 0;
-    opacity: 0;
-    padding: 6px 12px;
-    border: none;
-    border-radius: 6px;
+    height: 35px;
+    padding: 8px 45px 8px 15px; /* Padding derecho para la lupa */
+    border: 2px solid #22c55e;
+    border-radius: 20px;
+    background-color: #ffffff;
+    color: #333;
     font-size: 14px;
-    transition: width 0.4s ease, opacity 0.4s ease;
-    margin-left: 8px;
-    background-color: white;
-    color: #0eb27c;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    outline: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 10px rgba(34, 197, 94, 0.1);
+    opacity: 0;
+    visibility: hidden;
+    position: absolute;
+    right: 0px; /* Alineado con la lupa */
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
 }
 
-.search-container.active .search-input {
-    width: 160px;
+/* Estado activo cuando se pasa el mouse por encima del contenedor */
+.search-container:hover .search-input {
+    width: 200px; /* Reducido para no cubrir otros elementos */
     opacity: 1;
+    visibility: visible;
+    border-color: #16a34a;
+    box-shadow: 0 4px 20px rgba(34, 197, 94, 0.2);
+    background-color: #fefefe;
 }
 
-
-.actions-right i.fa-magnifying-glass:hover, i.fa-plus:hover, i.fa-user:hover {
-    transform: scale(1.1);
+/* También mantener el comportamiento de focus para mejor UX */
+.search-input:focus {
+    width: 200px;
+    opacity: 1;
+    visibility: visible;
+    border-color: #16a34a;
+    box-shadow: 0 4px 20px rgba(34, 197, 94, 0.2);
+    background-color: #fefefe;
 }
 
+/* Cambiar el color de la lupa cuando el input está activo */
+.search-container:hover .search-icon i,
+.search-input:focus ~ .search-icon i {
+    color: #22c55e;
+}
 
+.search-input::placeholder {
+    color: #9ca3af;
+    font-weight: 400;
+}
 
-       
+.search-icon {
+    background: #0eb27c; /* Círculo de color #0eb27c */
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    /* Estilos del círculo - centrado perfectamente */
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    padding: 0;
+    margin: 0 8px;
+    outline: none;
+    position: relative;
+    /* Forzar centrado absoluto */
+    box-sizing: border-box;
+}
+
+.search-icon:hover {
+    background: #0eb27c;
+}
+
+.search-icon:active {
+    background: #0eb27c;
+}
+
+.search-icon:focus {
+    outline: none;
+    background: #0eb27c;
+}
+
+.search-icon i {
+    font-size: 16px;
+    color: white;
+    cursor: pointer;
+    pointer-events: none;
+    /* Centrado perfecto */
+    line-height: 0;
+    vertical-align: middle;
+    display: inline-block;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Responsive para móviles */
+@media (max-width: 768px) {
+    .search-container {
+        max-width: 200px;
+    }
+    
+    .search-container:hover .search-input,
+    .search-input:focus {
+        width: 150px;
+        right: 35px;
+    }
+}
+
+/* Estilos adicionales para que no interfiera con otros botones */
+.search-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    max-width: 400px;
+    margin: 0;
+    height: 45px;
+    z-index: 10; /* Asegurar que esté por encima pero no cubra */
+}
+
 .carrusel {
     width: 100%;
     padding: 60px 20px;
