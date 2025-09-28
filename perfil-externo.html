@@ -51,7 +51,7 @@
                             <i class="fa-solid fa-star"></i>
                             Calificar
                         </button>
-                        <button class="btn-prof btn-secondary-prof" onclick="window.location.href='mensajeria.html'">
+                        <button class="btn-prof btn-secondary-prof">
                             <i class="fa-solid fa-message"></i>
                             Mensajería
                         </button>
@@ -106,7 +106,6 @@
         </div>
     </section>
 
-    <!-- Modal de Calificación -->
     <div id="ratingModal-prof" class="modal-prof">
         <div class="modal-content-prof">
             <span class="close-prof">&times;</span>
@@ -131,6 +130,8 @@
             </div>
         </div>
     </div>
+    <!-- Contenedor para el modal de mensajería -->
+    <div id="chatModalContainer"></div>
     <footer class="footer">
         <div class="glow-effect"></div>
         <div class="footer-content">
@@ -169,7 +170,7 @@
         </div>
     </footer>
     <script>
-        // Variables para el modal y calificación
+  
         const modalProf = document.getElementById('ratingModal-prof');
         const openModalBtnProf = document.getElementById('openModal-prof');
         const closeModalBtnProf = document.querySelector('.close-prof');
@@ -178,13 +179,13 @@
         const starsProf = document.querySelectorAll('.star-prof');
         let selectedRatingProf = 0;
 
-        // Abrir modal
+    
         openModalBtnProf.addEventListener('click', () => {
             modalProf.style.display = 'block';
             document.body.style.overflow = 'hidden';
         });
 
-        // Cerrar modal
+ 
         function closeModalProf() {
             modalProf.style.display = 'none';
             document.body.style.overflow = 'auto';
@@ -194,14 +195,14 @@
         closeModalBtnProf.addEventListener('click', closeModalProf);
         cancelBtnProf.addEventListener('click', closeModalProf);
 
-        // Cerrar modal al hacer clic fuera de él
+   
         window.addEventListener('click', (event) => {
             if (event.target === modalProf) {
                 closeModalProf();
             }
         });
 
-        // Manejo de calificación por estrellas
+     
         starsProf.forEach((starProf, indexProf) => {
             starProf.addEventListener('mouseenter', () => {
                 highlightStarsProf(indexProf + 1);
@@ -227,7 +228,7 @@
             });
         }
 
-        // Enviar calificación
+       
         submitBtnProf.addEventListener('click', () => {
             if (selectedRatingProf === 0) {
                 alert('Por favor, selecciona una calificación');
@@ -236,26 +237,26 @@
 
             const commentProf = document.getElementById('comment-prof').value;
             
-            // Aquí puedes enviar la calificación al servidor
+        
             console.log('Calificación enviada:', {
                 rating: selectedRatingProf,
                 comment: commentProf
             });
 
-            // Mostrar mensaje de éxito
+         
             alert(`¡Gracias por tu calificación de ${selectedRatingProf} estrella${selectedRatingProf > 1 ? 's' : ''}!`);
             
             closeModalProf();
         });
 
-        // Resetear modal
+        
         function resetModalProf() {
             selectedRatingProf = 0;
             highlightStarsProf(0);
             document.getElementById('comment-prof').value = '';
         }
 
-        // Animación de entrada para las tarjetas de servicios
+      
         const observerOptionsProf = {
             threshold: 0.1,
             rootMargin: '0px 0px -50px 0px'
@@ -272,7 +273,7 @@
             });
         }, observerOptionsProf);
 
-        // Observar las tarjetas de servicios
+       
         document.addEventListener('DOMContentLoaded', () => {
             const serviceCardsProf = document.querySelectorAll('.service-card-prof');
             serviceCardsProf.forEach((cardProf) => {
@@ -283,7 +284,6 @@
             });
         });
 
-        // Efecto de partículas en el fondo con colores suaves
         function createParticleProf() {
             const particleProf = document.createElement('div');
             particleProf.style.position = 'absolute';
@@ -312,10 +312,8 @@
             };
         }
 
-        // Crear partículas periódicamente
         setInterval(createParticleProf, 3000);
 
-        // Crear partículas de colores más suaves para el nuevo fondo
         function createColorfulParticleProf() {
             const particleProf = document.createElement('div');
             const colorsProf = ['rgba(14, 178, 124, 0.4)', 'rgba(52, 211, 153, 0.3)', 'rgba(16, 185, 129, 0.3)'];
@@ -348,10 +346,8 @@
             };
         }
 
-        // Crear partículas coloridas periódicamente
         setInterval(createColorfulParticleProf, 2000);
 
-        // Efecto hover para la imagen de perfil
         const profileImageProf = document.querySelector('.profile-image-prof');
         profileImageProf.addEventListener('mouseenter', () => {
             profileImageProf.style.transform = 'scale(1.05) rotate(2deg)';
@@ -359,6 +355,39 @@
 
         profileImageProf.addEventListener('mouseleave', () => {
             profileImageProf.style.transform = 'scale(1) rotate(0deg)';
+        });
+
+        let chatModalLoaded = false;
+        function loadChatModal() {
+            if (chatModalLoaded) {
+                openChat();
+                return;
+            }
+            fetch('mensajeria-modal.html')
+                .then(res => res.text())
+                .then(html => {
+                    document.getElementById('chatModalContainer').innerHTML = html;
+                    const script = document.createElement('script');
+                    script.src = 'mensajeria-modal.js';
+                    script.onload = () => {
+                        chatModalLoaded = true;
+                       
+                        setTimeout(() => {
+                            openChat();
+                        }, 0);
+                    };
+                    document.body.appendChild(script);
+                });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const btnMensajeria = document.querySelector('.btn-secondary-prof');
+            if (btnMensajeria) {
+                btnMensajeria.onclick = function(e) {
+                    e.preventDefault();
+                    loadChatModal();
+                };
+            }
         });
     </script>
 </body>

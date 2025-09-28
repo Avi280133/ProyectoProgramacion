@@ -221,7 +221,6 @@
     box-shadow: 0 12px 32px rgba(74, 85, 104, 0.4);
 }
 
-/* Services Section */
 .services-section-prof {
     background: rgba(255, 255, 255, 0.9);
     backdrop-filter: blur(20px);
@@ -530,4 +529,4 @@
     background: #e5e7eb;
 }
 
-/* Footer y header se mantienen igual */
+
