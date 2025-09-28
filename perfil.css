@@ -564,6 +564,16 @@ header nav ul li .caret {
     transform: scale(1.05);
     box-shadow: 0 8px 25px rgba(38, 224, 163, 0.3);
 }
+.profile-photo-container-edit input[type="file"] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 2;
+}
 .upload-overlay-edit {
     position: absolute;
     top: 0;
@@ -604,12 +614,37 @@ header nav ul li .caret {
     text-transform: uppercase;
     letter-spacing: 1px;
     width: 100%;
+    margin-bottom: 0px; /* Agrega un pequeño margen abajo */
 }
 .save-btn-edit:hover {
     transform: translateY(-2px);
     box-shadow: 0 10px 20px rgba(38, 224, 163, 0.4);
 }
 .save-btn-edit:active {
+    transform: translateY(0);
+}
+.delete-btn-edit {
+    background: linear-gradient(135deg, #e6344a 0%, #b8001c 100%);
+    color: #f9fffd;
+    border: none;
+    padding: 15px 40px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    width: 100%;
+    margin-top: 1px; /* Reduce el margen superior */
+}
+
+.delete-btn-edit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(230, 52, 74, 0.4);
+}
+
+.delete-btn-edit:active {
     transform: translateY(0);
 }
 
@@ -642,17 +677,17 @@ header nav ul li .caret {
         padding: 25px;
         width: 95%;
     }
-    .modal-content-edit {
+    .modal-content_edit {
         grid-template-columns: 1fr;
         gap: 25px;
     }
-    .modal-title-edit {
+    .modal-title_edit {
         font-size: 24px;
     }
-    .profile-section-edit {
+    .profile-section_edit {
         order: -1;
     }
-    .profile-photo-container-edit {
+    .profile-photo-container_edit {
         width: 150px;
         height: 150px;
     }
