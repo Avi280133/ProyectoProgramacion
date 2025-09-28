@@ -57,6 +57,7 @@
   </section>
 </main>
 
+<div id="chatModalContainer"></div>
 <footer class="footer">
         <div class="glow-effect"></div>
         <div class="footer-content">
@@ -96,5 +97,39 @@
             </div>
         </div>
     </footer>
+    <script>
+        let chatModalLoaded = false;
+        function loadChatModal() {
+            if (chatModalLoaded) {
+                openChat();
+                return;
+            }
+            fetch('mensajeria-modal.html')
+                .then(res => res.text())
+                .then(html => {
+                    document.getElementById('chatModalContainer').innerHTML = html;
+                    const script = document.createElement('script');
+                    script.src = 'mensajeria-modal.js';
+                    script.onload = () => {
+                        chatModalLoaded = true;
+                       
+                        setTimeout(() => {
+                            openChat();
+                        }, 0);
+                    };
+                    document.body.appendChild(script);
+                });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const btnMensajeria = document.querySelector('.btn-mensaje');
+            if (btnMensajeria) {
+                btnMensajeria.onclick = function(e) {
+                    e.preventDefault();
+                    loadChatModal();
+                };
+            }
+        });
+    </script>
 </body>
 </html>
