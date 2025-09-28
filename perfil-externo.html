@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="prov-perfil.css">
     <link rel="icon" type="image/png" href="img/favicon_SkillMatch.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
     <header class="main-header">
@@ -24,6 +25,14 @@
             <a href="perfil.html"><i class="fa-solid fa-user" style="color: #ffffff;"></i></a>
         </div>
     </header>
+    <script>
+        const searchIcon = document.querySelector('.search-icon');
+        const searchContainer = document.querySelector('.search-container');
+
+        searchIcon.addEventListener('click', () => {
+            searchContainer.classList.toggle('active');
+        });
+    </script>
 
     <section class="juan-profile-prof">
         <div class="container-prof">
