@@ -52,4 +52,27 @@ class Usuario {
         $st=$cx->prepare("DELETE FROM usuario WHERE cedula=?"); $st->bind_param("s",$cedula);
         $st->execute(); $n=$st->affected_rows; $cx->close(); return $n;
     }
+
+
+    public function login($email, $contrasena) {
+    // Conexión
+    $cx = (new ClaseConexion())->getConexion();
+ 
+    // Consulta SQL: buscamos el usuario con ese email y contraseña
+    $sql = "SELECT cedula, nombre, apellido, username, email, edad 
+            FROM usuario 
+            WHERE email = ? AND contrasena = ? ";
+
+    $st = $cx->prepare($sql);
+    $st->bind_param("ss", $this->email,$this->contrasenas);
+   $st->execute(); $n=$st->affected_rows; $cx->close(); return $n;
+
+    // Obtenemos resultados
+    //$res = $st->get_result();
+   // $usuario = $res->fetch_assoc();
+
+    // Devolvemos el usuario si existe, si no, null
+    return $usuario ? $usuario : null;
+}
+
 }
