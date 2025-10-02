@@ -159,5 +159,32 @@
     document.getElementById('editProfileModalOverlay').classList.remove('active');
   };
 </script>
+
+
+<script>
+(function(){
+  // Lee el fragmento de la URL después de #
+  const hash = window.location.hash.substring(1); // quita el "#"
+  const params = new URLSearchParams(hash);
+  const d = params.get('d');
+  if (!d) return;
+
+  try {
+    // Decodificar lo que mandó PHP con urlencode
+    const obj = JSON.parse(decodeURIComponent(d));
+
+    // Actualizar el DOM
+    const nombreEl = document.querySelector('.nombre-usuario');
+    const correoEl = document.querySelector('.gmail');
+
+    if (nombreEl) nombreEl.textContent = obj.nombre || '';
+    if (correoEl) correoEl.textContent = obj.email || '';
+  } catch (e) {
+    console.error("Payload inválido", e);
+  }
+})();
+</script>
+
+
 </body>
 </html>

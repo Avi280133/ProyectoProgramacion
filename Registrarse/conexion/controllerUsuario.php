@@ -121,28 +121,30 @@ switch ($action) {
         }
         break;
 
-   case 'login':
+  case 'login':
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        if (isset($_POST['email']) && !empty(trim($_POST['email'])) && 
-            isset($_POST['contrasena']) && !empty(trim($_POST['contrasena']))) {
-            $email = trim($_POST['email']);
-            $contrasena = trim($_POST['contrasena']);
+        $email = trim($_POST['email'] ?? '');
+        $contrasena = trim($_POST['contrasena'] ?? '');
 
-           $usuario = new Usuario('','','','','','','','','','');
-           $datos = $usuario->login($email, $contrasena);
+        $modelo = new Usuario('', '', '', '', '', '', '', '', '', '');
+        $datos = $modelo->login($email, $contrasena);
 
+        if ($datos) {
+            $payload = [
+                'cedula'   => $datos['cedula'],
+                'nombre'   => trim($datos['nombre'].' '.$datos['apellido']),
+                'email'    => $datos['email'],
+                'username' => $datos['username'],
+                'edad'     => $datos['edad']
+            ];
 
+            $json = json_encode($payload, JSON_UNESCAPED_UNICODE);
+            $encoded = urlencode($json);  // o base64 si prefieres
 
-
-           if ($usuario) {
-    echo "✅ Login correcto. Bienvenido " . $usuario->getNombre();
-} else {
-    echo "❌ Usuario o contraseña no encontrados.";
-}
-
-
+            header("Location: /proyectoprogramacion/perfil.html#d=$encoded");
+            exit;
         } else {
-            echo "⚠️ Faltan email o contraseña para iniciar sesión.";
+            echo "❌ Usuario o contraseña incorrectos.";
         }
     }
     break;

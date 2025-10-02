@@ -54,25 +54,30 @@ class Usuario {
     }
 
 
-    public function login($email, $contrasena) {
-    // Conexión
+  public function login($email, $contrasena) {
     $cx = (new ClaseConexion())->getConexion();
- 
-    // Consulta SQL: buscamos el usuario con ese email y contraseña
+
     $sql = "SELECT cedula, nombre, apellido, username, email, edad 
             FROM usuario 
-            WHERE email = ? AND contrasena = ? ";
+            WHERE email = ? AND contrasena = ?";
 
     $st = $cx->prepare($sql);
-    $st->bind_param("ss", $this->email,$this->contrasenas);
-   $st->execute(); $n=$st->affected_rows; $cx->close(); return $n;
+    if (!$st) {
+        die("Error en prepare: " . $cx->error);
+    }
 
-    // Obtenemos resultados
-    //$res = $st->get_result();
-   // $usuario = $res->fetch_assoc();
+    // Usar los parámetros recibidos, no las propiedades vacías
+    $st->bind_param("ss", $email, $contrasena);
+    $st->execute();
 
-    // Devolvemos el usuario si existe, si no, null
+    $res = $st->get_result();
+    $usuario = $res->fetch_assoc();
+
+    $st->close();
+    $cx->close();
+
     return $usuario ? $usuario : null;
 }
 
 }
+
