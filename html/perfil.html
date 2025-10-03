@@ -4,9 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Perfil de Usuario</title>
-   <link rel="stylesheet" href="styles.css">
-   <link rel="icon" type="image/png" href="img/favicon_SkillMatch.png">
-  <link rel="stylesheet" href="perfil.css" />
+   <link rel="stylesheet" href="../css/styles.css">
+   <link rel="icon" type="image/png" href="../img/favicon_SkillMatch.png">
+  <link rel="stylesheet" href="../css/perfil.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
@@ -18,7 +18,7 @@
         </div>
         
         <div class="logo-center">
-            <a href="index.html"><img src="imgInicio/logo-SkillMatch-v3.png" alt="SkillMatch Logo"></a>
+            <a href="../index.html"><img src="../img/logo-SkillMatch-v3.png" alt="SkillMatch Logo"></a>
         </div>
         
         <div class="actions-right">
@@ -31,7 +31,7 @@
 
     <div class="contenedor">
         <div class="perfil">
-            <img src="mujercita.jpeg" alt="Foto de perfil" class="redonda" />
+            <img src="../img/mujercita.jpeg" alt="Foto de perfil" class="redonda" />
             <h2 class="nombre-usuario">Alexandra Gim</h2>
             <p class="gmail">alexandraG@gmail.com</p>
             <p>Programadora</p>
