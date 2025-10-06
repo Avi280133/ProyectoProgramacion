@@ -26,6 +26,7 @@ class Usuario {
         $sql="INSERT INTO usuario(cedula,nombre,apellido,username,email,contrasena,edad)
               VALUES(?,?,?,?,?,?,?)";
         $st=$cx->prepare($sql);
+
         $st->bind_param("ssssssi",$this->cedula,$this->nombre,$this->apellido,$this->username,
             $this->email,$this->contrasena,$this->edad);
         $st->execute(); $n=$st->affected_rows; $cx->close(); return $n;
