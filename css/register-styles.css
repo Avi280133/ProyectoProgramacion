@@ -6,7 +6,7 @@
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-image: url(Registrarse/imagenes/2819346192asc.jpg);
+    background-image: url(../img/2819346192asc.jpg);
     background-size: cover;
     min-height: 100vh;
     display: flex;
@@ -61,58 +61,49 @@ body {
     box-sizing: border-box;
 }
 
-.btn {
-    margin-top: 2px;
-}
-
-.buttons {
-    display: flex;
-    gap: 10px;
-    flex-direction: column;
-}
-
-.btn-v {
-    background: linear-gradient(135deg, #4CAF50 0%, #268c2b 100%);
-    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
-    color: white;
-    padding: 12px 30px;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    cursor: pointer;
+.btn-register {
     width: 100%;
-    transition: all 0.3s ease;
-    font-weight: 500;
-    text-decoration: none;
-    display: inline-block;
-}
-
-.btn-r {
-    background: linear-gradient(135deg, #a92323 0%, #5c1414 100%);
-    box-shadow: 0 2px 8px rgba(96, 20, 20, 0.3);
-    color: white;
-    padding: 12px 30px;
+    padding: 16px;
     border: none;
-    border-radius: 8px;
-    font-size: 16px;
+    border-radius: 12px;
+    font-size: 1.05rem;
+    font-weight: 700;
     cursor: pointer;
-    width: 100%;
-    transition: all 0.3s ease;
-    font-weight: 500;
+    background: linear-gradient(135deg, #27AE60, #2ECC71);
+    color: white;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 6px 20px rgba(39, 174, 96, 0.3);
+    letter-spacing: 0.5px;
+    margin-top: 10px;
+}
+
+.btn-register:hover {
+    background: linear-gradient(135deg, #229954, #27AE60);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(39, 174, 96, 0.4);
+}
+
+.btn-register:active {
+    transform: translateY(0);
+}
+
+.login-link {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+.login-link a {
+    color: #27AE60;
     text-decoration: none;
-    display: inline-block;
+    font-weight: 600;
+    transition: color 0.3s ease;
 }
 
-.btn-v:hover {
-    background: linear-gradient(135deg, #45a049 0%, #1B5E20 100%);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
-}
-
-.btn-r:hover {
-    background: linear-gradient(135deg, #a04545 0%, #5e1b1b 100%);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(175, 78, 76, 0.4);
+.login-link a:hover {
+    color: #229954;
+    text-decoration: underline;
 }
 
 @media (min-width: 500px) {

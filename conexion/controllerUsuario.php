@@ -141,7 +141,7 @@ switch ($action) {
             $json = json_encode($payload, JSON_UNESCAPED_UNICODE);
             $encoded = urlencode($json);  // o base64 si prefieres
 
-            header("Location: /proyectoprogramacion/perfil.html#d=$encoded");
+            header("Location: ../html/perfil.html#d=$encoded");
             exit;
         } else {
             echo "❌ Usuario o contraseña incorrectos.";

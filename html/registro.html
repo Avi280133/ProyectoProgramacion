@@ -4,16 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome to SkillMatch</title>
-    <link rel="stylesheet" href="register-styles.css">
-    <link rel="icon" type="image/png" href="imagenes/favicon_SkillMatch.png">
-    <link rel="conexion" href="Registrarse/conexion/controllerUsuario.php">
+    <link rel="stylesheet" href="../css/register-styles.css">
+    <link rel="icon" type="image/png" href="../img/favicon_SkillMatch.png">
+    <link rel="conexion" href="../conexion/controllerUsuario.php">
 </head>
 <body>
     <div class="signup-container">
-        <img src="Registrarse/car-IMG/logo-SkillMatch-v3.png" alt="logoSM" class="Logo">
+        <img src="../img/logo-SkillMatch-v3.png" alt="logoSM" class="Logo">
         
         <h1 class="form-title">¡Bienvenido a SkillMatch!</h1>
-        <form action="Registrarse/conexion/controllerUsuario.php" method="POST">
+        <form action="../conexion/controllerUsuario.php" method="POST">
         <div class="form-container">
                 <div class="client-type">
                     <h3>Seleccione su tipo de cliente</h3>
@@ -59,15 +59,14 @@
                 <div class="form-group full-width">
                     <input type="password" id="confirmContrasena" name="confirmContrasena" placeholder="Confirmar contraseña" required>
                 </div>
-
+                <button type="submit" name="action" value="registrar" class="btn-register">
+                    Registrarse
+                </button>
+            </form>
+            <div class="login-link">
+                ¿Ya tienes cuenta? <a href="../html/login.html">Iniciar sesión</a>
+            </div>
         </div>
-        <input type="submit" name="action" value="registrar">
-
-        <div class="buttons">
-            <a href="#" class="btn-cancel">Cancelar</a>
-            <a href="index.html" class="btn-register">Registrarse</a>
-        </div>
-    </div>
-</form>
+   </div>
 </body>
 </html>
