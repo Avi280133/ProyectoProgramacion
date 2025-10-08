@@ -31,12 +31,18 @@
 
     <div class="contenedor">
         <div class="perfil">
-            <img src="../img/mujercita.jpeg" alt="Foto de perfil" class="redonda" />
-            <h2 class="nombre-usuario">Alexandra Gim</h2>
-            <p class="gmail">alexandraG@gmail.com</p>
-            <p>Programadora</p>
-            <p>Trabajo responsable con 3 años de experiencia</p>
-            <br>
+           <!-- Foto de perfil -->
+<img src="../img/<?php echo htmlspecialchars($usuario['fotoperfil'] ?? 'mujercita.jpeg'); ?>" 
+     alt="Foto de perfil" class="redonda" />
+
+<!-- Nombre y correo -->
+<h2 class="nombre-usuario"><?php echo htmlspecialchars($usuario['nombre'] . ' ' . $usuario['apellido']); ?></h2>
+<p class="gmail"><?php echo htmlspecialchars($usuario['email']); ?></p>
+
+<!-- Username y Edad -->
+<p>Username: <?php echo htmlspecialchars($usuario['username']); ?></p>
+<p>Edad: <?php echo htmlspecialchars($usuario['edad']); ?></p>
+
             
             <div class="botones">
                 <button class="btneditar" >Editar perfil</button>

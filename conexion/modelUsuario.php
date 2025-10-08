@@ -1,13 +1,14 @@
 <?php
 require_once('ClaseConexion.php');
+session_start();
 
 class Usuario {
-    private $cedula,$nombre,$apellido,$username,$calle,$numeropuerta,$email,$contrasena,$fotoperfil,$edad;
+    private $cedula,$nombre,$apellido,$username,$calle,$numeropuerta,$email,$contrasena,$fotoperfil,$edad,$tipo;
 
-    public function __construct($cedula,$nombre,$apellido,$username,$calle,$numeropuerta,$email,$contrasena,$fotoperfil,$edad){
+    public function __construct($cedula,$nombre,$apellido,$username,$calle,$numeropuerta,$email,$contrasena,$fotoperfil,$edad,$tipo){
         $this->cedula=$cedula; $this->nombre=$nombre; $this->apellido=$apellido; $this->username=$username;
         $this->calle=$calle; $this->numeropuerta=$numeropuerta; $this->email=$email; $this->contrasena=$contrasena;
-        $this->fotoperfil=$fotoperfil; $this->edad=$edad;
+        $this->fotoperfil=$fotoperfil; $this->edad=$edad;    $this->tipo = $tipo;
     }
     public function getCedula(){return $this->cedula;} public function getNombre(){return $this->nombre;}
     public function getApellido(){return $this->apellido;} public function getUsername(){return $this->username;}
@@ -29,7 +30,22 @@ class Usuario {
 
         $st->bind_param("ssssssi",$this->cedula,$this->nombre,$this->apellido,$this->username,
             $this->email,$this->contrasena,$this->edad);
-        $st->execute(); $n=$st->affected_rows; $cx->close(); return $n;
+        $st->execute(); 
+        $n=$st->affected_rows; 
+
+
+        if ($this->tipo === 'cliente') {
+    $st2 = $cx->prepare("INSERT INTO cliente (idcliente) VALUES (?)");
+    $st2->bind_param("s", $this->cedula);
+    $st2->execute();
+} elseif ($this->tipo === 'proveedor') {
+    $st2 = $cx->prepare("INSERT INTO proveedor (idproveedor) VALUES (?)");
+    $st2->bind_param("s", $this->cedula);
+    $st2->execute();
+}
+
+        
+        $cx->close(); return $n;
     }
 
 	public function modificar(){
@@ -40,7 +56,8 @@ class Usuario {
         $st=$cx->prepare($sql);
         $st->bind_param("sssssisssi",$this->cedula,$this->nombre,$this->apellido,$this->username,$this->calle,
             $this->numeropuerta,$this->email,$this->contrasena,$this->fotoperfil,$this->edad);
-        $st->execute(); $n=$st->affected_rows; $cx->close(); return $n;
+        $st->execute(); 
+        $n=$st->affected_rows; $cx->close(); return $n;
     }
 
     public static function buscarPorCedula($cedula){
@@ -77,6 +94,10 @@ class Usuario {
     $st->close();
     $cx->close();
 
+    if ($usuario) {
+       
+        $_SESSION['cedula'] = $usuario['cedula'];
+    }
     return $usuario ? $usuario : null;
 }
 
