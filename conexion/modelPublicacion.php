@@ -25,7 +25,11 @@ class Servicio {
               VALUES(?,?,?,?)";
         $st=$cx->prepare($sql);
         $st->bind_param("ssds",$this->titulo,$this->ubicacion,$this->precio,$this->descripcion);
-        $st->execute(); $n=$st->affected_rows; $cx->close(); return $n;
+        $st->execute(); $n=$st->affected_rows;
+        $idservicio = $cx->insert_id;
+        
+      //  $st2=$cx->prepare($sql2);
+        $cx->close(); return $n;
     }
 
 

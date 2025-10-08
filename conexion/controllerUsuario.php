@@ -22,7 +22,7 @@ switch ($action) {
     case 'registrar':
         // Registrar Usuario
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $required = ['cedula','nombre','apellido','username','email','contrasena','edad'];
+            $required = ['cedula','nombre','apellido','username','email','contrasena','edad','tipo'];
             $ok = true;
             foreach ($required as $f) {
                 if (!isset($_POST[$f]) || empty(trim($_POST[$f]))) { $ok = false; break; }
@@ -35,8 +35,8 @@ switch ($action) {
                 $email = trim($_POST['email']);
                 $contrasena = trim($_POST['contrasena']);
                 $edad = trim($_POST['edad']);
-
-                $usuario = new Usuario($cedula, $nombre, $apellido, $username, '','', $email, $contrasena,'', $edad);
+                $tipo = $_POST['tipo'];
+                $usuario = new Usuario($cedula, $nombre, $apellido, $username, '','', $email, $contrasena,'', $edad, $tipo);
                 $resultado = $usuario->registrar();
                 echo "registrar -> resultado: ";
                 var_dump($resultado);
@@ -127,26 +127,37 @@ switch ($action) {
         $contrasena = trim($_POST['contrasena'] ?? '');
 
         $modelo = new Usuario('', '', '', '', '', '', '', '', '', '');
-        $datos = $modelo->login($email, $contrasena);
+        $usuario = $modelo->login($email, $contrasena);
 
-        if ($datos) {
-            $payload = [
-                'cedula'   => $datos['cedula'],
-                'nombre'   => trim($datos['nombre'].' '.$datos['apellido']),
-                'email'    => $datos['email'],
-                'username' => $datos['username'],
-                'edad'     => $datos['edad']
-            ];
-
-            $json = json_encode($payload, JSON_UNESCAPED_UNICODE);
-            $encoded = urlencode($json);  // o base64 si prefieres
-
-            header("Location: ../html/perfil.html#d=$encoded");
-            exit;
+        if ($usuario) {
+            // 🔹 Pasamos los datos a perfil.php usando include
+            include('../html/perfil.php');
         } else {
             echo "❌ Usuario o contraseña incorrectos.";
         }
     }
+    break;
+
+        //include('../html/perfil.html');
+
+      //  if ($datos) {
+        //    $payload = [
+          //      'cedula'   => $datos['cedula'],
+            //    'nombre'   => trim($datos['nombre'].' '.$datos['apellido']),
+              //  'email'    => $datos['email'],
+                //'username' => $datos['username'],
+               // 'edad'     => $datos['edad']
+            //];
+
+            //$json = json_encode($payload, JSON_UNESCAPED_UNICODE);
+            //$encoded = urlencode($json);  // o base64 si prefieres
+
+            //header("Location: ../html/perfil.html#d=$encoded");
+            //exit;
+        //} else {
+          //  echo "❌ Usuario o contraseña incorrectos.";
+       // }
+    
     break;
 
 
