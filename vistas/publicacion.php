@@ -22,7 +22,7 @@
       <div class="actions-right">
           <i class="fa-solid fa-magnifying-glass" style="color: #ffffff;"></i>
           <i class="fa-solid fa-plus" style="color: #ffffff;"></i>
-          <a href="perfil.html"><i class="fa-solid fa-user" style="color: #ffffff;"></i></a>
+          <a href="perfil.php"><i class="fa-solid fa-user" style="color: #ffffff;"></i></a>
       </div>
   </header>
   
@@ -38,12 +38,12 @@
         </div>
         <div class="bloque-proveedor">
             <img src="../img/usuario-juan.jpg" alt="Foto de Juan" class="foto-proveedor" />
-            <a href="../perfil-externo.html"><h3 class="nombre-proveedor">Juan Martínez</h3></a>
+            <a href="../perfil-externo.php"><h3 class="nombre-proveedor">Juan Martínez</h3></a>
             <div class="rating">★ ★ ★ </div>
                 <p class="ubicacion">Zona: Pocitos, Montevideo</p>
                 <div class="botones-accion">
-                    <a href="solicitud.html"><button class="btn-solicitar">Solicitar Servicio</button></a>
-                    <a href="mensajeria.html"><button class="btn-mensaje">Enviar Mensaje</button></a>
+                    <a href="solicitud.php"><button class="btn-solicitar">Solicitar Servicio</button></a>
+                    <a href="mensajeria.php"><button class="btn-mensaje">Enviar Mensaje</button></a>
                 </div>
             </div>
         </div>

@@ -21,7 +21,7 @@
       <div class="actions-right">
           <i class="fa-solid fa-magnifying-glass" style="color: #ffffff;"></i>
           <i class="fa-solid fa-plus" style="color: #ffffff;"></i>
-          <a href="perfil.html"><i class="fa-solid fa-user" style="color: #ffffff;"></i></a>
+          <a href="perfil.php"><i class="fa-solid fa-user" style="color: #ffffff;"></i></a>
       </div>
   </header>
 

@@ -20,8 +20,8 @@
         </div>
 
         <div class="actions-right">
-            <a href="../html/publicar.html"><i class="fa-solid fa-plus" style="color: #ffffff;"></i>
-            <a href="../html/perfil.html"><i class="fa-solid fa-user" style="color: #ffffff;"></i></a>
+            <a href="../vistas/publicar.php"><i class="fa-solid fa-plus" style="color: #ffffff;"></i>
+            <a href="../vistas/perfil.php"><i class="fa-solid fa-user" style="color: #ffffff;"></i></a>
         </div>
     </header>
 
