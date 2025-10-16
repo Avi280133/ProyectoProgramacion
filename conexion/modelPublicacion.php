@@ -1,6 +1,6 @@
 <?php
 require_once('ClaseConexion.php');
-
+session_start();
 class Servicio {
     private $idservicio,$titulo,$ubicacion,$precio,$descripcion;
 
@@ -20,15 +20,25 @@ class Servicio {
     public function setDescrpcion($v){$this->descripcion=$v;}
     
     public function publicarServicio(){
+           if (isset($_SESSION['cedula'])) {
         $cx=(new ClaseConexion())->getConexion();
         $sql="INSERT INTO servicio(titulo,ubicacion,precio,descripcion)
               VALUES(?,?,?,?)";
         $st=$cx->prepare($sql);
         $st->bind_param("ssds",$this->titulo,$this->ubicacion,$this->precio,$this->descripcion);
-        $st->execute(); $n=$st->affected_rows;
+        $st->execute(); 
+        $n=$st->affected_rows;
         $idservicio = $cx->insert_id;
-        
-      //  $st2=$cx->prepare($sql2);
+        $idProveedor = $_SESSION['cedula'];
+        $sql2 = "INSERT INTO ofrece (idservicio, idproveedor) VALUES (?, ?)";
+        $st = $cx->prepare($sql2);
+        $st->bind_param("is", $idservicio, $idProveedor); // "i" = integer, "s" = string
+        $st->execute();
+        $n=$st->affected_rows;
+} else {
+    echo "Error: no hay proveedor logueado.";
+}
+ 
         $cx->close(); return $n;
     }
 

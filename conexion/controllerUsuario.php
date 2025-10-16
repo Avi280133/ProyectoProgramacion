@@ -36,7 +36,7 @@ switch ($action) {
                 $contrasena = trim($_POST['contrasena']);
                 $edad = trim($_POST['edad']);
                 $tipo = $_POST['tipo'];
-                $usuario = new Usuario($cedula, $nombre, $apellido, $username, '','', $email, $contrasena,'', $edad, $tipo);
+                $usuario = new Usuario($cedula, $nombre, $apellido, $username, $email, $contrasena,'', $edad, '', $tipo);
                 $resultado = $usuario->registrar();
                 echo "registrar -> resultado: ";
                 var_dump($resultado);
@@ -59,14 +59,13 @@ switch ($action) {
                 $nombre = trim($_POST['nombre']);
                 $apellido = trim($_POST['apellido']);
                 $username = trim($_POST['username']);
-                $calle = trim($_POST['calle']);
-                $numeropuerta = trim($_POST['numeropuerta']);
                 $email = trim($_POST['email']);
                 $contrasena = trim($_POST['contrasena']);
                 $fotoperfil = isset($_FILES['fotoperfil']) ? $_FILES['fotoperfil']['tmp_name'] : null;
                 $edad = trim($_POST['edad']);
+                $localidad = trim($_POST['localidad']);
 
-                $usuario = new Usuario($cedula, $nombre, $apellido, $username, $calle, $numeropuerta, $email, $contrasena, $fotoperfil, $edad);
+                $usuario = new Usuario($cedula, $nombre, $apellido, $username, $email, $contrasena, $fotoperfil, $edad, $localidad, '');
                 $resultado = $usuario->modificar();
                 if ($resultado > 0) {
                     Header('Location: ../index.html');
