@@ -6,6 +6,7 @@
   <title>Perfil de Usuario</title>
   <link rel="icon" type="image/png" href="../img/favicon_SkillMatch.png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+   <link rel="conexion" href="../conexion/controllerUsuario.php">
   <style>
     * {
   margin: 0;
@@ -599,7 +600,7 @@ body {
 
 @media (max-width: 600px) {
   .header-nuevo {
-    padding: 1rem !important;
+    padding: 1rem !important;}}
   </style>
   
 </head>
@@ -703,12 +704,12 @@ body {
         <h2 class="modal-title-edit">Editar Perfil</h2>
         <button class="close-btn-edit" id="closeModalBtn">×</button>
       </div>
-
+ <form action="../conexion/controllerUsuario.php" method="POST" enctype="multipart/form-data">
       <div class="modal-content-edit">
         <div class="form-section-edit">
           <div class="form-group-edit">
             <label class="form-label-edit">Localidad</label>
-            <select class="form-select-edit" id="locationSelect">
+            <select class="form-select-edit" id="locationSelect" name="localidad">
               <option>Ciudades</option>
               <option>Montevideo</option>
               <option>Salto</option>
@@ -737,34 +738,41 @@ body {
 
           <div class="form-group-edit">
             <label class="form-label-edit">Habilidades</label>
-            <textarea class="form-textarea-edit" id="skillsTextarea" placeholder="Describe tus principales habilidades y competencias..."></textarea>
+            <textarea class="form-textarea-edit" name="habilidad"  id="skillsTextarea" placeholder="Describe tus principales habilidades y competencias..."></textarea>
           </div>
 
           <div class="form-group-edit">
             <label class="form-label-edit">Experiencia</label>
-            <textarea class="form-textarea-edit" id="experienceTextarea" placeholder="Cuéntanos sobre tu experiencia profesional..."></textarea>
+            <textarea class="form-textarea-edit" name="experiencia"id="experienceTextarea" placeholder="Cuéntanos sobre tu experiencia profesional..."></textarea>
           </div>
         </div>
 
         <div class="profile-section-edit">
-          <div class="profile-photo-container-edit" id="photoContainer">
+            <div class="profile-photo-container-edit" id="photoContainer">
             <div class="upload-overlay-edit">
               <i class="fa-solid fa-image upload-icon-edit"></i>
             </div>
-            <input type="file" id="photoInput" accept="image/*">
+            <input type="file" id="photoInput" name="fotoperfil" accept="image/*">
+
+
+            
           </div>
 
           <div class="profile-inputs-edit">
-            <input type="text" class="form-input-edit" id="nameInput" placeholder="Alexandra Gim" value="Alexandra Gim" disabled>
-            <input type="text" class="form-input-edit" id="usernameInput" placeholder="username" value="username">
+            <input type="text" class="form-input-edit" id="nameInput" placeholder="Alexandra Gim" value="<?php echo htmlspecialchars($usuario['nombre'] . ' ' . $usuario['apellido']); ?>" disabled>
+            <input type="text" class="form-input-edit" id="usernameInput" name="username" placeholder="username" value="<?php echo htmlspecialchars($usuario['username'] ?? ''); ?>">
+            <!-- Enviar la ruta actual de la foto (si existe) para que el controlador la use cuando no se suba una nueva -->
+            <input type="hidden" name="fotoperfil" value="<?php echo htmlspecialchars($usuario['fotoperfil'] ?? ''); ?>">
           </div>
 
-          <button class="save-btn-edit" id="saveBtn">Guardar</button>
+          <button type="submit" name="action" value="modificar" class="save-btn-edit" id="saveBtn">Guardar</button>
           <button class="delete-btn-edit" id="deleteBtn">Eliminar Usuario</button>
         </div>
       </div>
     </div>
   </div>
+
+  </form>
 
   <footer class="footer">
     <div class="footer-content">
@@ -871,5 +879,33 @@ body {
       }
     })();
   </script>
+
+  <script>
+const photoInput = document.getElementById("photoInput");
+const photoContainer = document.getElementById("photoContainer");
+let selectedFile = null; // variable temporal
+
+// Cuando el usuario selecciona una imagen
+photoInput.addEventListener("change", function () {
+  const file = this.files[0];
+  if (!file) return;
+
+  // Guardamos el archivo para subirlo después
+  selectedFile = file;
+
+  // Mostrar vista previa
+  const reader = new FileReader();
+  reader.onload = function (e) {
+    // Borra la imagen anterior si había
+    photoContainer.innerHTML = `
+      <img src="${e.target.result}" alt="Vista previa" class="preview-img" 
+           style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover;">
+    `;
+  };
+  reader.readAsDataURL(file);
+});
+</script>
+
+  
 </body>
 </html>

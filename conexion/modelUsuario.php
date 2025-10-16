@@ -5,7 +5,7 @@ session_start();
 class Usuario {
     private $cedula,$nombre,$apellido,$username,$email,$contrasena,$fotoperfil,$edad,$localidad,$tipo;
 
-    public function __construct($cedula,$nombre,$apellido,$username,$calle,$numeropuerta,$email,$contrasena,$fotoperfil,$edad,$tipo){
+    public function __construct($cedula,$nombre,$apellido,$username,$email,$contrasena,$fotoperfil,$edad,$localidad,$tipo){
         $this->cedula=$cedula; $this->nombre=$nombre; $this->apellido=$apellido; $this->username=$username;
         $this->email=$email; $this->contrasena=$contrasena;
         $this->fotoperfil=$fotoperfil; $this->edad=$edad; $this->localidad=$localidad; $this->tipo = $tipo;
@@ -31,32 +31,48 @@ class Usuario {
             $this->email,$this->contrasena,$this->edad);
         $st->execute(); 
         $n=$st->affected_rows; 
-
-
         if ($this->tipo === 'cliente') {
     $st2 = $cx->prepare("INSERT INTO cliente (idcliente) VALUES (?)");
     $st2->bind_param("s", $this->cedula);
     $st2->execute();
+     include('../vistas/vistas-cliente.php');
 } elseif ($this->tipo === 'proveedor') {
     $st2 = $cx->prepare("INSERT INTO proveedor (idproveedor) VALUES (?)");
     $st2->bind_param("s", $this->cedula);
     $st2->execute();
+     include('../vistas/vistas-prov.php');
 }
 
         
         $cx->close(); return $n;
     }
 
-	public function modificar(){
+	public function modificarUsuario(){
         $cx=(new ClaseConexion())->getConexion();
         $sql= "UPDATE usuario 
-		SET nombre = ?, apellido = ?, username = ?, calle = ?, numeropuerta = ?, email = ?, contrasena = ?, fotoperfil = ?, edad = ?
+		SET username = ?, fotoperfil = ?, localidad = ?
 		WHERE cedula = ?";
+
+        if (session_status() === PHP_SESSION_NONE) session_start();
+        $cedula = $_SESSION['cedula'] ?? null;
+        if (!$cedula) {
+            // No hay sesión con cédula, no se puede actualizar
+            $cx->close();
+            return 0;
+        }
+
         $st=$cx->prepare($sql);
-        $st->bind_param("sssssisssi",$this->cedula,$this->nombre,$this->apellido,$this->username,$this->calle,
-            $this->numeropuerta,$this->email,$this->contrasena,$this->fotoperfil,$this->edad);
+        if (!$st) {
+            $cx->close();
+            return 0;
+        }
+
+        $st->bind_param("ssss", $this->username, $this->fotoperfil, $this->localidad, $cedula);
         $st->execute(); 
-        $n=$st->affected_rows; $cx->close(); return $n;
+        $n=$st->affected_rows;
+        $st->close();
+        $cx->close();
+        return $n;
     }
 
     public static function buscarPorCedula($cedula){
