@@ -3,24 +3,23 @@ require_once('ClaseConexion.php');
 session_start();
 
 class Usuario {
-    private $cedula,$nombre,$apellido,$username,$calle,$numeropuerta,$email,$contrasena,$fotoperfil,$edad,$tipo;
+    private $cedula,$nombre,$apellido,$username,$email,$contrasena,$fotoperfil,$edad,$localidad,$tipo;
 
     public function __construct($cedula,$nombre,$apellido,$username,$calle,$numeropuerta,$email,$contrasena,$fotoperfil,$edad,$tipo){
         $this->cedula=$cedula; $this->nombre=$nombre; $this->apellido=$apellido; $this->username=$username;
-        $this->calle=$calle; $this->numeropuerta=$numeropuerta; $this->email=$email; $this->contrasena=$contrasena;
-        $this->fotoperfil=$fotoperfil; $this->edad=$edad;    $this->tipo = $tipo;
+        $this->email=$email; $this->contrasena=$contrasena;
+        $this->fotoperfil=$fotoperfil; $this->edad=$edad; $this->localidad=$localidad; $this->tipo = $tipo;
     }
     public function getCedula(){return $this->cedula;} public function getNombre(){return $this->nombre;}
     public function getApellido(){return $this->apellido;} public function getUsername(){return $this->username;}
-    public function getCalle(){return $this->calle;} public function getNumeropuerta(){return $this->numeropuerta;}
     public function getEmail(){return $this->email;} public function getContrasena(){return $this->contrasena;}
     public function getFotoperfil(){return $this->fotoperfil;} public function getEdad(){return $this->edad;}
+    public function getLocalidad(){return $this->localidad;}
 
     public function setNombre($v){$this->nombre=$v;} public function setApellido($v){$this->apellido=$v;}
-    public function setUsername($v){$this->username=$v;} public function setCalle($v){$this->calle=$v;}
-    public function setNumeropuerta($v){$this->numeropuerta=$v;} public function setEmail($v){$this->email=$v;}
+    public function setUsername($v){$this->username=$v;} public function setEmail($v){$this->email=$v;}
     public function setContrasena($v){$this->contrasena=$v;} public function setFotoperfil($v){$this->fotoperfil=$v;}
-    public function setEdad($v){$this->edad=$v;}
+    public function setEdad($v){$this->edad=$v;} public function setLocalidad($v){$this->localidad=$v;}
 
     public function registrar(){
         $cx=(new ClaseConexion())->getConexion();
