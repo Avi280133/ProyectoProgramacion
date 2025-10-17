@@ -10,6 +10,7 @@
 // Para búsqueda por GET: ?action=buscar&cedula=...
 
 require_once('modelUsuario.php');  // Incluir el modelo Usuario
+require_once('modelProveedor.php');
 require_once('ClaseConexion.php'); // Incluir la clase de conexión
 
 // Detectar la acción: preferir POST (botones submit con name="action"), si no existe buscar en GET
@@ -47,35 +48,47 @@ switch ($action) {
         break;
 
     case 'modificar':
-        // Modificar Usuario
+  
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $required = ['cedula','nombre','apellido','username','calle','numeropuerta','email','contrasena','edad'];
-            $ok = true;
-            foreach ($required as $f) {
-                if (!isset($_POST[$f]) || empty(trim($_POST[$f]))) { $ok = false; break; }
+            // Recoger y sanear valores enviados por POST
+            if (session_status() === PHP_SESSION_NONE) session_start();
+            $cedula = $_SESSION['cedula'] ?? null;
+            if (!$cedula) {
+                echo "No hay sesión activa (cedula).";
+                break;
             }
-            if ($ok) {
-                $cedula = trim($_POST['cedula']);
-                $nombre = trim($_POST['nombre']);
-                $apellido = trim($_POST['apellido']);
-                $username = trim($_POST['username']);
-                $email = trim($_POST['email']);
-                $contrasena = trim($_POST['contrasena']);
-                $fotoperfil = isset($_FILES['fotoperfil']) ? $_FILES['fotoperfil']['tmp_name'] : null;
-                $edad = trim($_POST['edad']);
-                $localidad = trim($_POST['localidad']);
 
-                $usuario = new Usuario($cedula, $nombre, $apellido, $username, $email, $contrasena, $fotoperfil, $edad, $localidad, '');
-                $resultado = $usuario->modificar();
-                if ($resultado > 0) {
-                    Header('Location: ../index.html');
-                } else {
-                    echo "Error al modificar el usuario.";
-                }
+            $username = isset($_POST['username']) ? trim($_POST['username']) : null;
+            // Tomar fotoperfil desde POST (hidden) si viene, si no dejar cadena vacía
+
+            $fotoperfil = $_FILES['foto']; //isset($_POST['foto']) ? trim($_POST['fotoperfil']) : '';
+            $fotoNombre =  $fotoperfil['name'];
+            $localidad = isset($_POST['localidad']) ? trim($_POST['localidad']) : '';
+
+            $experiencia = isset($_POST['experiencia']) ? trim($_POST['experiencia']) : '';
+            $habilidad = isset($_POST['habilidad']) ? trim($_POST['habilidad']) : '';
+
+            // Crear objetos con la cédula tomada de la sesión
+            $usuario = new Usuario($cedula, '', '', $username ?? '', '', '', $fotoNombre, '', $localidad, '');
+            $resultado1 = $usuario->modificarUsuario();
+
+            $proveedor = new Proveedor($cedula, $experiencia, $habilidad);
+            $resultado2 = $proveedor->modificarProv();
+
+            if(move_uploaded_file($fotoperfil['tmp_name'], '../img/' . $fotoNombre)){
+                echo "La imagen se ha subido correctamente.";
             } else {
-                echo "Faltan campos obligatorios para modificar.";
+                echo "Error al subir la imagen.";
             }
+            print_r($_POST);
+           // if ($resultado1 > 0 || $resultado2 > 0) {
+               // Al menos una tabla actualizada
+           //    include('../vistas/perfil.php');
+           // } else {
+           //     echo "No se realizó ningún cambio o ocurrió un error.";
+           // }
         }
+    
         break;
 
     case 'eliminar':
@@ -130,7 +143,7 @@ switch ($action) {
 
         if ($usuario) {
             // 🔹 Pasamos los datos a perfil.php usando include
-            include('../html/perfil.php');
+            include('../vistas/perfil.php');
         } else {
             echo "❌ Usuario o contraseña incorrectos.";
         }
