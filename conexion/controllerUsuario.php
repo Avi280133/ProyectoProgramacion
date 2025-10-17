@@ -60,25 +60,33 @@ switch ($action) {
 
             $username = isset($_POST['username']) ? trim($_POST['username']) : null;
             // Tomar fotoperfil desde POST (hidden) si viene, si no dejar cadena vacía
-            $fotoperfil = isset($_POST['fotoperfil']) ? trim($_POST['fotoperfil']) : '';
+
+            $fotoperfil = $_FILES['foto']; //isset($_POST['foto']) ? trim($_POST['fotoperfil']) : '';
+            $fotoNombre =  $fotoperfil['name'];
             $localidad = isset($_POST['localidad']) ? trim($_POST['localidad']) : '';
 
             $experiencia = isset($_POST['experiencia']) ? trim($_POST['experiencia']) : '';
             $habilidad = isset($_POST['habilidad']) ? trim($_POST['habilidad']) : '';
 
             // Crear objetos con la cédula tomada de la sesión
-            $usuario = new Usuario($cedula, '', '', $username ?? '', '', '', $fotoperfil, '', $localidad, '');
+            $usuario = new Usuario($cedula, '', '', $username ?? '', '', '', $fotoNombre, '', $localidad, '');
             $resultado1 = $usuario->modificarUsuario();
 
             $proveedor = new Proveedor($cedula, $experiencia, $habilidad);
             $resultado2 = $proveedor->modificarProv();
 
-            if ($resultado1 > 0 || $resultado2 > 0) {
-               // Al menos una tabla actualizada
-               include('../vistas/perfil.php');
+            if(move_uploaded_file($fotoperfil['tmp_name'], '../img/' . $fotoNombre)){
+                echo "La imagen se ha subido correctamente.";
             } else {
-                echo "No se realizó ningún cambio o ocurrió un error.";
+                echo "Error al subir la imagen.";
             }
+            print_r($_POST);
+           // if ($resultado1 > 0 || $resultado2 > 0) {
+               // Al menos una tabla actualizada
+           //    include('../vistas/perfil.php');
+           // } else {
+           //     echo "No se realizó ningún cambio o ocurrió un error.";
+           // }
         }
     
         break;

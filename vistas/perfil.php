@@ -746,18 +746,19 @@ body {
             <textarea class="form-textarea-edit" name="experiencia"id="experienceTextarea" placeholder="Cuéntanos sobre tu experiencia profesional..."></textarea>
           </div>
         </div>
-
+ 
         <div class="profile-section-edit">
             <div class="profile-photo-container-edit" id="photoContainer">
             <div class="upload-overlay-edit">
               <i class="fa-solid fa-image upload-icon-edit"></i>
             </div>
-            <input type="file" id="photoInput" name="fotoperfil" accept="image/*">
+           
+           
 
 
             
           </div>
-
+ <input type="file" id="photoInput" name="foto" accept="image/*">
           <div class="profile-inputs-edit">
             <input type="text" class="form-input-edit" id="nameInput" placeholder="Alexandra Gim" value="<?php echo htmlspecialchars($usuario['nombre'] . ' ' . $usuario['apellido']); ?>" disabled>
             <input type="text" class="form-input-edit" id="usernameInput" name="username" placeholder="username" value="<?php echo htmlspecialchars($usuario['username'] ?? ''); ?>">
