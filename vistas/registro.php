@@ -64,7 +64,7 @@
                 </button>
             </form>
             <div class="login-link">
-                ¿Ya tienes cuenta? <a href="../html/login.html">Iniciar sesión</a>
+                ¿Ya tienes cuenta? <a href="login.php">Iniciar sesión</a>
             </div>
         </div>
    </div>

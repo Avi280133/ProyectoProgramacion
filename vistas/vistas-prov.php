@@ -9,30 +9,75 @@
 </head>
 <body>
     <!-- Header -->
-    <header class="main-header">
-        <div class="menu-left">
-            <a href="#" class="menu-icon">
-                <i class="fa-solid fa-bars"></i>
-            </a>
+    <header>
+        
+        <div class="header-logo">
+            <img src="../img/logomini.png" alt="SkillMatch Logo" style="height: 50px; width: auto; margin-right: 0.5rem;">
+            SkillMatch
         </div>
-
-        <div class="logo-center">
-            <img src="img/logo-SkillMatch-v3.png" alt="SkillMatch Logo">
-        </div>
-
-        <div class="actions-right">
-            <div class="search-container">
-                <button class="search-icon">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                </button>
-                <input type="text" class="search-input" placeholder="Buscar...">
-            </div>
+        <div class="header-actions">
             <div style="position: relative;">
-                <i class="fa-solid fa-bell" onclick="NotificationsModal.toggle()" style="cursor: pointer;" title="Notificaciones"></i>
-                
+                <div class="header-icon" id="notificationBell">
+                    <i class="fas fa-bell"></i>
+                    <span style="position: absolute; top: -5px; right: -8px; width: 20px; height: 20px; background: #ff6b6b; color: white; border-radius: 50%; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; font-weight: bold;">3</span>
+                </div>
+
+                <div class="notification-modal" id="notificationModal">
+                    <div class="notification-header">
+                        <h3>Notificaciones</h3>
+                        <i class="fas fa-times" style="cursor: pointer; color: #7f8c8d;" id="closeNotifications"></i>
+                    </div>
+                    <div class="notification-list">
+                        <div class="notification-item unread">
+                            <div class="notification-icon">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="notification-content">
+                                <div class="notification-title">Trabajo aceptado</div>
+                                <div class="notification-text">Tu solicitud de reparación del hogar fue aceptada por Juan M.</div>
+                                <div class="notification-time">Hace 2 horas</div>
+                            </div>
+                        </div>
+
+                        <div class="notification-item unread">
+                            <div class="notification-icon" style="background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <div class="notification-content">
+                                <div class="notification-title">Nueva reseña</div>
+                                <div class="notification-text">Carlos P. dejó una reseña de 5 estrellas para tu servicio</div>
+                                <div class="notification-time">Hace 5 horas</div>
+                            </div>
+                        </div>
+
+                        <div class="notification-item">
+                            <div class="notification-icon" style="background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);">
+                                <i class="fas fa-info-circle"></i>
+                            </div>
+                            <div class="notification-content">
+                                <div class="notification-title">Recordatorio</div>
+                                <div class="notification-text">Tu servicio de desarrollo web está próximo a completarse</div>
+                                <div class="notification-time">Hace 1 día</div>
+                            </div>
+                        </div>
+
+                        <div class="notification-item">
+                            <div class="notification-icon" style="background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);">
+                                <i class="fas fa-user-check"></i>
+                            </div>
+                            <div class="notification-content">
+                                <div class="notification-title">Perfil verificado</div>
+                                <div class="notification-text">Tu identidad ha sido verificada exitosamente</div>
+                                <div class="notification-time">Hace 2 días</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <i class="fa-solid fa-plus" title="Publicar Servicio"></i>
-            <i class="fa-solid fa-user" title="Mi Perfil"></i>
+
+            <div class="header-icon">
+                <i class="fas fa-user"></i>
+            </div>
         </div>
     </header>
 
@@ -576,7 +621,25 @@
             }
         `;
         document.head.appendChild(style);
+
+        const notificationBell = document.getElementById('notificationBell');
+        const notificationModal = document.getElementById('notificationModal');
+        const closeNotifications = document.getElementById('closeNotifications');
+
+        notificationBell.addEventListener('click', () => {
+            notificationModal.classList.toggle('active');
+        });
+
+        closeNotifications.addEventListener('click', () => {
+            notificationModal.classList.remove('active');
+        });
+
+        // Cerrar modal al hacer click afuera
+        document.addEventListener('click', (e) => {
+            if (!notificationBell.contains(e.target) && !notificationModal.contains(e.target)) {
+                notificationModal.classList.remove('active');
+            }
+        });
     </script>
-    <script src="vistas/styles-notis.js"></script>
 </body>
 </html>
