@@ -76,19 +76,16 @@ switch ($action) {
             $resultado2 = $proveedor->modificarProv();
 
             if(move_uploaded_file($fotoperfil['tmp_name'], '../img/' . $fotoNombre)){
-                echo "La imagen se ha subido correctamente.";
-            } else {
-                echo "Error al subir la imagen.";
+                //echo "La imagen se ha subido correctamente.";
+               
+        // else {
+              //  echo "Error al subir la imagen.";
             }
-            print_r($_POST);
-           // if ($resultado1 > 0 || $resultado2 > 0) {
-               // Al menos una tabla actualizada
-           //    include('../vistas/perfil.php');
-           // } else {
-           //     echo "No se realizó ningún cambio o ocurrió un error.";
-           // }
+          //  print_r($_POST);
+       include('../vistas/vistas-prov.php');
+       //header('Location:'. $_SERVER['PHP_SELF']);
+        
         }
-    
         break;
 
     case 'eliminar':

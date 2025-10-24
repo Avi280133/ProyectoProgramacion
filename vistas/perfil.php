@@ -834,6 +834,9 @@ body {
     document.getElementById('closeModalBtn').onclick = function() {
       document.getElementById('editProfileModalOverlay').classList.remove('active');
     };
+    document.getElementById('saveBtn').onclick = function() {
+      document.getElementById('editProfileModalOverlay').classList.remove('active');
+    };
   </script>
 
   <script>
