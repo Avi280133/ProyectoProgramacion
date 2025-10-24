@@ -90,7 +90,7 @@ class Usuario {
   public function login($email, $contrasena) {
     $cx = (new ClaseConexion())->getConexion();
 
-    $sql = "SELECT cedula, nombre, apellido, username, email, edad 
+    $sql = "SELECT cedula, nombre, apellido, username, email, fotoperfil, edad 
             FROM usuario 
             WHERE email = ? AND contrasena = ?";
 

@@ -680,6 +680,7 @@ body {
   <div class="contenedor">
     <div class="perfil">
       <!-- Foto de perfil -->
+    
       <img src="../img/<?php echo htmlspecialchars($usuario['fotoperfil'] ?? 'mujercita.jpeg'); ?>" 
            alt="Foto de perfil" class="redonda" />
 
