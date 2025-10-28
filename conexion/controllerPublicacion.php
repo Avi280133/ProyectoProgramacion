@@ -1,13 +1,21 @@
 <?php
 //ControllerPublicacion.php
-echo "<pre>Datos recibidos:\n";
-print_r($_POST);
-echo "</pre>";
+//echo "<pre>Datos recibidos:\n";
+//print_r($_POST);
+//echo "</pre>";
 
 require_once('modelPublicacion.php');  // Incluir el modelo Usuario
 require_once('ClaseConexion.php'); // Incluir la clase de conexión
 // Registrar Publicacion
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+
+$action = null;
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
+    $action = $_POST['action'];}
+
+switch ($action) {
+    case 'publicar':
+  if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Comprobar si se han recibido los datos necesarios para el registro
     if  (isset($_POST['titulo']) && !empty($_POST['titulo']) &&
         isset($_POST['ubicacion']) && !empty($_POST['ubicacion']) &&
@@ -32,11 +40,13 @@ echo "entro a publicar";
     }
 }
 
-
+break;
+    case 'buscar':
 // Registrar Publicacion
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['titulo']) && !empty($_POST['titulo'])) {
     $titulo = $_POST['titulo'];
     $resultados = Servicio::buscarPorTitulo($titulo);
-    echo "entro a buscar";
-    print_r($resultados); // Muestra los resultados
-}
+   
+    $servicio = $resultados; // Asignar el primer resultado a $serv
+include('../vistas/busqueda.php');
+}}

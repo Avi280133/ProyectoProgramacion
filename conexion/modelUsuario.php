@@ -116,5 +116,44 @@ class Usuario {
     return $usuario ? $usuario : null;
 }
 
+public static function detectarRol($cedula) {
+    $cx = (new ClaseConexion())->getConexion();
+    $role = null;
+
+    $st = $cx->prepare("SELECT 1 FROM cliente WHERE idcliente = ? LIMIT 1");
+    if ($st) {
+        $st->bind_param("s", $cedula);
+        $st->execute();
+        $res = $st->get_result();
+        if ($res && $res->fetch_assoc()) { $role = 'cliente'; }
+        $st->close();
+    }
+
+    if (!$role) {
+        $st = $cx->prepare("SELECT 1 FROM proveedor WHERE idproveedor = ? LIMIT 1");
+        if ($st) {
+            $st->bind_param("s", $cedula);
+            $st->execute();
+            $res = $st->get_result();
+            if ($res && $res->fetch_assoc()) { $role = 'proveedor'; }
+            $st->close();
+        }
+    }
+
+    if (!$role) {
+        $st = $cx->prepare("SELECT 1 FROM administrador WHERE idadministrador = ? LIMIT 1");
+        if ($st) {
+            $st->bind_param("s", $cedula);
+            $st->execute();
+            $res = $st->get_result();
+            if ($res && $res->fetch_assoc()) { $role = 'admin'; }
+            $st->close();
+        }
+    }
+
+    $cx->close();
+    return $role; // 'cliente' | 'proveedor' | 'admin' | null
+}
+
 }
 
