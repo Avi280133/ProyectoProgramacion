@@ -8,6 +8,9 @@
     <script src="https://kit.fontawesome.com/6d671fbf0c.js" crossorigin="anonymous"></script>
        <link rel="conexion" href="../conexion/controllerPublicacion.php">
 </head>
+
+
+
 <body>
     <header class="main-header">
         <div class="menu-left">

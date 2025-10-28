@@ -5,6 +5,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Administrador - SkillMatch</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+     <link rel="conexion" href="../conexion/controllerPublicacion.php">
+
+     
+<?php
+require_once '../conexion/controllerUsuario.php';
+  $cx=(new ClaseConexion())->getConexion();
+        $sql1="SELECT COUNT(*) AS total_usuarios FROM usuario;";
+        $st=$cx->prepare($sql1);
+        $st->execute(); 
+        $res=$st->get_result()->fetch_assoc();
+        $numeroUsuarios = $res['total_usuarios'];
+
+        $sql2="SELECT COUNT(*) AS total_proveedores FROM proveedor;";
+        $st=$cx->prepare($sql2);
+        $st->execute(); 
+        $res=$st->get_result()->fetch_assoc();
+        $numeroProveedores = $res['total_proveedores'];
+
+        $sql3="SELECT COUNT(*) AS total_servicios FROM servicio;";
+        $st=$cx->prepare($sql3);
+        $st->execute(); 
+        $res=$st->get_result()->fetch_assoc();
+        $numeroServicios = $res['total_servicios'];
+        
+        $sql4=" SELECT COUNT(*) AS total_categorias FROM categoria;";
+        $st=$cx->prepare($sql4);
+        $st->execute(); 
+        $res=$st->get_result()->fetch_assoc();
+        $numeroCategorias = $res['total_categorias'];
+
+?>
+
     <style>
         * {
             margin: 0;
@@ -597,7 +629,10 @@
                 <div class="stat-icon users">
                     <i class="fas fa-users"></i>
                 </div>
-                <div class="stat-number">248</div>
+               <?php
+               echo '<div class="stat-number">' .  $numeroUsuarios ;
+               echo '</div>';
+               ?>
                 <div class="stat-label">Total Usuarios</div>
             </div>
 
@@ -605,7 +640,10 @@
                 <div class="stat-icon providers">
                     <i class="fas fa-user-tie"></i>
                 </div>
-                <div class="stat-number">142</div>
+                  <?php
+               echo '<div class="stat-number">' .  $numeroProveedores ;
+               echo '</div>';
+               ?>
                 <div class="stat-label">Proveedores</div>
             </div>
 
@@ -613,7 +651,10 @@
                 <div class="stat-icon services">
                     <i class="fas fa-briefcase"></i>
                 </div>
-                <div class="stat-number">89</div>
+                    <?php
+               echo '<div class="stat-number">' .  $numeroServicios ;
+               echo '</div>';
+               ?>
                 <div class="stat-label">Servicios Activos</div>
             </div>
 
@@ -621,7 +662,10 @@
                 <div class="stat-icon categories">
                     <i class="fas fa-tags"></i>
                 </div>
-                <div class="stat-number">12</div>
+                 <?php
+               echo '<div class="stat-number">' .  $numeroCategorias ;
+               echo '</div>';
+               ?>
                 <div class="stat-label">Categorías</div>
             </div>
         </div>
