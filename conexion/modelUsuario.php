@@ -43,7 +43,6 @@ class Usuario {
      include('../vistas/vistas-prov.php');
 }
 
-        
         $cx->close(); return $n;
     }
 
@@ -80,9 +79,11 @@ class Usuario {
         $st=$cx->prepare("SELECT * FROM usuario WHERE cedula=?"); $st->bind_param("s",$cedula);
         $st->execute(); $r=$st->get_result()->fetch_assoc(); $cx->close(); return $r;
     }
+
+
     public static function eliminar($cedula){
         $cx=(new ClaseConexion())->getConexion();
-        $st=$cx->prepare("DELETE FROM usuario WHERE cedula=?"); $st->bind_param("s",$cedula);
+        $st=$cx->prepare("DELETE * FROM usuario WHERE cedula=?"); $st->bind_param("s",$cedula);
         $st->execute(); $n=$st->affected_rows; $cx->close(); return $n;
     }
 
