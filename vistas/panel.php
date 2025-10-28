@@ -5,38 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Administrador - SkillMatch</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-     <link rel="conexion" href="../conexion/controllerPublicacion.php">
-
-     
-<?php
-require_once '../conexion/controllerUsuario.php';
-  $cx=(new ClaseConexion())->getConexion();
-        $sql1="SELECT COUNT(*) AS total_usuarios FROM usuario;";
-        $st=$cx->prepare($sql1);
-        $st->execute(); 
-        $res=$st->get_result()->fetch_assoc();
-        $numeroUsuarios = $res['total_usuarios'];
-
-        $sql2="SELECT COUNT(*) AS total_proveedores FROM proveedor;";
-        $st=$cx->prepare($sql2);
-        $st->execute(); 
-        $res=$st->get_result()->fetch_assoc();
-        $numeroProveedores = $res['total_proveedores'];
-
-        $sql3="SELECT COUNT(*) AS total_servicios FROM servicio;";
-        $st=$cx->prepare($sql3);
-        $st->execute(); 
-        $res=$st->get_result()->fetch_assoc();
-        $numeroServicios = $res['total_servicios'];
-        
-        $sql4=" SELECT COUNT(*) AS total_categorias FROM categoria;";
-        $st=$cx->prepare($sql4);
-        $st->execute(); 
-        $res=$st->get_result()->fetch_assoc();
-        $numeroCategorias = $res['total_categorias'];
-
-?>
-
     <style>
         * {
             margin: 0;
@@ -135,6 +103,18 @@ require_once '../conexion/controllerUsuario.php';
             color: #0eb27c;
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .logout-btn:focus {
+            outline: none;
+        }
+
+        .logout-btn:active {
+            text-decoration: none;
+        }
+
+        .logout-btn:visited {
+            color: white;
         }
 
         .container {
@@ -297,40 +277,128 @@ require_once '../conexion/controllerUsuario.php';
             cursor: not-allowed;
         }
 
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
+        /* Listas */
+        .cards-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 1.5rem;
         }
 
-        .data-table thead {
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        .item-card {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 1.25rem 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
         }
 
-        .data-table th {
-            padding: 1rem;
-            text-align: left;
-            color: #2c3e50;
+        .item-card:hover {
+            border-color: #0eb27c;
+            box-shadow: 0 4px 12px rgba(14, 178, 124, 0.1);
+            transform: translateX(5px);
+        }
+
+        .item-card.selected {
+            border: 3px solid #0eb27c;
+            background: linear-gradient(135deg, #e8f5f1 0%, #d1f0e5 100%);
+            box-shadow: 0 4px 12px rgba(14, 178, 124, 0.2);
+            transform: translateX(5px);
+        }
+
+        .item-card .card-icon-container {
+            width: 60px;
+            height: 60px;
+            min-width: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: white;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .item-card .card-icon-container.provider-icon {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .item-card .card-icon-container.service-icon {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .item-card .card-icon-container.category-icon {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+
+        .item-card .card-main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .item-card .card-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .item-card .card-id {
+            background: #e0e0e0;
+            color: #7f8c8d;
+            padding: 0.25rem 0.7rem;
+            border-radius: 50px;
+            font-size: 0.7rem;
             font-weight: 600;
+        }
+
+        .item-card.selected .card-id {
+            background: #0eb27c;
+            color: white;
+        }
+
+        .item-card .card-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+
+        .item-card .card-subtitle {
+            color: #7f8c8d;
             font-size: 0.9rem;
         }
 
-        .data-table td {
-            padding: 1rem;
-            border-bottom: 1px solid #f0f0f0;
+        .item-card .card-info {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .item-card .info-row {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
             color: #7f8c8d;
         }
 
-        .data-table tr {
-            transition: all 0.2s ease;
-            cursor: pointer;
+        .item-card .info-row i {
+            width: 16px;
+            color: #0eb27c;
         }
 
-        .data-table tbody tr:hover {
-            background: #f8f9fa;
-        }
-
-        .data-table tr.selected {
-            background: linear-gradient(135deg, #e8f5f1 0%, #d1f0e5 100%);
+        .item-card .card-badges {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
         }
 
         .badge {
@@ -356,14 +424,16 @@ require_once '../conexion/controllerUsuario.php';
             color: white;
         }
 
-        .badge-available {
-            background: linear-gradient(135deg, #0eb27c 0%, #047857 100%);
+        .price-badge {
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
             color: white;
-        }
-
-        .badge-expired {
-            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
-            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
         }
 
         .empty-state {
@@ -378,7 +448,7 @@ require_once '../conexion/controllerUsuario.php';
             opacity: 0.3;
         }
 
-        /* Modal Styles */
+        /* estilos para los modales generales */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -495,6 +565,12 @@ require_once '../conexion/controllerUsuario.php';
             min-height: 100px;
         }
 
+        .form-hint {
+            color: #7f8c8d;
+            font-size: 0.8rem;
+            margin-top: 0.3rem;
+        }
+
         .modal-footer {
             padding: 1.5rem 2rem;
             border-top: 2px solid #f0f0f0;
@@ -523,7 +599,7 @@ require_once '../conexion/controllerUsuario.php';
             box-shadow: 0 5px 15px rgba(14, 178, 124, 0.3);
         }
 
-        /* Delete Confirmation Modal */
+        /* modal de confirmación para eliminar */
         .delete-modal {
             max-width: 450px;
             text-align: center;
@@ -564,6 +640,99 @@ require_once '../conexion/controllerUsuario.php';
             box-shadow: 0 5px 15px rgba(231, 76, 60, 0.3);
         }
 
+        /* notificación que aparece arriba a la derecha */
+        .notification-toast {
+            position: fixed;
+            top: 100px;
+            right: 30px;
+            background: white;
+            border-radius: 15px;
+            padding: 1.2rem 1.5rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            z-index: 3000;
+            opacity: 0;
+            transform: translateX(400px);
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            min-width: 320px;
+            max-width: 450px;
+        }
+
+        .notification-toast.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .notification-toast.hide {
+            opacity: 0;
+            transform: translateX(400px);
+        }
+
+        .notification-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .notification-toast.success .notification-icon {
+            background: linear-gradient(135deg, #0eb27c 0%, #047857 100%);
+            color: white;
+        }
+
+        .notification-toast.error .notification-icon {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+        }
+
+        .notification-toast.info .notification-icon {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-title {
+            font-weight: 700;
+            color: #2c3e50;
+            font-size: 1rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .notification-message {
+            color: #7f8c8d;
+            font-size: 0.85rem;
+        }
+
+        .notification-close {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: none;
+            background: #f0f0f0;
+            color: #7f8c8d;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .notification-close:hover {
+            background: #e0e0e0;
+            transform: rotate(90deg);
+        }
+
         @media (max-width: 768px) {
             .container {
                 padding: 0 1rem;
@@ -577,10 +746,6 @@ require_once '../conexion/controllerUsuario.php';
                 flex-direction: column;
             }
 
-            .data-table {
-                font-size: 0.85rem;
-            }
-
             .admin-info {
                 display: none;
             }
@@ -592,13 +757,20 @@ require_once '../conexion/controllerUsuario.php';
             .modal-body {
                 padding: 1.5rem;
             }
+
+            .notification-toast {
+                right: 15px;
+                left: 15px;
+                min-width: auto;
+                max-width: none;
+            }
         }
     </style>
 </head>
 <body>
     <header>
         <div class="header-logo">
-            <img src="../img/logomini.png" alt="SkillMatch Logo" style="height: 50px; width: auto; margin-right: 0.5rem;">
+            <i class="fas fa-handshake"></i>
             SkillMatch
         </div>
         <div class="header-actions">
@@ -629,10 +801,7 @@ require_once '../conexion/controllerUsuario.php';
                 <div class="stat-icon users">
                     <i class="fas fa-users"></i>
                 </div>
-               <?php
-               echo '<div class="stat-number">' .  $numeroUsuarios ;
-               echo '</div>';
-               ?>
+                <div class="stat-number">3</div>
                 <div class="stat-label">Total Usuarios</div>
             </div>
 
@@ -640,10 +809,7 @@ require_once '../conexion/controllerUsuario.php';
                 <div class="stat-icon providers">
                     <i class="fas fa-user-tie"></i>
                 </div>
-                  <?php
-               echo '<div class="stat-number">' .  $numeroProveedores ;
-               echo '</div>';
-               ?>
+                <div class="stat-number">1</div>
                 <div class="stat-label">Proveedores</div>
             </div>
 
@@ -651,10 +817,7 @@ require_once '../conexion/controllerUsuario.php';
                 <div class="stat-icon services">
                     <i class="fas fa-briefcase"></i>
                 </div>
-                    <?php
-               echo '<div class="stat-number">' .  $numeroServicios ;
-               echo '</div>';
-               ?>
+                <div class="stat-number">2</div>
                 <div class="stat-label">Servicios Activos</div>
             </div>
 
@@ -662,10 +825,7 @@ require_once '../conexion/controllerUsuario.php';
                 <div class="stat-icon categories">
                     <i class="fas fa-tags"></i>
                 </div>
-                 <?php
-               echo '<div class="stat-number">' .  $numeroCategorias ;
-               echo '</div>';
-               ?>
+                <div class="stat-number">3</div>
                 <div class="stat-label">Categorías</div>
             </div>
         </div>
@@ -689,33 +849,451 @@ require_once '../conexion/controllerUsuario.php';
                 </div>
             </div>
 
-            <div id="tableContainer">
-                <!-- La tabla se generará dinámicamente -->
+            <!-- aquí va el listado de usuarios -->
+            <div id="usersContainer" class="cards-grid">
+                <div class="item-card" data-id="1" onclick="selectCard(this, 'users')">
+                    <div class="card-icon-container">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="card-main-content">
+                        <div class="card-header">
+                            <div class="card-id">ID: 1</div>
+                            <span class="badge badge-client">Cliente</span>
+                        </div>
+                        <div class="card-title">María González</div>
+                        <div class="card-info">
+                            <div class="info-row">
+                                <i class="fas fa-envelope"></i>
+                                <span>maria@email.com</span>
+                            </div>
+                            <div class="info-row">
+                                <i class="fas fa-circle-check"></i>
+                                <span>Activo</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="item-card" data-id="2" onclick="selectCard(this, 'users')">
+                    <div class="card-icon-container">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="card-main-content">
+                        <div class="card-header">
+                            <div class="card-id">ID: 2</div>
+                            <span class="badge badge-provider">Proveedor</span>
+                        </div>
+                        <div class="card-title">Juan Pérez</div>
+                        <div class="card-info">
+                            <div class="info-row">
+                                <i class="fas fa-envelope"></i>
+                                <span>juan@email.com</span>
+                            </div>
+                            <div class="info-row">
+                                <i class="fas fa-circle-check"></i>
+                                <span>Activo</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="item-card" data-id="3" onclick="selectCard(this, 'users')">
+                    <div class="card-icon-container">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="card-main-content">
+                        <div class="card-header">
+                            <div class="card-id">ID: 3</div>
+                            <span class="badge badge-client">Cliente</span>
+                        </div>
+                        <div class="card-title">Ana Rodríguez</div>
+                        <div class="card-info">
+                            <div class="info-row">
+                                <i class="fas fa-envelope"></i>
+                                <span>ana@email.com</span>
+                            </div>
+                            <div class="info-row">
+                                <i class="fas fa-circle-check"></i>
+                                <span>Activo</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="item-card" data-id="4" onclick="selectCard(this, 'users')">
+                    <div class="card-icon-container">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="card-main-content">
+                        <div class="card-header">
+                            <div class="card-id">ID: 4</div>
+                            <span class="badge badge-provider">Proveedor</span>
+                        </div>
+                        <div class="card-title">Carlos López</div>
+                        <div class="card-info">
+                            <div class="info-row">
+                                <i class="fas fa-envelope"></i>
+                                <span>carlos@email.com</span>
+                            </div>
+                            <div class="info-row">
+                                <i class="fas fa-circle-check"></i>
+                                <span>Activo</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="item-card" data-id="5" onclick="selectCard(this, 'users')">
+                    <div class="card-icon-container">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="card-main-content">
+                        <div class="card-header">
+                            <div class="card-id">ID: 5</div>
+                            <span class="badge badge-client">Cliente</span>
+                        </div>
+                        <div class="card-title">Laura Martínez</div>
+                        <div class="card-info">
+                            <div class="info-row">
+                                <i class="fas fa-envelope"></i>
+                                <span>laura@email.com</span>
+                            </div>
+                            <div class="info-row">
+                                <i class="fas fa-circle-check"></i>
+                                <span>Activo</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
+
+            <!-- aquí va el listado de proveedores -->
+            <div id="providersContainer" class="cards-grid" style="display: none;">
+                <div class="item-card" data-id="1" onclick="selectCard(this, 'providers')">
+                    <div class="card-icon-container provider-icon">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <div class="card-main-content">
+                        <div class="card-header">
+                            <div class="card-id">ID: 1</div>
+                        </div>
+                        <div class="card-title">Juan Pérez</div>
+                        <div class="card-subtitle">Desarrollo Web</div>
+                        <div class="card-info">
+                            <div class="info-row">
+                                <i class="fas fa-star"></i>
+                                <span>4.8 / 5.0</span>
+                            </div>
+                            <div class="info-row">
+                                <i class="fas fa-briefcase"></i>
+                                <span>45 trabajos</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="item-card" data-id="2" onclick="selectCard(this, 'providers')">
+                    <div class="card-icon-container provider-icon">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <div class="card-main-content">
+                        <div class="card-header">
+                            <div class="card-id">ID: 2</div>
+                        </div>
+                        <div class="card-title">Carlos López</div>
+                        <div class="card-subtitle">Reparación del Hogar</div>
+                        <div class="card-info">
+                            <div class="info-row">
+                                <i class="fas fa-star"></i>
+                                <span>4.9 / 5.0</span>
+                            </div>
+                            <div class="info-row">
+                                <i class="fas fa-briefcase"></i>
+                                <span>67 trabajos</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="item-card" data-id="3" onclick="selectCard(this, 'providers')">
+                    <div class="card-icon-container provider-icon">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <div class="card-main-content">
+                        <div class="card-header">
+                            <div class="card-id">ID: 3</div>
+                        </div>
+                        <div class="card-title">Pedro Sánchez</div>
+                        <div class="card-subtitle">Diseño Gráfico</div>
+                        <div class="card-info">
+                            <div class="info-row">
+                                <i class="fas fa-star"></i>
+                                <span>4.7 / 5.0</span>
+                            </div>
+                            <div class="info-row">
+                                <i class="fas fa-briefcase"></i>
+                                <span>32 trabajos</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="item-card" data-id="4" onclick="selectCard(this, 'providers')">
+                    <div class="card-icon-container provider-icon">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <div class="card-main-content">
+                        <div class="card-header">
+                            <div class="card-id">ID: 4</div>
+                        </div>
+                        <div class="card-title">Diego Fernández</div>
+                        <div class="card-subtitle">Plomería</div>
+                        <div class="card-info">
+                            <div class="info-row">
+                                <i class="fas fa-star"></i>
+                                <span>4.6 / 5.0</span>
+                            </div>
+                            <div class="info-row">
+                                <i class="fas fa-briefcase"></i>
+                                <span>28 trabajos</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- aquí va el listado de servicios -->
+            <div id="servicesContainer" class="cards-grid" style="display: none;">
+                <div class="item-card" data-id="1" onclick="selectCard(this, 'services')">
+                    <div class="card-icon-container service-icon">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <div class="card-main-content">
+                        <div class="card-header">
+                            <div class="card-id">ID: 1</div>
+                        </div>
+                        <div class="card-title">Desarrollo Web Completo</div>
+                        <div class="card-info">
+                            <div class="info-row">
+                                <i class="fas fa-user-tie"></i>
+                                <span>Juan Pérez</span>
+                            </div>
+                            <div class="info-row">
+                                <i class="fas fa-tag"></i>
+                                <span>Tecnología</span>
+                            </div>
+                            <div class="price-badge">
+                                <i class="fas fa-dollar-sign"></i>
+                                <span>1,500</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="item-card" data-id="2" onclick="selectCard(this, 'services')">
+                    <div class="card-icon-container service-icon">
+                        <i class="fas fa-wrench"></i>
+                    </div>
+                    <div class="card-main-content">
+                        <div class="card-header">
+                            <div class="card-id">ID: 2</div>
+                        </div>
+                        <div class="card-title">Reparación de Plomería</div>
+                        <div class="card-info">
+                            <div class="info-row">
+                                <i class="fas fa-user-tie"></i>
+                                <span>Carlos López</span>
+                            </div>
+                            <div class="info-row">
+                                <i class="fas fa-tag"></i>
+                                <span>Hogar</span>
+                            </div>
+                            <div class="price-badge">
+                                <i class="fas fa-dollar-sign"></i>
+                                <span>350</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="item-card" data-id="3" onclick="selectCard(this, 'services')">
+                    <div class="card-icon-container service-icon">
+                        <i class="fas fa-palette"></i>
+                    </div>
+                    <div class="card-main-content">
+                        <div class="card-header">
+                            <div class="card-id">ID: 3</div>
+                        </div>
+                        <div class="card-title">Diseño de Logotipo</div>
+                        <div class="card-info">
+                            <div class="info-row">
+                                <i class="fas fa-user-tie"></i>
+                                <span>Pedro Sánchez</span>
+                            </div>
+                            <div class="info-row">
+                                <i class="fas fa-tag"></i>
+                                <span>Diseño</span>
+                            </div>
+                            <div class="price-badge">
+                                <i class="fas fa-dollar-sign"></i>
+                                <span>800</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="item-card" data-id="4" onclick="selectCard(this, 'services')">
+                    <div class="card-icon-container service-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <div class="card-main-content">
+                        <div class="card-header">
+                            <div class="card-id">ID: 4</div>
+                        </div>
+                        <div class="card-title">Instalación Eléctrica</div>
+                        <div class="card-info">
+                            <div class="info-row">
+                                <i class="fas fa-user-tie"></i>
+                                <span>Diego Fernández</span>
+                            </div>
+                            <div class="info-row">
+                                <i class="fas fa-tag"></i>
+                                <span>Hogar</span>
+                            </div>
+                            <div class="price-badge">
+                                <i class="fas fa-dollar-sign"></i>
+                                <span>450</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- aquí va el listado de categorías -->
+            <div id="categoriesContainer" class="cards-grid" style="display: none;">
+                <div class="item-card" data-id="1" onclick="selectCard(this, 'categories')">
+                    <div class="card-icon-container category-icon">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <div class="card-main-content">
+                        <div class="card-header">
+                            <div class="card-id">ID: 1</div>
+                        </div>
+                        <div class="card-title">Tecnología</div>
+                        <div class="card-info">
+                            <div class="info-row">
+                                <i class="fas fa-briefcase"></i>
+                                <span>23 servicios activos</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="item-card" data-id="2" onclick="selectCard(this, 'categories')">
+                    <div class="card-icon-container category-icon">
+                        <i class="fas fa-home"></i>
+                    </div>
+                    <div class="card-main-content">
+                        <div class="card-header">
+                            <div class="card-id">ID: 2</div>
+                        </div>
+                        <div class="card-title">Hogar</div>
+                        <div class="card-info">
+                            <div class="info-row">
+                                <i class="fas fa-briefcase"></i>
+                                <span>34 servicios activos</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="item-card" data-id="3" onclick="selectCard(this, 'categories')">
+                    <div class="card-icon-container category-icon">
+                        <i class="fas fa-palette"></i>
+                    </div>
+                    <div class="card-main-content">
+                        <div class="card-header">
+                            <div class="card-id">ID: 3</div>
+                        </div>
+                        <div class="card-title">Diseño</div>
+                        <div class="card-info">
+                            <div class="info-row">
+                                <i class="fas fa-briefcase"></i>
+                                <span>18 servicios activos</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="item-card" data-id="4" onclick="selectCard(this, 'categories')">
+                    <div class="card-icon-container category-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <div class="card-main-content">
+                        <div class="card-header">
+                            <div class="card-id">ID: 4</div>
+                        </div>
+                        <div class="card-title">Educación</div>
+                        <div class="card-info">
+                            <div class="info-row">
+                                <i class="fas fa-briefcase"></i>
+                                <span>14 servicios activos</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 
-    <!-- Modal de Creación/Edición -->
-    <div class="modal-overlay" id="formModal">
+    <!-- este es el modal para crear un nuevo usuario -->
+    <div class="modal-overlay" id="createUserModal">
         <div class="modal">
             <div class="modal-header">
-                <h3 id="modalTitle">
-                    <i class="fas fa-plus-circle"></i>
+                <h3>
+                    <i class="fas fa-user-plus"></i>
                     Crear Usuario
                 </h3>
-                <button class="modal-close" onclick="closeModal('formModal')">
+                <button class="modal-close" onclick="closeModal('createUserModal')">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <div class="modal-body" id="modalFormContent">
-                <!-- El formulario se generará dinámicamente -->
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Nombre Completo *</label>
+                    <input type="text" class="form-input" id="createUserName" placeholder="Ej: María González" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email *</label>
+                    <input type="email" class="form-input" id="createUserEmail" placeholder="usuario@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Tipo de Usuario *</label>
+                    <select class="form-select" id="createUserType" required>
+                        <option value="">Seleccionar tipo</option>
+                        <option value="Cliente">Cliente</option>
+                        <option value="Proveedor">Proveedor</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Contraseña *</label>
+                    <input type="password" class="form-input" id="createUserPassword" placeholder="Mínimo 8 caracteres" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Estado</label>
+                    <select class="form-select" id="createUserStatus">
+                        <option value="Activo">Activo</option>
+                        <option value="Inactivo">Inactivo</option>
+                    </select>
+                </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-cancel" onclick="closeModal('formModal')">
+                <button class="btn btn-cancel" onclick="closeModal('createUserModal')">
                     <i class="fas fa-times"></i>
                     Cancelar
                 </button>
-                <button class="btn btn-save" onclick="saveItem()">
+                <button class="btn btn-save" onclick="saveUser('create')">
                     <i class="fas fa-check"></i>
                     Guardar
                 </button>
@@ -723,7 +1301,337 @@ require_once '../conexion/controllerUsuario.php';
         </div>
     </div>
 
-    <!-- Modal de Confirmación de Eliminación -->
+    <!-- este es el modal para modificar un usuario existente -->
+    <div class="modal-overlay" id="editUserModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>
+                    <i class="fas fa-user-edit"></i>
+                    Editar Usuario
+                </h3>
+                <button class="modal-close" onclick="closeModal('editUserModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Nombre Completo *</label>
+                    <input type="text" class="form-input" id="editUserName" placeholder="Ej: María González" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email *</label>
+                    <input type="email" class="form-input" id="editUserEmail" placeholder="usuario@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Tipo de Usuario *</label>
+                    <select class="form-select" id="editUserType" required>
+                        <option value="">Seleccionar tipo</option>
+                        <option value="Cliente">Cliente</option>
+                        <option value="Proveedor">Proveedor</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Estado</label>
+                    <select class="form-select" id="editUserStatus">
+                        <option value="Activo">Activo</option>
+                        <option value="Inactivo">Inactivo</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-cancel" onclick="closeModal('editUserModal')">
+                    <i class="fas fa-times"></i>
+                    Cancelar
+                </button>
+                <button class="btn btn-save" onclick="saveUser('edit')">
+                    <i class="fas fa-check"></i>
+                    Actualizar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- este es el modal para crear un nuevo proveedor -->
+    <div class="modal-overlay" id="createProviderModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>
+                    <i class="fas fa-user-tie"></i>
+                    Crear Proveedor
+                </h3>
+                <button class="modal-close" onclick="closeModal('createProviderModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Nombre Completo *</label>
+                    <input type="text" class="form-input" id="createProviderName" placeholder="Ej: Juan Pérez" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Servicio Principal *</label>
+                    <input type="text" class="form-input" id="createProviderService" placeholder="Ej: Desarrollo Web" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Calificación</label>
+                    <input type="number" class="form-input" id="createProviderRating" min="0" max="5" step="0.1" placeholder="5.0" value="5.0">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Trabajos Completados</label>
+                    <input type="number" class="form-input" id="createProviderJobs" min="0" placeholder="0" value="0">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-cancel" onclick="closeModal('createProviderModal')">
+                    <i class="fas fa-times"></i>
+                    Cancelar
+                </button>
+                <button class="btn btn-save" onclick="saveProvider('create')">
+                    <i class="fas fa-check"></i>
+                    Guardar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- este es el modal para modificar un proveedor existente -->
+    <div class="modal-overlay" id="editProviderModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>
+                    <i class="fas fa-user-tie"></i>
+                    Editar Proveedor
+                </h3>
+                <button class="modal-close" onclick="closeModal('editProviderModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Nombre Completo *</label>
+                    <input type="text" class="form-input" id="editProviderName" placeholder="Ej: Juan Pérez" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Servicio Principal *</label>
+                    <input type="text" class="form-input" id="editProviderService" placeholder="Ej: Desarrollo Web" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Calificación</label>
+                    <input type="number" class="form-input" id="editProviderRating" min="0" max="5" step="0.1" placeholder="5.0">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Trabajos Completados</label>
+                    <input type="number" class="form-input" id="editProviderJobs" min="0" placeholder="0">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-cancel" onclick="closeModal('editProviderModal')">
+                    <i class="fas fa-times"></i>
+                    Cancelar
+                </button>
+                <button class="btn btn-save" onclick="saveProvider('edit')">
+                    <i class="fas fa-check"></i>
+                    Actualizar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- este es el modal para crear un nuevo servicio -->
+    <div class="modal-overlay" id="createServiceModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>
+                    <i class="fas fa-briefcase"></i>
+                    Crear Servicio
+                </h3>
+                <button class="modal-close" onclick="closeModal('createServiceModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Título del Servicio *</label>
+                    <input type="text" class="form-input" id="createServiceTitle" placeholder="Ej: Desarrollo Web Completo" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Proveedor *</label>
+                    <input type="text" class="form-input" id="createServiceProvider" placeholder="Nombre del proveedor" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Categoría *</label>
+                    <select class="form-select" id="createServiceCategory" required>
+                        <option value="">Seleccionar categoría</option>
+                        <option value="Tecnología">Tecnología</option>
+                        <option value="Hogar">Hogar</option>
+                        <option value="Diseño">Diseño</option>
+                        <option value="Educación">Educación</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Precio (USD) *</label>
+                    <input type="number" class="form-input" id="createServicePrice" min="0" step="0.01" placeholder="0.00" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Descripción</label>
+                    <textarea class="form-textarea" id="createServiceDescription" placeholder="Describe el servicio en detalle..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-cancel" onclick="closeModal('createServiceModal')">
+                    <i class="fas fa-times"></i>
+                    Cancelar
+                </button>
+                <button class="btn btn-save" onclick="saveService('create')">
+                    <i class="fas fa-check"></i>
+                    Guardar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- este es el modal para modificar un servicio existente -->
+    <div class="modal-overlay" id="editServiceModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>
+                    <i class="fas fa-briefcase"></i>
+                    Editar Servicio
+                </h3>
+                <button class="modal-close" onclick="closeModal('editServiceModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Título del Servicio *</label>
+                    <input type="text" class="form-input" id="editServiceTitle" placeholder="Ej: Desarrollo Web Completo" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Proveedor *</label>
+                    <input type="text" class="form-input" id="editServiceProvider" placeholder="Nombre del proveedor" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Categoría *</label>
+                    <select class="form-select" id="editServiceCategory" required>
+                        <option value="">Seleccionar categoría</option>
+                        <option value="Tecnología">Tecnología</option>
+                        <option value="Hogar">Hogar</option>
+                        <option value="Diseño">Diseño</option>
+                        <option value="Educación">Educación</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Precio (USD) *</label>
+                    <input type="number" class="form-input" id="editServicePrice" min="0" step="0.01" placeholder="0.00" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Descripción</label>
+                    <textarea class="form-textarea" id="editServiceDescription" placeholder="Describe el servicio en detalle..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-cancel" onclick="closeModal('editServiceModal')">
+                    <i class="fas fa-times"></i>
+                    Cancelar
+                </button>
+                <button class="btn btn-save" onclick="saveService('edit')">
+                    <i class="fas fa-check"></i>
+                    Actualizar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- este es el modal para crear una nueva categoría -->
+    <div class="modal-overlay" id="createCategoryModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>
+                    <i class="fas fa-tags"></i>
+                    Crear Categoría
+                </h3>
+                <button class="modal-close" onclick="closeModal('createCategoryModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Nombre de la Categoría *</label>
+                    <input type="text" class="form-input" id="createCategoryName" placeholder="Ej: Tecnología" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Ícono (Font Awesome) *</label>
+                    <input type="text" class="form-input" id="createCategoryIcon" placeholder="fa-laptop-code" required>
+                    <div class="form-hint">Visita fontawesome.com para ver íconos disponibles</div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Número de Servicios</label>
+                    <input type="number" class="form-input" id="createCategoryServices" min="0" placeholder="0" value="0">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Descripción</label>
+                    <textarea class="form-textarea" id="createCategoryDescription" placeholder="Describe la categoría..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-cancel" onclick="closeModal('createCategoryModal')">
+                    <i class="fas fa-times"></i>
+                    Cancelar
+                </button>
+                <button class="btn btn-save" onclick="saveCategory('create')">
+                    <i class="fas fa-check"></i>
+                    Guardar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- este es el modal para modificar una categoría existente -->
+    <div class="modal-overlay" id="editCategoryModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>
+                    <i class="fas fa-tags"></i>
+                    Editar Categoría
+                </h3>
+                <button class="modal-close" onclick="closeModal('editCategoryModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Nombre de la Categoría *</label>
+                    <input type="text" class="form-input" id="editCategoryName" placeholder="Ej: Tecnología" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Ícono (Font Awesome) *</label>
+                    <input type="text" class="form-input" id="editCategoryIcon" placeholder="fa-laptop-code" required>
+                    <div class="form-hint">Visita fontawesome.com para ver íconos disponibles</div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Número de Servicios</label>
+                    <input type="number" class="form-input" id="editCategoryServices" min="0" placeholder="0">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Descripción</label>
+                    <textarea class="form-textarea" id="editCategoryDescription" placeholder="Describe la categoría..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-cancel" onclick="closeModal('editCategoryModal')">
+                    <i class="fas fa-times"></i>
+                    Cancelar
+                </button>
+                <button class="btn btn-save" onclick="saveCategory('edit')">
+                    <i class="fas fa-check"></i>
+                    Actualizar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- este es el modal que pregunta si realmente querés eliminar algo -->
     <div class="modal-overlay" id="deleteModal">
         <div class="modal delete-modal">
             <div class="modal-body">
@@ -748,50 +1656,38 @@ require_once '../conexion/controllerUsuario.php';
         </div>
     </div>
 
+    <!-- esta es la notificación que aparece cuando hacés algo -->
+    <div class="notification-toast" id="notificationToast">
+        <div class="notification-icon">
+            <i class="fas fa-check-circle"></i>
+        </div>
+        <div class="notification-content">
+            <div class="notification-title" id="notificationTitle">Operación exitosa</div>
+            <div class="notification-message" id="notificationMessage">La acción se completó correctamente</div>
+        </div>
+        <button class="notification-close" onclick="hideNotification()">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
     <script>
+        // acá guardamos en qué sección estamos (usuarios, proveedores, servicios o categorías)
         let currentSection = 'users';
         let selectedItem = null;
-        let isEditMode = false;
+        let selectedItemName = '';
 
-        const data = {
-            users: [
-                { id: 1, name: 'María González', email: 'maria@email.com', type: 'Cliente', status: 'Activo' },
-                { id: 2, name: 'Juan Pérez', email: 'juan@email.com', type: 'Proveedor', status: 'Activo' },
-                { id: 3, name: 'Ana Rodríguez', email: 'ana@email.com', type: 'Cliente', status: 'Activo' },
-                { id: 4, name: 'Carlos López', email: 'carlos@email.com', type: 'Proveedor', status: 'Activo' },
-                { id: 5, name: 'Laura Martínez', email: 'laura@email.com', type: 'Cliente', status: 'Activo' }
-            ],
-            providers: [
-                { id: 1, name: 'Juan Pérez', service: 'Desarrollo Web', rating: 4.8, jobs: 45 },
-                { id: 2, name: 'Carlos López', service: 'Reparación del Hogar', rating: 4.9, jobs: 67 },
-                { id: 3, name: 'Pedro Sánchez', service: 'Diseño Gráfico', rating: 4.7, jobs: 32 },
-                { id: 4, name: 'Diego Fernández', service: 'Plomería', rating: 4.6, jobs: 28 }
-            ],
-            services: [
-                { id: 1, title: 'Desarrollo Web Completo', provider: 'Juan Pérez', category: 'Tecnología', availability: 'Disponible' },
-                { id: 2, title: 'Reparación de Plomería', provider: 'Carlos López', category: 'Hogar', availability: 'Disponible' },
-                { id: 3, title: 'Diseño de Logotipo', provider: 'Pedro Sánchez', category: 'Diseño', availability: 'Vencido' },
-                { id: 4, title: 'Instalación Eléctrica', provider: 'Diego Fernández', category: 'Hogar', availability: 'Disponible' }
-            ],
-            categories: [
-                { id: 1, name: 'Tecnología', services: 23, icon: 'fa-laptop-code' },
-                { id: 2, name: 'Hogar', services: 34, icon: 'fa-home' },
-                { id: 3, name: 'Diseño', services: 18, icon: 'fa-palette' },
-                { id: 4, name: 'Educación', services: 14, icon: 'fa-graduation-cap' }
-            ]
-        };
-
+        // esta función cambia entre las diferentes secciones del panel
         function showSection(section) {
             currentSection = section;
             selectedItem = null;
             
-            // Update active stat card
+            // quitamos la clase activa de todas las tarjetas de estadísticas
             document.querySelectorAll('.stat-card').forEach(card => {
                 card.classList.remove('active');
             });
             event.currentTarget.classList.add('active');
 
-            // Update section title
+            // cambiamos el título de la sección
             const titles = {
                 users: 'Gestión de Usuarios',
                 providers: 'Gestión de Proveedores',
@@ -800,344 +1696,206 @@ require_once '../conexion/controllerUsuario.php';
             };
             document.getElementById('sectionTitle').textContent = titles[section];
 
-            // Disable buttons
+            // escondemos todos los contenedores de listado
+            document.getElementById('usersContainer').style.display = 'none';
+            document.getElementById('providersContainer').style.display = 'none';
+            document.getElementById('servicesContainer').style.display = 'none';
+            document.getElementById('categoriesContainer').style.display = 'none';
+
+            // mostramos el contenedor de la sección actual
+            document.getElementById(section + 'Container').style.display = 'flex';
+
+            // deshabilitamos los botones de editar y eliminar
             document.getElementById('editBtn').disabled = true;
             document.getElementById('deleteBtn').disabled = true;
-
-            // Render table
-            renderTable();
         }
 
-        function renderTable() {
-            const container = document.getElementById('tableContainer');
-            const sectionData = data[currentSection];
-
-            if (!sectionData || sectionData.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-inbox"></i>
-                        <p>No hay datos disponibles</p>
-                    </div>
-                `;
-                return;
-            }
-
-            let tableHTML = '<table class="data-table"><thead><tr>';
-
-            // Generate headers based on section
-            if (currentSection === 'users') {
-                tableHTML += '<th>ID</th><th>Nombre</th><th>Email</th><th>Tipo</th><th>Estado</th>';
-            } else if (currentSection === 'providers') {
-                tableHTML += '<th>ID</th><th>Nombre</th><th>Servicio</th><th>Calificación</th><th>Trabajos</th>';
-            } else if (currentSection === 'services') {
-                tableHTML += '<th>ID</th><th>Título</th><th>Proveedor</th><th>Categoría</th><th>Disponibilidad</th>';
-            } else if (currentSection === 'categories') {
-                tableHTML += '<th>ID</th><th>Nombre</th><th>Servicios</th><th>Ícono</th>';
-            }
-
-            tableHTML += '</tr></thead><tbody>';
-
-            // Generate rows
-            sectionData.forEach(item => {
-                tableHTML += `<tr onclick="selectItem(${item.id})">`;
-                
-                if (currentSection === 'users') {
-                    tableHTML += `
-                        <td>${item.id}</td>
-                        <td><strong>${item.name}</strong></td>
-                        <td>${item.email}</td>
-                        <td><span class="badge ${item.type === 'Proveedor' ? 'badge-provider' : 'badge-client'}">${item.type}</span></td>
-                        <td><span class="badge badge-active">${item.status}</span></td>
-                    `;
-                } else if (currentSection === 'providers') {
-                    tableHTML += `
-                        <td>${item.id}</td>
-                        <td><strong>${item.name}</strong></td>
-                        <td>${item.service}</td>
-                        <td><i class="fas fa-star" style="color: #f39c12;"></i> ${item.rating}</td>
-                        <td>${item.jobs} trabajos</td>
-                    `;
-                } else if (currentSection === 'services') {
-                    tableHTML += `
-                        <td>${item.id}</td>
-                        <td><strong>${item.title}</strong></td>
-                        <td>${item.provider}</td>
-                        <td>${item.category}</td>
-                        <td><span class="badge ${item.availability === 'Disponible' ? 'badge-available' : 'badge-expired'}">${item.availability}</span></td>
-                    `;
-                } else if (currentSection === 'categories') {
-                    tableHTML += `
-                        <td>${item.id}</td>
-                        <td><strong>${item.name}</strong></td>
-                        <td>${item.services} servicios</td>
-                        <td><i class="fas ${item.icon}" style="color: #0eb27c; font-size: 1.2rem;"></i></td>
-                    `;
-                }
-                
-                tableHTML += '</tr>';
-            });
-
-            tableHTML += '</tbody></table>';
-            container.innerHTML = tableHTML;
-        }
-
-        function selectItem(id) {
-            selectedItem = id;
-            
-            // Remove previous selection
-            document.querySelectorAll('.data-table tr').forEach(row => {
-                row.classList.remove('selected');
+        // esta función selecciona una tarjeta cuando hacés click en ella
+        function selectCard(card, section) {
+            // quitamos la selección de todas las tarjetas en esta sección
+            const container = document.getElementById(section + 'Container');
+            container.querySelectorAll('.item-card').forEach(c => {
+                c.classList.remove('selected');
             });
             
-            // Add selection to clicked row
-            event.currentTarget.classList.add('selected');
+            // agregamos la clase selected a la tarjeta clickeada
+            card.classList.add('selected');
             
-            // Enable buttons
+            // guardamos el id y nombre del elemento seleccionado
+            selectedItem = card.dataset.id;
+            selectedItemName = card.querySelector('.card-title').textContent;
+            
+            // ahora sí habilitamos los botones de editar y eliminar
             document.getElementById('editBtn').disabled = false;
             document.getElementById('deleteBtn').disabled = false;
         }
 
+        // esta función abre el modal correspondiente para crear algo nuevo
         function createItem() {
-            isEditMode = false;
-            const modalTitle = document.getElementById('modalTitle');
-            const formContent = document.getElementById('modalFormContent');
-            
-            // Update modal title
-            const titles = {
-                users: 'Crear Usuario',
-                providers: 'Crear Proveedor',
-                services: 'Crear Servicio',
-                categories: 'Crear Categoría'
+            const modals = {
+                users: 'createUserModal',
+                providers: 'createProviderModal',
+                services: 'createServiceModal',
+                categories: 'createCategoryModal'
             };
-            modalTitle.innerHTML = `<i class="fas fa-plus-circle"></i> ${titles[currentSection]}`;
-            
-            // Generate form based on section
-            formContent.innerHTML = generateForm();
-            
-            // Show modal
-            document.getElementById('formModal').classList.add('active');
+            openModal(modals[currentSection]);
         }
 
+        // esta función abre el modal correspondiente para editar algo que ya existe
         function editItem() {
             if (!selectedItem) return;
             
-            isEditMode = true;
-            const modalTitle = document.getElementById('modalTitle');
-            const formContent = document.getElementById('modalFormContent');
-            
-            // Update modal title
-            const titles = {
-                users: 'Editar Usuario',
-                providers: 'Editar Proveedor',
-                services: 'Editar Servicio',
-                categories: 'Editar Categoría'
+            const modals = {
+                users: 'editUserModal',
+                providers: 'editProviderModal',
+                services: 'editServiceModal',
+                categories: 'editCategoryModal'
             };
-            modalTitle.innerHTML = `<i class="fas fa-edit"></i> ${titles[currentSection]}`;
-            
-            // Generate form with existing data
-            formContent.innerHTML = generateForm(true);
-            
-            // Fill form with selected item data
-            fillFormData();
-            
-            // Show modal
-            document.getElementById('formModal').classList.add('active');
+            openModal(modals[currentSection]);
         }
 
-        function generateForm(isEdit = false) {
-            let formHTML = '';
-            
-            if (currentSection === 'users') {
-                formHTML = `
-                    <div class="form-group">
-                        <label class="form-label">Nombre Completo *</label>
-                        <input type="text" class="form-input" id="userName" placeholder="Ej: María González" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Email *</label>
-                        <input type="email" class="form-input" id="userEmail" placeholder="usuario@email.com" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Tipo de Usuario *</label>
-                        <select class="form-select" id="userType" required>
-                            <option value="">Seleccionar tipo</option>
-                            <option value="Cliente">Cliente</option>
-                            <option value="Proveedor">Proveedor</option>
-                        </select>
-                    </div>
-                    ${!isEdit ? `
-                    <div class="form-group">
-                        <label class="form-label">Contraseña *</label>
-                        <input type="password" class="form-input" id="userPassword" placeholder="Mínimo 8 caracteres" required>
-                    </div>
-                    ` : ''}
-                    <div class="form-group">
-                        <label class="form-label">Estado</label>
-                        <select class="form-select" id="userStatus">
-                            <option value="Activo">Activo</option>
-                            <option value="Inactivo">Inactivo</option>
-                        </select>
-                    </div>
-                `;
-            } else if (currentSection === 'providers') {
-                formHTML = `
-                    <div class="form-group">
-                        <label class="form-label">Nombre Completo *</label>
-                        <input type="text" class="form-input" id="providerName" placeholder="Ej: Juan Pérez" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Servicio Principal *</label>
-                        <input type="text" class="form-input" id="providerService" placeholder="Ej: Desarrollo Web" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Calificación</label>
-                        <input type="number" class="form-input" id="providerRating" min="0" max="5" step="0.1" placeholder="0.0" value="5.0">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Trabajos Completados</label>
-                        <input type="number" class="form-input" id="providerJobs" min="0" placeholder="0" value="0">
-                    </div>
-                `;
-            } else if (currentSection === 'services') {
-                formHTML = `
-                    <div class="form-group">
-                        <label class="form-label">Título del Servicio *</label>
-                        <input type="text" class="form-input" id="serviceTitle" placeholder="Ej: Desarrollo Web Completo" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Proveedor *</label>
-                        <input type="text" class="form-input" id="serviceProvider" placeholder="Nombre del proveedor" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Categoría *</label>
-                        <select class="form-select" id="serviceCategory" required>
-                            <option value="">Seleccionar categoría</option>
-                            <option value="Tecnología">Tecnología</option>
-                            <option value="Hogar">Hogar</option>
-                            <option value="Diseño">Diseño</option>
-                            <option value="Educación">Educación</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Disponibilidad *</label>
-                        <select class="form-select" id="serviceAvailability" required>
-                            <option value="Disponible">Disponible</option>
-                            <option value="Vencido">Vencido</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Descripción</label>
-                        <textarea class="form-textarea" id="serviceDescription" placeholder="Describe el servicio en detalle..."></textarea>
-                    </div>
-                `;
-            } else if (currentSection === 'categories') {
-                formHTML = `
-                    <div class="form-group">
-                        <label class="form-label">Nombre de la Categoría *</label>
-                        <input type="text" class="form-input" id="categoryName" placeholder="Ej: Tecnología" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Ícono (Font Awesome) *</label>
-                        <input type="text" class="form-input" id="categoryIcon" placeholder="fa-laptop-code" required>
-                        <small style="color: #7f8c8d; font-size: 0.8rem;">Visita fontawesome.com para ver íconos disponibles</small>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Número de Servicios</label>
-                        <input type="number" class="form-input" id="categoryServices" min="0" placeholder="0" value="0">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Descripción</label>
-                        <textarea class="form-textarea" id="categoryDescription" placeholder="Describe la categoría..."></textarea>
-                    </div>
-                `;
-            }
-            
-            return formHTML;
-        }
-
-        function fillFormData() {
-            const item = data[currentSection].find(i => i.id === selectedItem);
-            if (!item) return;
-            
-            if (currentSection === 'users') {
-                document.getElementById('userName').value = item.name;
-                document.getElementById('userEmail').value = item.email;
-                document.getElementById('userType').value = item.type;
-                document.getElementById('userStatus').value = item.status;
-            } else if (currentSection === 'providers') {
-                document.getElementById('providerName').value = item.name;
-                document.getElementById('providerService').value = item.service;
-                document.getElementById('providerRating').value = item.rating;
-                document.getElementById('providerJobs').value = item.jobs;
-            } else if (currentSection === 'services') {
-                document.getElementById('serviceTitle').value = item.title;
-                document.getElementById('serviceProvider').value = item.provider;
-                document.getElementById('serviceCategory').value = item.category;
-                document.getElementById('serviceAvailability').value = item.availability;
-            } else if (currentSection === 'categories') {
-                document.getElementById('categoryName').value = item.name;
-                document.getElementById('categoryIcon').value = item.icon;
-                document.getElementById('categoryServices').value = item.services;
-            }
-        }
-
-        function saveItem() {
-            // Aquí iría la lógica para guardar en el backend
-            if (isEditMode) {
-                alert(`${currentSection.slice(0, -1)} actualizado correctamente`);
-            } else {
-                alert(`Nuevo ${currentSection.slice(0, -1)} creado correctamente`);
-            }
-            closeModal('formModal');
-            renderTable();
-        }
-
+        // esta función abre el modal de confirmación antes de eliminar
         function deleteItem() {
             if (!selectedItem) return;
             
-            const item = data[currentSection].find(i => i.id === selectedItem);
             const deleteMsg = document.getElementById('deleteMessage');
             
-            // Customize delete message based on section
-            if (currentSection === 'users') {
-                deleteMsg.textContent = `¿Estás seguro de eliminar al usuario "${item.name}"? Esta acción no se puede deshacer.`;
-            } else if (currentSection === 'providers') {
-                deleteMsg.textContent = `¿Estás seguro de eliminar al proveedor "${item.name}"? Se eliminarán también todos sus servicios asociados.`;
-            } else if (currentSection === 'services') {
-                deleteMsg.textContent = `¿Estás seguro de eliminar el servicio "${item.title}"? Esta acción no se puede deshacer.`;
-            } else if (currentSection === 'categories') {
-                deleteMsg.textContent = `¿Estás seguro de eliminar la categoría "${item.name}"? Esto afectará a ${item.services} servicios.`;
-            }
+            // cambiamos el mensaje según lo que vayamos a eliminar
+            const messages = {
+                users: `¿Estás seguro de eliminar al usuario "${selectedItemName}"? Esta acción no se puede deshacer.`,
+                providers: `¿Estás seguro de eliminar al proveedor "${selectedItemName}"? Se eliminarán también todos sus servicios asociados.`,
+                services: `¿Estás seguro de eliminar el servicio "${selectedItemName}"? Esta acción no se puede deshacer.`,
+                categories: `¿Estás seguro de eliminar la categoría "${selectedItemName}"? Esto afectará a los servicios asociados.`
+            };
             
-            document.getElementById('deleteModal').classList.add('active');
+            deleteMsg.textContent = messages[currentSection];
+            openModal('deleteModal');
         }
 
+        // esta función elimina definitivamente el elemento después de confirmar
         function confirmDelete() {
-            // Aquí iría la lógica para eliminar en el backend
-            const item = data[currentSection].find(i => i.id === selectedItem);
+            const container = document.getElementById(currentSection + 'Container');
+            const cardToDelete = container.querySelector(`.item-card[data-id="${selectedItem}"]`);
             
-            // Remove from data array
-            const index = data[currentSection].findIndex(i => i.id === selectedItem);
-            if (index > -1) {
-                data[currentSection].splice(index, 1);
+            if (cardToDelete) {
+                cardToDelete.remove();
             }
             
-            alert(`${currentSection.slice(0, -1)} eliminado correctamente`);
             closeModal('deleteModal');
             
-            // Reset selection
+            // mostramos notificación de éxito según lo que hayamos eliminado
+            const messages = {
+                users: { title: 'Usuario eliminado', message: 'El usuario ha sido eliminado correctamente' },
+                providers: { title: 'Proveedor eliminado', message: 'El proveedor ha sido eliminado correctamente' },
+                services: { title: 'Servicio eliminado', message: 'El servicio ha sido eliminado correctamente' },
+                categories: { title: 'Categoría eliminada', message: 'La categoría ha sido eliminada correctamente' }
+            };
+            
+            showNotification('success', messages[currentSection].title, messages[currentSection].message);
+            
+            // limpiamos la selección
             selectedItem = null;
+            selectedItemName = '';
             document.getElementById('editBtn').disabled = true;
             document.getElementById('deleteBtn').disabled = true;
-            
-            renderTable();
         }
 
+        // acá están las funciones que guardan los cambios de usuarios
+        function saveUser(mode) {
+            if (mode === 'create') {
+                closeModal('createUserModal');
+                showNotification('success', 'Usuario creado', 'El usuario ha sido creado correctamente');
+            } else {
+                closeModal('editUserModal');
+                showNotification('success', 'Usuario actualizado', 'El usuario ha sido actualizado correctamente');
+            }
+        }
+
+        // acá están las funciones que guardan los cambios de proveedores
+        function saveProvider(mode) {
+            if (mode === 'create') {
+                closeModal('createProviderModal');
+                showNotification('success', 'Proveedor creado', 'El proveedor ha sido creado correctamente');
+            } else {
+                closeModal('editProviderModal');
+                showNotification('success', 'Proveedor actualizado', 'El proveedor ha sido actualizado correctamente');
+            }
+        }
+
+        // acá están las funciones que guardan los cambios de servicios
+        function saveService(mode) {
+            if (mode === 'create') {
+                closeModal('createServiceModal');
+                showNotification('success', 'Servicio creado', 'El servicio ha sido creado correctamente');
+            } else {
+                closeModal('editServiceModal');
+                showNotification('success', 'Servicio actualizado', 'El servicio ha sido actualizado correctamente');
+            }
+        }
+
+        // acá están las funciones que guardan los cambios de categorías
+        function saveCategory(mode) {
+            if (mode === 'create') {
+                closeModal('createCategoryModal');
+                showNotification('success', 'Categoría creada', 'La categoría ha sido creada correctamente');
+            } else {
+                closeModal('editCategoryModal');
+                showNotification('success', 'Categoría actualizada', 'La categoría ha sido actualizada correctamente');
+            }
+        }
+
+        // esta función muestra la notificación tipo toast
+        function showNotification(type, title, message) {
+            const toast = document.getElementById('notificationToast');
+            const toastTitle = document.getElementById('notificationTitle');
+            const toastMessage = document.getElementById('notificationMessage');
+            const icon = toast.querySelector('.notification-icon i');
+            
+            // configuramos el título y mensaje
+            toastTitle.textContent = title;
+            toastMessage.textContent = message;
+            
+            // cambiamos el ícono según el tipo de notificación
+            const icons = {
+                success: 'fa-check-circle',
+                error: 'fa-exclamation-circle',
+                info: 'fa-info-circle'
+            };
+            
+            icon.className = `fas ${icons[type] || icons.success}`;
+            
+            // agregamos la clase del tipo de notificación (success, error, info)
+            toast.className = `notification-toast ${type}`;
+            
+            // mostramos la notificación con un pequeño delay
+            setTimeout(() => toast.classList.add('show'), 100);
+            
+            // la ocultamos automáticamente después de 4 segundos
+            setTimeout(() => hideNotification(), 4000);
+        }
+
+        // esta función oculta la notificación
+        function hideNotification() {
+            const toast = document.getElementById('notificationToast');
+            toast.classList.remove('show');
+            toast.classList.add('hide');
+            
+            setTimeout(() => {
+                toast.classList.remove('hide');
+            }, 400);
+        }
+
+        // función simple para abrir cualquier modal
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+        }
+
+        // función simple para cerrar cualquier modal
         function closeModal(modalId) {
             document.getElementById(modalId).classList.remove('active');
         }
 
-        // Close modal when clicking outside
+        // si hacés click afuera del modal, se cierra automáticamente
         document.querySelectorAll('.modal-overlay').forEach(overlay => {
             overlay.addEventListener('click', function(e) {
                 if (e.target === this) {
@@ -1145,9 +1903,6 @@ require_once '../conexion/controllerUsuario.php';
                 }
             });
         });
-
-        // Initialize
-        renderTable();
     </script>
 </body>
 </html>
