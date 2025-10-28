@@ -1,13 +1,5 @@
 <?php
-// ControllerUsuario.php
-// Este controlador ahora usa un switch en función del parámetro 'action'
-// para elegir la operación a ejecutar (registrar, modificar, eliminar, buscar, login).
-// En el formulario HTML puede usar múltiples botones submit:
-// <button type="submit" name="action" value="registrar">Registrar</button>
-// <button type="submit" name="action" value="modificar">Modificar</button>
-// <button type="submit" name="action" value="eliminar">Eliminar</button>
-// <button type="submit" name="action" value="login">Iniciar sesión</button>
-// Para búsqueda por GET: ?action=buscar&cedula=...
+
 
 require_once('modelUsuario.php');  // Incluir el modelo Usuario
 require_once('modelProveedor.php');
