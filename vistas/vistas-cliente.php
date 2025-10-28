@@ -6,6 +6,8 @@
     <title>SkillMatch - Encuentra tu Servicio</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="../css/cliente.css">
+     <link rel="conexion" href="../conexion/controllerUsuario.php">
+      <link rel="conexion" href="../conexion/controllerPublicacion.php">
 </head>
 <body>
     <!-- Header -->
@@ -86,10 +88,13 @@
         <div class="hero-content">
             <h1>Encuentra el Profesional Perfecto</h1>
             <p>Conecta con expertos calificados para cualquier servicio que necesites</p>
+             <form action="../conexion/controllerPublicacion.php" method="POST">
             <div class="search-container">
-                <input type="text" placeholder="Busca plomero, electricista, programador...">
+                <input type="text" name="titulo" value="titulo" placeholder="Busca plomero, electricista, programador...">
                 <button><i class="fas fa-search"></i></button>
+                <button type="submit" name="action" value="buscar">Buscar2.0</button>
             </div>
+            </form>
         </div>
     </section>
 

@@ -51,9 +51,16 @@ class Servicio {
     $st->bind_param("s", $likeTitulo);
     $st->execute();
     $result = $st->get_result();
-    $servicios = $result->fetch_all(MYSQLI_ASSOC);
+    // Puede devolver múltiples filas; recoger todas en un array
+    $servicios = [];
+    while ($row = $result->fetch_assoc()) {
+        $servicios[] = $row;
+    }
+    // liberar recursos
+    $result->free();
+    $st->close();
     $cx->close();
-    return $servicios;
+    return $servicios; // array (posiblemente vacío) de filas asociativas
 }
 }
 

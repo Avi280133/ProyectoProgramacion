@@ -139,34 +139,31 @@ switch ($action) {
         $usuario = $modelo->login($email, $contrasena);
 
         if ($usuario) {
-            // 🔹 Pasamos los datos a perfil.php usando include
-            include('../vistas/perfil.php');
+            if (session_status() === PHP_SESSION_NONE) session_start();
+            $_SESSION['cedula'] = $usuario['cedula'] ?? null;
+
+            // detectar rol mediante el modelo
+            $role = Usuario::detectarRol($_SESSION['cedula'] ?? '');
+            $_SESSION['role'] = $role;
+
+            switch ($role) {
+                case 'cliente':
+                    include('../vistas/vistas-cliente.php');
+                    break;
+                case 'proveedor':
+                    include('../vistas/perfil.php');
+                    break;
+                case 'admin':
+                    include('../vistas/panel.php');
+                    break;
+                default:
+                   // include('../vistas/perfil.php');
+                    break;
+            }
         } else {
             echo "❌ Usuario o contraseña incorrectos.";
         }
     }
-    break;
-
-        //include('../html/perfil.html');
-
-      //  if ($datos) {
-        //    $payload = [
-          //      'cedula'   => $datos['cedula'],
-            //    'nombre'   => trim($datos['nombre'].' '.$datos['apellido']),
-              //  'email'    => $datos['email'],
-                //'username' => $datos['username'],
-               // 'edad'     => $datos['edad']
-            //];
-
-            //$json = json_encode($payload, JSON_UNESCAPED_UNICODE);
-            //$encoded = urlencode($json);  // o base64 si prefieres
-
-            //header("Location: ../html/perfil.html#d=$encoded");
-            //exit;
-        //} else {
-          //  echo "❌ Usuario o contraseña incorrectos.";
-       // }
-    
     break;
 
 

@@ -62,7 +62,7 @@
           <div class="form-group price-input-container">
             <span class="price-symbol">$</span>
             <input type="text" id="precio" name="precio" class="price-input" placeholder="0.00" pattern="[0-9]+(\.[0-9]{1,2})?" title="Ingresa un precio válido">
-            <style>
+        <!--    <style>
               .form-group {
                 margin-bottom: 24px;
               }
@@ -109,10 +109,10 @@
                   border-color: #28a745;
                   box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1);
               }
-            </style>
+            </style>-->
           </div>
 
-        <button type="submit" class="boton-enviar-formulario">📩 Publicar servicio</button>
+        <button type="submit" name="action" value="publicar"class="boton-enviar-formulario">📩 Publicar servicio</button>
       </form>
     </div>
   </main>

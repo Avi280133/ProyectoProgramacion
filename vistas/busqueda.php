@@ -6,6 +6,7 @@
     <title>Resultados || SkillMatch</title>
     <link rel="stylesheet" href="../css/busqueda-styles.css">
     <script src="https://kit.fontawesome.com/6d671fbf0c.js" crossorigin="anonymous"></script>
+       <link rel="conexion" href="../conexion/controllerPublicacion.php">
 </head>
 <body>
     <header class="main-header">
@@ -47,24 +48,28 @@
                 <button class="filter-btn">Distancia</button>
             </div>
         </div>
-
-        <div class="services-grid">
-            <div class="service-card fade-in" style="animation-delay: 0.1s">
-                <div class="service-icon">💻</div>
-                <h3 class="service-title">Desarrollo Web Frontend</h3>
-                <p class="service-description">
-                    Especialista en React, Vue.js y tecnologías modernas. Creación de interfaces responsivas y experiencias de usuario excepcionales.
-                </p>
-                <div class="service-meta">
-                    <div class="rating">
-                        ⭐ 4.9 (127 reviews)
-                    </div>
-                    <div class="price">Desde $25/hora</div>
-                </div>
-                <button class="contact-btn">Contactar Ahora</button>
-            </div>
-
-            <div class="service-card fade-in" style="animation-delay: 0.2s">
+<?php  
+print_r($servicio);
+foreach ($servicio as $servicio) {
+     echo '<div class="services-grid">';
+       echo '  <div class="service-card fade-in" style="animation-delay: 0.1s">';
+             echo '    <div class="service-icon">💻</div>';
+            echo '    <h3 class="service-title"> '
+                    . htmlspecialchars($servicio['titulo']) ;
+            echo '</h3>';
+            echo '    <p class="service-description">'
+             . htmlspecialchars($servicio['descripcion']) ;
+           echo ' </p>';
+            echo '    <div class="service-meta">';
+            echo '      <div class="rating">⭐ 4.9 (127 reviews)</div>';
+            echo '      <div class="price">'
+             . htmlspecialchars($servicio['precio']) ;
+            '</div>';
+            echo '    </div>';
+            echo '    <button class="contact-btn">Contactar Ahora</button>';
+            echo '  </div>';}
+?>
+            <!-- <div class="service-card fade-in" style="animation-delay: 0.2s">
                 <div class="service-icon">⚙️</div>
                 <h3 class="service-title">Desarrollo Backend</h3>
                 <p class="service-description">
@@ -148,8 +153,8 @@
             <button class="page-btn">4</button>
             <button class="page-btn">›</button>
         </div>
-    </main>
-
+    </main> -->
+</main>
     <script>
         const searchInput = document.querySelector('.search-input');
         const searchBtn = document.querySelector('.search-btn');
