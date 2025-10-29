@@ -6,11 +6,17 @@ SkillMatch es una plataforma web que tiene como propósito conectar a personas q
 SkillMatch incorpora un conjunto de herramientas diseñadas para facilitar la interacción entre usuarios y proveedores, garantizando una experiencia completa y eficiente. Entre sus principales funciones se destacan:
 
   • Registro e inicio de sesión personalizados, que permiten a cada usuario crear y gestionar su perfil de manera segura.
+  
   • Publicación, edición y eliminación de servicios, con información detallada y categorizada para una mejor visibilidad.
+  
   • Sistema de mensajería interna, que posibilita la comunicación directa entre clientes y proveedores.
+  
   • Búsqueda avanzada de servicios, filtrada por palabra clave, categoría, ubicación o valoración.
+  
   • Gestión de reseñas y calificaciones, para mantener la transparencia y la calidad de los servicios ofrecidos.
+  
   • Panel de administración, encargado de supervisar la actividad dentro de la plataforma y asegurar el cumplimiento de las normas.
+  
   • Notificaciones automáticas, que mantienen informados a los usuarios sobre interacciones, mensajes y actualizaciones relevantes.
 
 ============================================================================================
