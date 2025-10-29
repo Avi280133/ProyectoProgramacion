@@ -161,6 +161,32 @@ switch ($action) {
     break;
 
 
+ case 'mensaje':
+        // Buscar Usuario por Cédula (GET o POST)
+       // $cedula = null;
+      //  if (isset($_GET['cedula']) && !empty(trim($_GET['cedula']))) $cedula = trim($_GET['cedula']);
+       // if (isset($_POST['cedula']) && !empty(trim($_POST['cedula']))) $cedula = trim($_POST['cedula']);
+      //  if ($cedula) {
+         $usuario = Usuario::mensaje();
+         //   if ($usuario) {
+          //      echo "Usuario encontrado: <br>";
+          //      echo "Cédula: " . $usuario['cedula'] . "<br>";
+            //    echo "Nombre: " . $usuario['nombre'] . "<br>";
+              //  echo "Apellido: " . $usuario['apellido'] . "<br>";
+               // echo "Username: " . $usuario['username'] . "<br>";
+               // echo "Calle: " . $usuario['calle'] . "<br>";
+               // echo "Número Puerta: " . $usuario['numeropuerta'] . "<br>";
+               // echo "Email: " . $usuario['email'] . "<br>";
+              //  echo "Edad: " . $usuario['edad'] . "<br>";
+         //   } else {
+         //       echo "Usuario no encontrado.";
+         //   }
+     //   } else {
+      //     echo "Falta parámetro 'cedula' para buscar.";
+      //  }
+        break;
+
+
     default:
         echo "No se especificó una acción válida. Use el parámetro 'action' (registrar, modificar, eliminar, buscar, login).";
 }

@@ -117,6 +117,44 @@ class Usuario {
     return $usuario ? $usuario : null;
 }
 
+
+
+
+
+public function mensaje() {
+    $cx = (new ClaseConexion())->getConexion();
+print_r($_SESSION);
+  //  $sql = "SELECT cedula, nombre, apellido, username, email, fotoperfil, edad 
+   //         FROM usuario 
+   //         WHERE email = ? AND contrasena = ?";
+
+ //   $st = $cx->prepare($sql);
+  //  if (!$st) {
+ //       die("Error en prepare: " . $cx->error);
+  //  }
+
+    // Usar los parámetros recibidos, no las propiedades vacías
+  //  $st->bind_param("ss", $email, $contrasena);
+   // $st->execute();
+
+ //   $res = $st->get_result();
+ //   $usuario = $res->fetch_assoc();
+
+ //   $st->close();
+  //  $cx->close();
+
+  //  if ($usuario) {
+       
+    //    $_SESSION['cedula'] = $usuario['cedula'];
+  //  }
+   // return $usuario ? $usuario : null;
+}
+
+
+
+
+
+
 public static function detectarRol($cedula) {
     $cx = (new ClaseConexion())->getConexion();
     $role = null;

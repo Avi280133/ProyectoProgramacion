@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Administrador - SkillMatch</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-     <link rel="conexion" href="../conexion/controllerPublicacion.php">
+    <link rel="conexion" href="../conexion/controllerPublicacion.php">
 
-     
+
 <?php
 require_once '../conexion/controllerUsuario.php';
   $cx=(new ClaseConexion())->getConexion();

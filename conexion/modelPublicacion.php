@@ -62,5 +62,41 @@ class Servicio {
     $cx->close();
     return $servicios; // array (posiblemente vacío) de filas asociativas
 }
+
+  public static function cargarServicio($idservicio) {
+    $cx = (new ClaseConexion())->getConexion();
+    $sql = "SELECT s.*, 
+                   u.cedula   AS proveedor_cedula,
+                   u.nombre   AS proveedor_nombre,
+                   u.fotoperfil AS proveedor_fotoperfil,
+                   u.localidad AS proveedor_localidad
+            FROM servicio s
+            INNER JOIN ofrece ps ON s.idservicio = ps.idservicio
+            INNER JOIN usuario u ON ps.idproveedor = u.cedula
+            WHERE s.idservicio = ?
+            LIMIT 1";
+    $st = $cx->prepare($sql);
+    if (!$st) {
+        $cx->close();
+        return null;
+    }
+
+    $st->bind_param("i", $idservicio);
+    $st->execute();
+    $result = $st->get_result();
+    $servicio = $result ? $result->fetch_assoc() : null;
+
+    if ($result) $result->free();
+    if ($servicio) {
+       
+        $_SESSION['idreceptor'] = $servicio['proveedor_cedula'];
+    }
+    $st->close();
+    $cx->close();
+    return $servicio; // ahora contiene 'titulo' y 'descripcion' + campos del proveedor con alias
+    
+}
+
+
 }
 
