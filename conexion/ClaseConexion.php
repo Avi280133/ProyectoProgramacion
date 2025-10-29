@@ -3,7 +3,7 @@ class ClaseConexion
 {
     private $servidor ="localhost";
     private $usuario = "root";
-    private $contrasena = "";
+    private $contrasena = "ar1adna99";
     private $baseDeDatos = "SkillMatch";
     private $conexion;
 
