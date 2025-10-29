@@ -1,6 +1,5 @@
 || ★ SkillMatch ★ ||
 
-Plataforma de Conexión de Servicios ||
 SkillMatch es una plataforma web que tiene como propósito conectar a personas que ofrecen y solicitan servicios, brindando un entorno moderno, confiable y fácil de usar. Con un diseño intuitivo y una estructura orientada a la experiencia del usuario, la página promueve interacciones seguras y eficientes dentro de una comunidad digital en constante crecimiento.
 ========================================
 ★ Funciones
