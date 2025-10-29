@@ -76,7 +76,9 @@
             </div>
 
             <div class="header-icon">
-                <i class="fas fa-user"></i>
+                <a href="perfil.php" style="color: inherit; text-decoration: none;">
+                    <i class="fas fa-user"></i>
+                </a>
             </div>
         </div>
     </header>
