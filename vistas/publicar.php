@@ -52,7 +52,7 @@
         </select>
         <label for="servicio" class="etiqueta-campo">Inserte imagenes</label>
         <div class="imagen-equipo">
-          <input type="file" id="imagen" name="imagen" accept="image/*">
+          <input type="file" id="imagen" name="imagen" value="imagen" accept="image/*">
         </div>
 
         <label for="descripcion" class="etiqueta-campo">Descripción del servicio:</label>

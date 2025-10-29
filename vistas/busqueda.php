@@ -52,7 +52,7 @@
             </div>
         </div>
 <?php  
-print_r($servicio);
+
 foreach ($servicio as $servicio) {
      echo '<div class="services-grid">';
        echo '  <div class="service-card fade-in" style="animation-delay: 0.1s">';
