@@ -1,7 +1,7 @@
 || ★ SkillMatch ★ ||
 
 SkillMatch es una plataforma web que tiene como propósito conectar a personas que ofrecen y solicitan servicios, brindando un entorno moderno, confiable y fácil de usar. Con un diseño intuitivo y una estructura orientada a la experiencia del usuario, la página promueve interacciones seguras y eficientes dentro de una comunidad digital en constante crecimiento.
-============================================================================================================================================
+============================================================================================
 ★ Funciones
 SkillMatch incorpora un conjunto de herramientas diseñadas para facilitar la interacción entre usuarios y proveedores, garantizando una experiencia completa y eficiente. Entre sus principales funciones se destacan:
 
@@ -13,7 +13,7 @@ SkillMatch incorpora un conjunto de herramientas diseñadas para facilitar la in
 • Panel de administración, encargado de supervisar la actividad dentro de la plataforma y asegurar el cumplimiento de las normas.
 • Notificaciones automáticas, que mantienen informados a los usuarios sobre interacciones, mensajes y actualizaciones relevantes.
 
-============================================================================================================================================
+============================================================================================
 
 ★ Interfaz de Usuario
 La interfaz de SkillMatch está diseñada para adaptarse al rol de cada usuario y ofrecer una experiencia personalizada, funcional y estética. Cada vista prioriza la usabilidad, la claridad de la información y la eficiencia en las acciones.
@@ -49,7 +49,7 @@ Formulario que permite al cliente completar los datos necesarios para contratar 
 ★ Búsqueda y Resultados
 Muestra los servicios disponibles según la búsqueda realizada, acompañada de una interfaz de filtrado que permite refinar los resultados por palabra clave, categoría, ubicación o valoración.
 
-============================================================================================================================================
+============================================================================================
 
 ★ Contenedores Docker
 
@@ -70,7 +70,7 @@ sudo docker run -d --name SkillMatch -p 8080:80 -v /home/alphora4tech/Alphora4Te
 docker ps
 curl -I http://localhost:8080
 
-============================================================================================================================================
+============================================================================================
 
 ★ Agradecimientos
 
