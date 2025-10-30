@@ -21,31 +21,44 @@ class Usuario {
     public function setContrasena($v){$this->contrasena=$v;} public function setFotoperfil($v){$this->fotoperfil=$v;}
     public function setEdad($v){$this->edad=$v;} public function setLocalidad($v){$this->localidad=$v;}
 
-    public function registrar(){
-        $cx=(new ClaseConexion())->getConexion();
-        $sql="INSERT INTO usuario(cedula,nombre,apellido,username,email,contrasena,edad)
-              VALUES(?,?,?,?,?,?,?)";
-        $st=$cx->prepare($sql);
+   public function registrar(){
+    $cx=(new ClaseConexion())->getConexion();
+    $sql="INSERT INTO usuario(cedula,nombre,apellido,username,email,contrasena,edad)
+          VALUES(?,?,?,?,?,?,?)";
+    $st=$cx->prepare($sql);
 
-        $st->bind_param("ssssssi",$this->cedula,$this->nombre,$this->apellido,$this->username,
-            $this->email,$this->contrasena,$this->edad);
-        $st->execute(); 
-        $n=$st->affected_rows; 
-        if ($this->tipo === 'cliente') {
-    $st2 = $cx->prepare("INSERT INTO cliente (idcliente) VALUES (?)");
-    $st2->bind_param("s", $this->cedula);
-    $st2->execute();
-     include('../vistas/vistas-cliente.php');
-} elseif ($this->tipo === 'proveedor') {
-    $st2 = $cx->prepare("INSERT INTO proveedor (idproveedor) VALUES (?)");
-    $st2->bind_param("s", $this->cedula);
-    $st2->execute();
-     include('../vistas/vistas-prov.php');
+    // HASH NUEVO
+    $hash = password_hash($this->contrasena, PASSWORD_DEFAULT);
+
+    $st->bind_param(
+        "ssssssi",
+        $this->cedula,
+        $this->nombre,
+        $this->apellido,
+        $this->username,
+        $this->email,
+        $hash,                 // <= antes: $this->contrasena
+        $this->edad
+    );
+    $st->execute(); 
+    $n=$st->affected_rows; 
+
+    if ($this->tipo === 'cliente') {
+        $st2 = $cx->prepare("INSERT INTO cliente (idcliente) VALUES (?)");
+        $st2->bind_param("s", $this->cedula);
+        $st2->execute();
+        include('../vistas/vistas-cliente.php');
+    } elseif ($this->tipo === 'proveedor') {
+        $st2 = $cx->prepare("INSERT INTO proveedor (idproveedor) VALUES (?)");
+        $st2->bind_param("s", $this->cedula);
+        $st2->execute();
+        include('../vistas/vistas-prov.php');
+    }
+
+    $cx->close(); 
+    return $n;
 }
 
-        
-        $cx->close(); return $n;
-    }
 
 	public function modificarUsuario(){
         $cx=(new ClaseConexion())->getConexion();
@@ -86,35 +99,34 @@ class Usuario {
         $st->execute(); $n=$st->affected_rows; $cx->close(); return $n;
     }
 
-
-  public function login($email, $contrasena) {
+public function login($email, $contrasena) {
     $cx = (new ClaseConexion())->getConexion();
 
-    $sql = "SELECT cedula, nombre, apellido, username, email, fotoperfil, edad 
+    $sql = "SELECT cedula, nombre, apellido, username, email, fotoperfil, edad, contrasena
             FROM usuario 
-            WHERE email = ? AND contrasena = ?";
+            WHERE email = ? LIMIT 1";
 
     $st = $cx->prepare($sql);
-    if (!$st) {
-        die("Error en prepare: " . $cx->error);
-    }
+    if (!$st) { die("Error en prepare: " . $cx->error); }
 
-    // Usar los parámetros recibidos, no las propiedades vacías
-    $st->bind_param("ss", $email, $contrasena);
+    $st->bind_param("s", $email);
     $st->execute();
 
     $res = $st->get_result();
-    $usuario = $res->fetch_assoc();
+    $usuario = $res ? $res->fetch_assoc() : null;
 
     $st->close();
     $cx->close();
 
-    if ($usuario) {
-       
+    if ($usuario && password_verify($contrasena, $usuario['contrasena'])) {
+        if (session_status() === PHP_SESSION_NONE) session_start();
         $_SESSION['cedula'] = $usuario['cedula'];
+        unset($usuario['contrasena']); // no exponer hash
+        return $usuario;
     }
-    return $usuario ? $usuario : null;
+    return null;
 }
+
 
 public static function detectarRol($cedula) {
     $cx = (new ClaseConexion())->getConexion();
