@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Administrador - SkillMatch</title>
           <link rel="conexion" href="../conexion/controllerPublicacion.php">
+           <link rel="conexion" href="../conexion/controllerUsuario.php">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style> 
@@ -898,29 +899,32 @@ require_once '../conexion/controllerUsuario.php';
             </div>
 
             <!-- aquí va el listado de usuarios -->
-            <div id="usersContainer" class="cards-grid">
-                <div class="item-card" data-id="1" onclick="selectCard(this, 'users')">
-                    <div class="card-icon-container">
-                        <i class="fas fa-user"></i>
-                    </div>
-                    <div class="card-main-content">
-                        <div class="card-header">
-                            <div class="card-id">ID: 1</div>
-                            <span class="badge badge-client">Cliente</span>
-                        </div>
-                        <div class="card-title">María González</div>
-                        <div class="card-info">
-                            <div class="info-row">
-                                <i class="fas fa-envelope"></i>
-                                <span>maria@email.com</span>
-                            </div>
-                            <div class="info-row">
-                                <i class="fas fa-circle-check"></i>
-                                <span>Activo</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+          <?php  
+foreach ($usuario as $usuario) {
+    echo '<div class="item-card" data-id="' . htmlspecialchars($usuario['cedula']) . '" onclick="selectCard(this, \'users\')">';
+        echo '<div class="card-icon-container">';
+            echo '<i class="fas fa-user"></i>';
+        echo '</div>';
+        echo '<div class="card-main-content">';
+            echo '<div class="card-header">';
+                echo '<div class="card-id">ID: ' . htmlspecialchars($usuario['cedula']) . '</div>';
+             //   echo '<span class="badge badge-client">Cliente</span>';
+            echo '</div>';
+            echo '<div class="card-title">' . htmlspecialchars($usuario['nombre']) . ' ' . htmlspecialchars($usuario['apellido']) . '</div>';
+            echo '<div class="card-info">';
+                echo '<div class="info-row">';
+                    echo '<i class="fas fa-envelope"></i>';
+                    echo '<span>' . htmlspecialchars($usuario['email']) . '</span>';
+                echo '</div>';
+                echo '<div class="info-row">';
+                    echo '<i class="fas fa-circle-check"></i>';
+                    echo '<span>' . htmlspecialchars($usuario['estado']) . '</span>';
+                echo '</div>';
+            echo '</div>';
+        echo '</div>';
+    echo '</div>';
+}
+?>
 
                 <div class="item-card" data-id="2" onclick="selectCard(this, 'users')">
                     <div class="card-icon-container">

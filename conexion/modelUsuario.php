@@ -27,8 +27,10 @@ class Usuario {
           VALUES(?,?,?,?,?,?,?)";
     $st=$cx->prepare($sql);
 
-    // HASH NUEVO
+    // Joaquin Perez aca esta el hash, no est adentro de un controlador
     $hash = password_hash($this->contrasena, PASSWORD_DEFAULT);
+
+
 
     $st->bind_param(
         "ssssssi",
@@ -37,7 +39,7 @@ class Usuario {
         $this->apellido,
         $this->username,
         $this->email,
-        $hash,                 // <= antes: $this->contrasena
+        $hash,                
         $this->edad
     );
     $st->execute(); 
