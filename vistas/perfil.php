@@ -1674,7 +1674,7 @@ body {
           </div>
 
           <button type="submit" name="action" value="modificar" class="save-btn-edit" id="saveBtn">Guardar</button>
-          <button class="delete-btn-edit" id="deleteBtn">Eliminar Usuario</button>
+          <button type="submit" name="action" value="eliminar"   class="delete-btn-edit" id="deleteBtn">Eliminar Usuario</button>
         </div>
       </div>
     </div>
