@@ -7,6 +7,9 @@
           <link rel="conexion" href="../conexion/controllerPublicacion.php">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+    <style> 
+
+
 <?php
 require_once '../conexion/controllerUsuario.php';
   $cx=(new ClaseConexion())->getConexion();
@@ -38,6 +41,7 @@ require_once '../conexion/controllerUsuario.php';
 
 
     <style>
+
         * {
             margin: 0;
             padding: 0;
