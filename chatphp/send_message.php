@@ -21,9 +21,6 @@ try {
     $stmt->bind_param("iis", $sender_id, $receiver_id, $message);
     $stmt->execute();
 
-    // $cx->commit();
-    //echo json_encode(['success' => true]);
-
     //Segunda inserción 
     $stmt1 = $cx->prepare("INSERT INTO notimsj (cedula, contenido, is_read) VALUES (?, ?, ?)");
     $notification_message = "Nuevo mensaje recibido";
@@ -37,7 +34,7 @@ try {
 } catch (Exception $e) {
      //Si ocurre un error, deshace la transacción
      $cx->rollback();
-    echo json_encode(['error' => $e->getMessage()]);
+     echo json_encode(['error' => $e->getMessage()]);
 }
 
 ?>
