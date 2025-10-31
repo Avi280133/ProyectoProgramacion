@@ -85,17 +85,15 @@ switch ($action) {
     case 'eliminar':
         // Eliminar Usuario
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            if (isset($_POST['cedula']) && !empty(trim($_POST['cedula']))) {
-                $cedula = trim($_POST['cedula']);
+          
+                $cedula = $_SESSION['cedula'];
                 $resultado = Usuario::eliminar($cedula);
                 if ($resultado > 0) {
-                    Header('Location: ../index.html');
+                    include('../index.html');
                 } else {
                     echo "Error al eliminar el usuario.";
                 }
-            } else {
-                echo "Se requiere 'cedula' para eliminar.";
-            }
+         
         }
         break;
 
@@ -156,6 +154,8 @@ switch ($action) {
             }
         } else {
             echo "❌ Usuario o contraseña incorrectos.";
+           // $clave = "AdminSkillmatchPSWD";
+           // echo password_hash($clave, PASSWORD_DEFAULT);
         }
     }
     break;

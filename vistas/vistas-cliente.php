@@ -29,8 +29,8 @@
                         <h3>Notificaciones</h3>
                         <i class="fas fa-times" style="cursor: pointer; color: #7f8c8d;" id="closeNotifications"></i>
                     </div>
-                    <div class="notification-list">
-                        <div class="notification-item unread">
+                    <div id="papanotificaciones" class="notification-list">
+                        <!-- <div class="notification-item unread">
                             <div class="notification-icon">
                                 <i class="fas fa-check-circle"></i>
                             </div>
@@ -72,7 +72,7 @@
                                 <div class="notification-text">Tu identidad ha sido verificada exitosamente</div>
                                 <div class="notification-time">Hace 2 días</div>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>
@@ -424,6 +424,102 @@
                 notificationModal.classList.remove('active');
             }
         });
+        const getServicios = () => {
+            const papanotificaciones = document.getElementById('papanotificaciones');
+            if (!papanotificaciones) return;
+            
+            // Limpiar las notificaciones existentes
+            papanotificaciones.innerHTML = '';
+            
+            // Array con todas las tablas que queremos consultar
+            const tablas = ['notificacion', 'contrata', 'comenta', 'supervisa', 'ofrece'];
+            
+            // Realizar todas las consultas en paralelo
+            Promise.all(tablas.map(tabla => 
+                fetch(`../conexion/notificaciones.php?tabla=${tabla}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => ({tabla, data}))
+            ))
+            .then(resultados => {
+                let notificacionesHTML = ''; // acumulamos todas las notificaciones
+                
+                resultados.forEach(({tabla, data}) => {
+                    if (data.error) {
+                        console.error(`Error en tabla ${tabla}:`, data.error);
+                        return;
+                    }
+                    console.log(`Datos de ${tabla}:`, data);
+                    
+                    // Procesar cada registro según el tipo de tabla
+                    data.forEach(item => {
+                        let titulo = '';
+                        let texto = '';
+                        let icono = '';
+                        let color = '';
+
+                        switch(tabla) {
+                            case 'notificacion':
+                                titulo = 'Notificación';
+                                texto = item.mensaje || item.descripcion || 'Nueva notificación';
+                                icono = 'fa-bell';
+                                color = '#3498db, #2980b9';
+                                break;
+                            case 'contrata':
+                                titulo = 'Nuevo Contrato';
+                                texto = 'Se ha generado un nuevo contrato';
+                                icono = 'fa-file-contract';
+                                color = '#27ae60, #219a52';
+                                break;
+                            case 'comenta':
+                                titulo = 'Nuevo Comentario';
+                                texto = item.comentario || 'Han comentado en tu publicación';
+                                icono = 'fa-comment';
+                                color = '#e67e22, #d35400';
+                                break;
+                            case 'supervisa':
+                                titulo = 'Supervisión';
+                                texto = 'Nueva actividad de supervisión';
+                                icono = 'fa-eye';
+                                color = '#9b59b6, #8e44ad';
+                                break;
+                            case 'ofrece':
+                                titulo = 'Nueva Oferta';
+                                texto = 'Has recibido una nueva oferta';
+                                icono = 'fa-gift';
+                                color = '#e74c3c, #c0392b';
+                                break;
+                        }
+
+                        notificacionesHTML += `
+                            <div class="notification-item">
+                                <div class="notification-icon" style="background: linear-gradient(135deg, ${color});">
+                                    <i class="fas ${icono}"></i>
+                                </div>
+                                <div class="notification-content">
+                                    <div class="notification-title">${titulo}</div>
+                                    <div class="notification-text">${texto}</div>
+                                    <div class="notification-time">Nuevo</div>
+                                </div>
+                            </div>
+                        `;
+                        });
+
+            // insertamos todo el HTML una sola vez
+            papanotificaciones.innerHTML = notificacionesHTML;
+
+            })
+            .catch(error => console.error('Error:', error));
+        }
+setInterval(() => {
+    getServicios()
+    console.log('Actualizando servicios...');
+}, 20000); // Cada 
+getServicios()
     </script>
 </body>
 </html>

@@ -20,16 +20,18 @@ switch ($action) {
     if  (isset($_POST['titulo']) && !empty($_POST['titulo']) &&
         isset($_POST['ubicacion']) && !empty($_POST['ubicacion']) &&
         isset($_POST['precio']) && !empty($_POST['precio']) &&
-        isset($_POST['descripcion']) && !empty($_POST['descripcion'])) {
+        isset($_POST['descripcion']) && !empty($_POST['descripcion']) &&
+        isset($_POST['imagen']) && !empty($_POST['imagen'])) {
 
         // Obtener los valores del formulario
         $titulo = $_POST['titulo'];
         $ubicacion = $_POST['ubicacion'];
         $precio = $_POST['precio'];
         $descripcion = $_POST['descripcion'];
+        $imagen= $_POST['imagen'];
 
         // Crear una nueva instancia de Usuario
-        $servicio = new Servicio('', $titulo, $ubicacion, $precio, $descripcion);
+        $servicio = new Servicio('', $titulo, $ubicacion, $precio, $descripcion, $imagen);
 
         // Registrar el usuario en la base de datos
         $resultado = $servicio->publicarServicio();

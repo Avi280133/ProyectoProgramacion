@@ -2,30 +2,33 @@
 require_once('ClaseConexion.php');
 session_start();
 class Servicio {
-    private $idservicio,$titulo,$ubicacion,$precio,$descripcion;
+    private $idservicio,$titulo,$ubicacion,$precio,$descripcion,$imagen;
 
-    public function __construct($idservicio,$titulo,$ubicacion,$precio,$descripcion){
+
+    public function __construct($idservicio,$titulo,$ubicacion,$precio,$descripcion,$imagen){
         $this->idservicio=$idservicio; $this->titulo=$titulo; $this->ubicacion=$ubicacion; $this->precio=$precio;
-        $this->descripcion=$descripcion;
+        $this->descripcion=$descripcion;  $this->imagen=$imagen;
     }
     public function getIdServicio(){return $this->idservicio;} 
     public function getTitulo(){return $this->titulo;}
     public function getUbicacion(){return $this->ubicacion;} 
     public function getPrecio(){return $this->precio;}
     public function getDescripcion(){return $this->descripcion;} 
+     public function getImagen(){return $this->imagen;} 
 
     public function setTitulo($v){$this->titulo=$v;} 
     public function setUbicacion($v){$this->ubicacion=$v;}
     public function setPrecio($v){$this->precio=$v;}
     public function setDescrpcion($v){$this->descripcion=$v;}
+    public function setImagen($v){$this->imagen=$v;} 
     
     public function publicarServicio(){
            if (isset($_SESSION['cedula'])) {
         $cx=(new ClaseConexion())->getConexion();
-        $sql="INSERT INTO servicio(titulo,ubicacion,precio,descripcion)
-              VALUES(?,?,?,?)";
+        $sql="INSERT INTO servicio(titulo,ubicacion,precio,descripcion,imagen)
+              VALUES(?,?,?,?,?)";
         $st=$cx->prepare($sql);
-        $st->bind_param("ssds",$this->titulo,$this->ubicacion,$this->precio,$this->descripcion);
+        $st->bind_param("ssdss",$this->titulo,$this->ubicacion,$this->precio,$this->descripcion,$this->imagen);
         $st->execute(); 
         $n=$st->affected_rows;
         $idservicio = $cx->insert_id;
