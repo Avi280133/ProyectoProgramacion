@@ -130,6 +130,25 @@ public function login($email, $contrasena) {
 }
 
 
+public static function cargarPanelClientes() {
+    $cx = (new ClaseConexion())->getConexion();
+    $sql = "
+        SELECT u.*
+        FROM usuario u
+        INNER JOIN cliente c ON c.idcliente = u.cedula
+        ORDER BY u.nombre, u.apellido
+    ";
+    $st = $cx->prepare($sql);
+    $st->execute();
+    $res = $st->get_result();
+    $r = $res->fetch_all(MYSQLI_ASSOC);
+    $cx->close();
+    return $r;
+}
+
+
+
+
 public static function detectarRol($cedula) {
     $cx = (new ClaseConexion())->getConexion();
     $role = null;
