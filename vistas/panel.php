@@ -863,7 +863,7 @@ function enviarAction(valor) {
             <i class="fas fa-users"></i></i>
                 </div>
          <div class="stat-number"><?php echo $numeroClientes; ?></div>
-        <div class="stat-label">Total Clientes</div>
+        <div class="stat-label">Clientes</div>
     </div>
    
 
@@ -1050,23 +1050,10 @@ if (!empty($servicios)) {
                     <input type="email" class="form-input" id="createUserEmail" placeholder="usuario@email.com" required>
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Tipo de Usuario *</label>
-                    <select class="form-select" id="createUserType" required>
-                        <option value="">Seleccionar tipo</option>
-                        <option value="Cliente">Cliente</option>
-                        <option value="Proveedor">Proveedor</option>
-                    </select>
                 </div>
                 <div class="form-group">
                     <label class="form-label">Contraseña *</label>
                     <input type="password" class="form-input" id="createUserPassword" placeholder="Mínimo 8 caracteres" required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Estado</label>
-                    <select class="form-select" id="createUserStatus">
-                        <option value="Activo">Activo</option>
-                        <option value="Inactivo">Inactivo</option>
-                    </select>
                 </div>
             </div>
             <div class="modal-footer">
@@ -1103,21 +1090,6 @@ if (!empty($servicios)) {
                     <label class="form-label">Email *</label>
                     <input type="email" class="form-input" id="editUserEmail" placeholder="usuario@email.com" required>
                 </div>
-                <div class="form-group">
-                    <label class="form-label">Tipo de Usuario *</label>
-                    <select class="form-select" id="editUserType" required>
-                        <option value="">Seleccionar tipo</option>
-                        <option value="Cliente">Cliente</option>
-                        <option value="Proveedor">Proveedor</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Estado</label>
-                    <select class="form-select" id="editUserStatus">
-                        <option value="Activo">Activo</option>
-                        <option value="Inactivo">Inactivo</option>
-                    </select>
-                </div>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-cancel" onclick="closeModal('editUserModal')">
@@ -1150,16 +1122,8 @@ if (!empty($servicios)) {
                     <input type="text" class="form-input" id="createProviderName" placeholder="Ej: Juan Pérez" required>
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Servicio Principal *</label>
-                    <input type="text" class="form-input" id="createProviderService" placeholder="Ej: Desarrollo Web" required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Calificación</label>
-                    <input type="number" class="form-input" id="createProviderRating" min="0" max="5" step="0.1" placeholder="5.0" value="5.0">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Trabajos Completados</label>
-                    <input type="number" class="form-input" id="createProviderJobs" min="0" placeholder="0" value="0">
+                    <label class="form-label">Email *</label>
+                    <input type="email" class="form-input" id="createProviderEmail" placeholder="Ej: juan.perez@email.com" required>
                 </div>
             </div>
             <div class="modal-footer">
@@ -1193,16 +1157,8 @@ if (!empty($servicios)) {
                     <input type="text" class="form-input" id="editProviderName" placeholder="Ej: Juan Pérez" required>
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Servicio Principal *</label>
-                    <input type="text" class="form-input" id="editProviderService" placeholder="Ej: Desarrollo Web" required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Calificación</label>
-                    <input type="number" class="form-input" id="editProviderRating" min="0" max="5" step="0.1" placeholder="5.0">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Trabajos Completados</label>
-                    <input type="number" class="form-input" id="editProviderJobs" min="0" placeholder="0">
+                    <label class="form-label">Email *</label>
+                    <input type="email" class="form-input" id="editProviderEmail" placeholder="Ej: juan.perez@email.com" required>
                 </div>
             </div>
             <div class="modal-footer">
@@ -1289,10 +1245,6 @@ if (!empty($servicios)) {
                     <input type="text" class="form-input" id="editServiceTitle" placeholder="Ej: Desarrollo Web Completo" required>
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Proveedor *</label>
-                    <input type="text" class="form-input" id="editServiceProvider" placeholder="Nombre del proveedor" required>
-                </div>
-                <div class="form-group">
                     <label class="form-label">Categoría *</label>
                     <select class="form-select" id="editServiceCategory" required>
                         <option value="">Seleccionar categoría</option>
@@ -1341,19 +1293,6 @@ if (!empty($servicios)) {
                     <label class="form-label">Nombre de la Categoría *</label>
                     <input type="text" class="form-input" id="createCategoryName" placeholder="Ej: Tecnología" required>
                 </div>
-                <div class="form-group">
-                    <label class="form-label">Ícono (Font Awesome) *</label>
-                    <input type="text" class="form-input" id="createCategoryIcon" placeholder="fa-laptop-code" required>
-                    <div class="form-hint">Visita fontawesome.com para ver íconos disponibles</div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Número de Servicios</label>
-                    <input type="number" class="form-input" id="createCategoryServices" min="0" placeholder="0" value="0">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Descripción</label>
-                    <textarea class="form-textarea" id="createCategoryDescription" placeholder="Describe la categoría..."></textarea>
-                </div>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-cancel" onclick="closeModal('createCategoryModal')">
@@ -1384,19 +1323,6 @@ if (!empty($servicios)) {
                 <div class="form-group">
                     <label class="form-label">Nombre de la Categoría *</label>
                     <input type="text" class="form-input" id="editCategoryName" placeholder="Ej: Tecnología" required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Ícono (Font Awesome) *</label>
-                    <input type="text" class="form-input" id="editCategoryIcon" placeholder="fa-laptop-code" required>
-                    <div class="form-hint">Visita fontawesome.com para ver íconos disponibles</div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Número de Servicios</label>
-                    <input type="number" class="form-input" id="editCategoryServices" min="0" placeholder="0">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Descripción</label>
-                    <textarea class="form-textarea" id="editCategoryDescription" placeholder="Describe la categoría..."></textarea>
                 </div>
             </div>
             <div class="modal-footer">
