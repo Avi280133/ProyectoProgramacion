@@ -827,11 +827,10 @@ $categorias = Usuario::cargarPanelCategorias();
                     <i class="fas fa-user-shield"></i>
                 </div>
                 <div class="admin-details">
-                    <div class="admin-name">Admin Juan</div>
-                    <div class="admin-role">Administrador</div>
+                    <div class="admin-name">Administrador</div>
                 </div>
             </div>
-            <a href="../index.php" class="logout-btn">
+            <a href="../conexion/logout.php" class="logout-btn">
                 <i class="fas fa-sign-out-alt"></i>
                 Cerrar Sesión
             </a>
