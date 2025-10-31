@@ -9,8 +9,9 @@
   <link rel="icon" type="image/png" href="../img/favicon_SkillMatch.png">
     <link rel="conexion" href="../conexion/controllerPublicacion.php">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
-    * {
+* {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
@@ -25,48 +26,160 @@
     }
 
     /* Header Styles */
-    header {
-      background: linear-gradient(135deg, #0eb27c 0%, #047857 100%);
-      padding: 1rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 8px 32px rgba(14, 178, 124, 0.2);
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-    }
+     header {
+            background: linear-gradient(135deg, #0eb27c 0%, #047857 100%);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 8px 32px rgba(14, 178, 124, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
 
-    .menu-left, .actions-right {
-      display: flex;
-      gap: 1.5rem;
-      align-items: center;
-    }
+        .header-logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: white;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
 
-    .logo-center {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-    }
+        .header-logo:hover {
+            transform: translateY(-5px);
+        }
 
-    .logo-center img {
-      height: 40px;
-      object-fit: contain;
-    }
+        .header-logo img {
+            transition: all 0.3s ease;
+        }
 
-    .header-icon, .menu-icon, .actions-right i, .actions-right a {
-      color: white;
-      font-size: 1.3rem;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      position: relative;
-      text-decoration: none;
-    }
+        .header-logo:hover img {
+            transform: scale(1.1) rotate(-5deg);
+        }
 
-    .header-icon:hover, .menu-icon:hover, .actions-right i:hover, .actions-right a:hover {
-      transform: scale(1.2) rotate(5deg);
-      filter: brightness(1.2);
-    }
+        .header-logo i {
+            font-size: 2rem;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .header-icon {
+            color: white;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .header-icon:hover {
+            transform: scale(1.2) rotate(5deg);
+            filter: brightness(1.2);
+        }
+
+        /* Notification Modal */
+        .notification-modal {
+            position: absolute;
+            top: 100%;
+            right: -1rem;
+            background: white;
+            border-radius: 20px;
+            width: 350px;
+            max-height: 500px;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            margin-top: 1rem;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-20px) scale(0.9);
+            transition: all 0.3s ease;
+            z-index: 2000;
+        }
+
+        .notification-modal.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0) scale(1);
+        }
+
+        .notification-header {
+            padding: 1.5rem;
+            border-bottom: 2px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .notification-header h3 {
+            color: #2c3e50;
+            font-size: 1.2rem;
+        }
+
+        .notification-list {
+            padding: 0;
+        }
+
+        .notification-item {
+            padding: 1.2rem 1.5rem;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            gap: 1rem;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .notification-item:hover {
+            background: #f8f9fa;
+            padding-left: 2rem;
+        }
+
+        .notification-item.unread {
+            background: linear-gradient(135deg, #e8f5f1 0%, #d1f0e5 100%);
+        }
+
+        .notification-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #0eb27c 0%, #047857 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            flex-shrink: 0;
+            font-size: 1.2rem;
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-title {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 0.3rem;
+            font-size: 0.95rem;
+        }
+
+        .notification-text {
+            color: #7f8c8d;
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+
+        .notification-time {
+            color: #95a5a6;
+            font-size: 0.75rem;
+            margin-top: 0.5rem;
+        }
 
     /* Main Content */
     .pagina-servicio {
@@ -337,81 +450,124 @@
       background: #f0f9f4;
     }
 
+    .btn-reportar {
+      background: white !important;
+      color: #dc3545 !important;
+      border: 2px solid #dc3545 !important;
+    }
+
+    .btn-reportar:hover {
+      background: #dc3545 !important;
+      color: white !important;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
+    }
+
+
     /* Footer Styles */
-    .footer {
-      background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-      color: white;
-      padding: 3rem 2rem 2rem;
-      position: relative;
-      overflow: hidden;
-      margin-top: 80px;
-    }
+    footer {
+            background: linear-gradient(135deg, #064e3b 0%, #025939 50%, #0eb27c 100%);
+            color: white;
+            padding: 3rem 2rem 2rem;
+            margin-top: 3rem;
+        }
 
-    .glow-effect {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, #0eb27c, transparent);
-      animation: glow 3s ease-in-out infinite;
-    }
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
 
-    @keyframes glow {
-      0%, 100% { opacity: 0.5; }
-      50% { opacity: 1; }
-    }
+        .footer-section h4 {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
 
-    .footer-content {
-      max-width: 1200px;
-      margin: 0 auto;
-    }
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
 
-    .footer-links {
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
-      margin-bottom: 2rem;
-      flex-wrap: wrap;
-    }
+        .footer-links a {
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
 
-    .footer-links a {
-      color: #b0b0b0;
-      text-decoration: none;
-      font-size: 0.95rem;
-      transition: all 0.3s ease;
-    }
+        .footer-links a:hover {
+            color: white;
+            padding-left: 0.5rem;
+        }
 
-    .footer-links a:hover {
-      color: #0eb27c;
-      transform: translateY(-2px);
-    }
+        .footer-bottom {
+            text-align: center;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            padding-top: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
 
-    .social-icons {
-      display: flex;
-      justify-content: center;
-      gap: 1.5rem;
-      padding-top: 2rem;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-    }
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
 
-    .social-icon {
-      color: #b0b0b0;
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+        .social-icon {
+            width: 45px;
+            height: 45px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
 
-    .social-icon:hover {
-      color: #0eb27c;
-      transform: translateY(-3px) scale(1.1);
-    }
+        .social-icon:hover {
+            background: white;
+            color: #0eb27c;
+            transform: translateY(-3px);
+        }
 
-    .social-icon svg {
-      width: 24px;
-      height: 24px;
-    }
+        .category-card-hover {
+            border: 2px solid transparent;
+        }
+
+        .category-card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 50px rgba(14, 178, 124, 0.2) !important;
+            border-color: #0eb27c;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+            }
+        }
 
     /* Responsive */
     @media (max-width: 768px) {
@@ -435,24 +591,303 @@
         grid-template-columns: 1fr;
       }
     }
+
+    /* Modal de calificar - Estilo mejorado */
+    .modal-prof {
+        display: none;
+        position: fixed;
+        z-index: 3000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(5px);
+        align-items: center;
+        justify-content: center;
+        padding: 40px 20px;
+        animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    .modal-content-prof {
+        background: white;
+        margin: auto;
+        border-radius: 20px;
+        max-width: 550px;
+        width: 100%;
+        padding: 35px 30px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        position: relative;
+        animation: slideUp 0.3s ease;
+        border: 1px solid rgba(14, 178, 124, 0.1);
+    }
+
+    @keyframes slideUp {
+        from { 
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to { 
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .close-prof {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        font-size: 28px;
+        cursor: pointer;
+        color: #95a5a6;
+        transition: all 0.3s ease;
+        width: 35px;
+        height: 35px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background: transparent;
+    }
+
+    .close-prof:hover {
+        color: #e74c3c;
+        background: #fee;
+        transform: rotate(90deg);
+    }
+
+    .modal-header-prof {
+        margin-bottom: 25px;
+        text-align: center;
+    }
+
+    .modal-header-prof .modal-title-prof {
+        font-size: 1.6rem;
+        margin-bottom: 10px;
+        color: #025939;
+        font-weight: 700;
+    }
+
+    .modal-header-prof .modal-subtitle-prof {
+        color: #7f8c8d;
+        font-size: 0.95rem;
+        margin-bottom: 0;
+    }
+
+    .star-rating-prof {
+        display: flex;
+        gap: 12px;
+        margin: 25px 0;
+        font-size: 42px;
+        cursor: pointer;
+        justify-content: center;
+    }
+
+    .star-prof {
+        color: #e0e0e0;
+        transition: all 0.2s ease;
+        user-select: none;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .star-prof:hover {
+        transform: scale(1.15);
+    }
+
+    .star-prof.active-prof {
+        color: #ffc107;
+        transform: scale(1.1);
+        text-shadow: 0 4px 8px rgba(255, 193, 7, 0.4);
+    }
+
+    .comment-section-prof {
+        margin-top: 25px;
+    }
+
+    .comment-label-prof {
+        display: block;
+        margin-bottom: 10px;
+        color: #2c3e50;
+        font-weight: 600;
+        font-size: 0.95rem;
+    }
+
+    .comment-textarea-prof {
+        width: 100%;
+        min-height: 110px;
+        border-radius: 12px;
+        border: 2px solid #e1e5e9;
+        padding: 14px 16px;
+        font-size: 0.95rem;
+        resize: vertical;
+        font-family: 'Inter', sans-serif;
+        transition: all 0.3s ease;
+        background: #f8f9fa;
+    }
+
+    .comment-textarea-prof:focus {
+        outline: none;
+        border-color: #0eb27c;
+        background: white;
+        box-shadow: 0 0 0 4px rgba(14, 178, 124, 0.1);
+    }
+
+    .comment-textarea-prof:hover {
+        border-color: #0eb27c;
+        background: white;
+    }
+
+    .modal-actions-prof {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        margin-top: 25px;
+    }
+
+    .modal-btn-prof {
+        padding: 13px 28px;
+        border-radius: 10px;
+        font-weight: 600;
+        cursor: pointer;
+        border: none;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+        font-family: 'Inter', sans-serif;
+    }
+
+    .modal-btn-secondary-prof {
+        background: #f0f0f0;
+        color: #495057;
+        border: 2px solid #e0e0e0;
+    }
+
+    .modal-btn-secondary-prof:hover {
+        background: #e8e8e8;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .modal-btn-primary-prof {
+        background: linear-gradient(135deg, #0eb27c 0%, #025939 100%);
+        color: white;
+        box-shadow: 0 4px 15px rgba(14, 178, 124, 0.3);
+    }
+
+    .modal-btn-primary-prof:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(14, 178, 124, 0.4);
+    }
+
+    .modal-btn-primary-prof:active {
+        transform: translateY(0);
+    }
+
+    @media (max-width: 580px) {
+        .modal-content-prof { 
+            padding: 25px 20px; 
+            border-radius: 16px;
+        }
+        
+        .star-rating-prof { 
+            font-size: 36px;
+            gap: 8px;
+        }
+        
+        .modal-header-prof .modal-title-prof {
+            font-size: 1.3rem;
+        }
+        
+        .modal-actions-prof {
+            flex-direction: column;
+        }
+        
+        .modal-btn-prof {
+            width: 100%;
+            padding: 12px 20px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .modal-content-prof { 
+            padding: 16px; 
+        }
+        .star-rating-prof { 
+            font-size: 22px; 
+        }
+    }
   </style>
 </head>
 <body>
-  <header class="main-header">
-    <div class="menu-left">
-      <a href="#" class="menu-icon">
-        <i class="fa-solid fa-magnifying-glass" style="color: #ffffff;"></i>
-      </a>
-    </div>
-    <div class="logo-center">
-      <a href="../index.html"><img src="../img/logo-SkillMatch-v3.png" alt="SkillMatch Logo"></a>
-    </div>
-    <div class="actions-right">
-      <i class="fa-solid fa-magnifying-glass" style="color: #ffffff;"></i>
-      <i class="fa-solid fa-plus" style="color: #ffffff;"></i>
-      <a href="perfil.php"><i class="fa-solid fa-user" style="color: #ffffff;"></i></a>
-    </div>
-  </header>
+  <header>
+        
+        <div class="header-logo">
+          <a href="vistas-cliente.php" style="color: inherit; text-decoration: none; display: flex; align-items: center;">
+            <img src="../img/logomini.png" alt="SkillMatch Logo" style="height: 50px; width: auto; margin-right: 0.5rem;">
+            SkillMatch
+          </a>
+        </div>
+        <div class="header-actions">
+            <div style="position: relative;">
+                <div class="header-icon" id="notificationBell">
+                    <i class="fas fa-bell"></i>
+                    <span style="position: absolute; top: -5px; right: -8px; width: 20px; height: 20px; background: #ff6b6b; color: white; border-radius: 50%; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; font-weight: bold;">3</span>
+                </div>
+
+                <div class="notification-modal" id="notificationModal">
+                    <div class="notification-header">
+                        <h3>Notificaciones</h3>
+                        <i class="fas fa-times" style="cursor: pointer; color: #7f8c8d;" id="closeNotifications"></i>
+                    </div>
+                    <div class="notification-list">
+                        <div class="notification-item unread">
+                            <div class="notification-icon">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="notification-content">
+                                <div class="notification-title">Trabajo aceptado</div>
+                                <div class="notification-text">Tu solicitud de reparación del hogar fue aceptada por Juan M.</div>
+                                <div class="notification-time">Hace 2 horas</div>
+                            </div>
+                        </div>
+
+                        <div class="notification-item unread">
+                            <div class="notification-icon" style="background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <div class="notification-content">
+                                <div class="notification-title">Nueva reseña</div>
+                                <div class="notification-text">Carlos P. dejó una reseña de 5 estrellas para tu servicio</div>
+                                <div class="notification-time">Hace 5 horas</div>
+                            </div>
+                        </div>
+
+                        <div class="notification-item">
+                            <div class="notification-icon" style="background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);">
+                                <i class="fas fa-info-circle"></i>
+                            </div>
+                            <div class="notification-content">
+                                <div class="notification-title">Recordatorio</div>
+                                <div class="notification-text">Tu servicio de desarrollo web está próximo a completarse</div>
+                                <div class="notification-time">Hace 1 día</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="header-icon">
+                <a href="perfil-cliente.php" style="color: inherit; text-decoration: none;">
+                    <i class="fas fa-user"></i>
+                </a>
+            </div>
+        </div>
+    </header>
   
   <main class="pagina-servicio">
     <div class="contenedor-servicio">
@@ -467,46 +902,16 @@
           <p class="descripcion">
            <?php echo htmlspecialchars($servicio['descripcion']); ?>
           </p>
-
-          <div class="caracteristicas">
-            <h3>Servicios incluidos</h3>
-            <ul class="lista-caracteristicas">
-              <li>Diseño de identidad corporativa</li>
-              <li>Material publicitario impreso</li>
-              <li>Diseño para redes sociales</li>
-              <li>Packaging y etiquetas</li>
-              <li>Presentaciones corporativas</li>
-              <li>Mockups y visualizaciones</li>
-            </ul>
-          </div>
-
-          <div class="detalles-adicionales">
-            <h3>Detalles del servicio</h3>
-            <div class="info-item">
-              <span class="info-label">Tiempo de entrega</span>
-              <span class="info-value">3-5 días hábiles</span>
-            </div>
-            <div class="info-item">
-              <span class="info-label">Revisiones incluidas</span>
-              <span class="info-value">Hasta 3 revisiones</span>
-            </div>
-            <div class="info-item">
-              <span class="info-label">Formato de entrega</span>
-              <span class="info-value">AI, PSD, PNG, JPG</span>
-            </div>
-            <div class="info-item">
-              <span class="info-label">Zona de trabajo</span>
-              <span class="info-value">Montevideo y remoto</span>
-            </div>
-          </div>
         </div>
       </div>
 
       <!-- Sidebar Proveedor -->
       <aside class="sidebar-proveedor">
         <div class="card-proveedor">
+
           <img src="../img/usuario-juan.jpg" alt="Foto de <?php echo htmlspecialchars($usuario['fotoperfil'] ?? 'Proveedor'); ?>" class="foto-proveedor" />
           <a href="../vistas/perfil-externo.php" class="nombre-proveedor"><?php echo htmlspecialchars($usuario['nombre'] ?? 'Proveedor', ENT_QUOTES); ?></a>
+
           <div class="rating">
             <span>★</span>
             <span>★</span>
@@ -525,11 +930,15 @@
           <!-- class="btn btn-mensaje" -->
           <div class="botones-accion">
             <a href="solicitud.php"><button class="btn btn-solicitar">Solicitar Servicio</button></a>
+
           
             <form action="../chatphp/chat.php" method="post">
   <input type="hidden" name="emite" value="<?php echo htmlspecialchars($usuario['cedula']); ?>">
   <button type="submit" class="btn btn-mensaje">Enviar Mensaje</button>
 </form>
+
+            <button class="btn btn-reportar">Reportar Usuario</button>
+
 
           </div>
         </div>
@@ -538,45 +947,96 @@
   </main>
 
   <div id="chatModalContainer"></div>
-  
-  <footer class="footer">
-    <div class="glow-effect"></div>
-    <div class="footer-content">
-      <div class="footer-links">
-        <a href="#politicas">Políticas de Seguridad</a>
-        <a href="#acerca">Acerca de Nosotros</a>
-        <a href="#trabajo">Sé Parte de Nuestra Empresa</a>
-      </div>
 
-      <div class="social-icons">
-        <a href="#facebook" class="social-icon" title="Facebook">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-          </svg>
-        </a>
-        <a href="#instagram" class="social-icon" title="Instagram">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-          </svg>
-        </a>
-        <a href="#twitter" class="social-icon" title="Twitter">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
-          </svg>
-        </a>
-        <a href="#linkedin" class="social-icon" title="LinkedIn">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-          </svg>
-        </a>
-        <a href="mailto:contacto@empresa.com" class="social-icon" title="Gmail">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.91 1.528-1.145C21.69 2.28 24 3.434 24 5.457z"/>
-          </svg>
-        </a>
-      </div>
+  <!-- Modal de calificar (copiado de perfil-externo) -->
+  <div id="ratingModal-prof" class="modal-prof" aria-hidden="true">
+    <div class="modal-content-prof" role="dialog" aria-modal="true" aria-labelledby="ratingTitle-prof">
+        <span class="close-prof" aria-label="Cerrar">&times;</span>
+        <div class="modal-header-prof">
+            <h2 id="ratingTitle-prof" class="modal-title-prof">Calificar a Juan Martínez</h2>
+            <p class="modal-subtitle-prof">Tu opinión nos ayuda a mejorar la comunidad</p>
+        </div>
+
+        <div class="star-rating-prof" aria-label="Seleccionar calificación">
+            <span class="star-prof" data-rating="1">★</span>
+            <span class="star-prof" data-rating="2">★</span>
+            <span class="star-prof" data-rating="3">★</span>
+            <span class="star-prof" data-rating="4">★</span>
+            <span class="star-prof" data-rating="5">★</span>
+        </div>
+
+        <div class="comment-section-prof">
+            <label for="comment-prof" class="comment-label-prof">Comentario (opcional)</label>
+            <textarea id="comment-prof" class="comment-textarea-prof" placeholder="Comparte tu experiencia..."></textarea>
+        </div>
+
+        <div class="modal-actions-prof">
+            <button class="modal-btn-prof modal-btn-secondary-prof" id="cancelBtn-prof">Cancelar</button>
+            <button class="modal-btn-prof modal-btn-primary-prof" id="submitRating-prof">Enviar Calificación</button>
+        </div>
     </div>
-  </footer>
+</div>
+  
+  <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Empresa</h4>
+                <div class="footer-links">
+                    <a href="#acerca">Acerca de SkillMatch</a>
+                    <a href="#blog">Blog</a>
+                    <a href="#prensa">Prensa</a>
+                    <a href="#carreras">Carreras</a>
+                </div>
+            </div>
+
+            <div class="footer-section">
+                <h4>Servicio</h4>
+                <div class="footer-links">
+                    <a href="#como-funciona">Cómo Funciona</a>
+                    <a href="#tarifas">Tarifas</a>
+                    <a href="#categorias">Categorías</a>
+                    <a href="#garantia">Garantía de Calidad</a>
+                </div>
+            </div>
+
+            <div class="footer-section">
+                <h4>Soporte</h4>
+                <div class="footer-links">
+                    <a href="#ayuda">Centro de Ayuda</a>
+                    <a href="#contacto">Contacto</a>
+                    <a href="#seguridad">Seguridad</a>
+                    <a href="#privacidad">Privacidad</a>
+                </div>
+            </div>
+
+            <div class="footer-section">
+                <h4>Conecta</h4>
+                <div class="footer-links">
+                    <a href="#descarga">Descargar App</a>
+                    <a href="#newsletter">Newsletter</a>
+                    <a href="#comunidad">Comunidad</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2024 SkillMatch. Todos los derechos reservados.</p>
+            <div class="social-links">
+                <a href="#facebook" class="social-icon" title="Facebook">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                <a href="https://www.instagram.com/skillmatch.sm/" class="social-icon" title="Instagram">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="#twitter" class="social-icon" title="Twitter">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a href="#linkedin" class="social-icon" title="LinkedIn">
+                    <i class="fab fa-linkedin-in"></i>
+                </a>
+            </div>
+        </div>
+    </footer>
 
   <script>
   let chatModalLoaded = false;
@@ -595,12 +1055,163 @@
         });
       }
     });
+  </script>
+   <script>
+      (function initNotificationBox() {
+    const bell = document.getElementById('notificationBell');
+    const modal = document.getElementById('notificationModal');
+    const closeBtn = document.getElementById('closeNotifications');
+    const list = modal ? modal.querySelector('.notification-list') : null;
+    const badge = bell ? bell.querySelector('span') : null;
 
-    // debug helper: muestra si el botón existe
-    if (!document.querySelector('.btn-mensaje')) {
-      console.warn('No se encontró elemento .btn-mensaje en publicacion.php');
+    if (!bell || !modal || !list) return;
+
+    function updateBadge() {
+        const unread = list.querySelectorAll('.notification-item.unread').length;
+        if (!badge) return;
+        badge.textContent = unread > 0 ? unread : '';
+        badge.style.display = unread > 0 ? 'flex' : 'none';
     }
-  });
+
+    function markAsRead(item) {
+        if (!item.classList.contains('unread')) return;
+        item.classList.remove('unread');
+        // opcional: enviar al servidor que la notificación fue leída
+        // const id = item.dataset.notificationId;
+        // fetch('/conexion/notifications.php', { method: 'POST', body: new URLSearchParams({ action: 'mark_read', id }) });
+        updateBadge();
+    }
+
+    // Toggle modal
+    bell.addEventListener('click', (e) => {
+        e.stopPropagation();
+        modal.classList.toggle('active');
+    });
+
+    // Close icon
+    if (closeBtn) closeBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        modal.classList.remove('active');
+    });
+
+    // Click fuera para cerrar
+    document.addEventListener('click', (e) => {
+        if (!bell.contains(e.target) && !modal.contains(e.target)) {
+            modal.classList.remove('active');
+        }
+    });
+
+    // Manejo de click en cada notificación
+    list.addEventListener('click', (e) => {
+        const item = e.target.closest('.notification-item');
+        if (!item) return;
+        // prevenir que el click cierre el modal
+        e.stopPropagation();
+        markAsRead(item);
+
+        // acción asociada (si tiene link o detalle)
+        const actionUrl = item.dataset.href;
+        if (actionUrl) {
+            // abrir en misma pestaña; usar target _blank si querés nueva pestaña
+            window.location.href = actionUrl;
+        }
+    });
+
+    // Inicializar estado del badge al cargar
+    document.addEventListener('DOMContentLoaded', updateBadge);
+    updateBadge();
+
+    // Exponer funciones para uso manual (opcional)
+    window.notifications = {
+        updateBadge,
+        markAsReadAll: () => {
+            list.querySelectorAll('.notification-item.unread').forEach(item => markAsRead(item));
+            // opcional: notificar servidor
+        }
+    };
+})();
+    </script>
+<script>
+(function() {
+    const modalProf = document.getElementById('ratingModal-prof');
+    if (!modalProf) return;
+
+    const openModalBtnProf = document.querySelector('.btn-calificar') || document.querySelector('.btn-solicitar') || document.getElementById('openModal-prof');
+    const closeModalBtnProf = modalProf.querySelector('.close-prof');
+    const cancelBtnProf = document.getElementById('cancelBtn-prof');
+    const submitBtnProf = document.getElementById('submitRating-prof');
+    const starsProf = modalProf.querySelectorAll('.star-prof');
+    const commentProfEl = document.getElementById('comment-prof');
+    let selectedRatingProf = 0;
+
+    // abrir modal si se dispara el botón (si existe un botón específico)
+    // Aquí en publicacion.php no había un "Calificar" público, así que si querés abrir desde un elemento concreto agrega id="openModal-prof" a ese botón.
+    if (openModalBtnProf) {
+        openModalBtnProf.addEventListener('click', (e) => {
+            e.preventDefault();
+            showModalProf();
+        });
+    }
+
+    function showModalProf() {
+        modalProf.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+    function closeModalProf() {
+        modalProf.style.display = 'none';
+        document.body.style.overflow = 'auto';
+        resetModalProf();
+    }
+
+    closeModalBtnProf.addEventListener('click', closeModalProf);
+    cancelBtnProf.addEventListener('click', closeModalProf);
+
+    window.addEventListener('click', (event) => {
+        if (event.target === modalProf) closeModalProf();
+    });
+
+    starsProf.forEach((starProf, indexProf) => {
+        starProf.addEventListener('mouseenter', () => highlightStarsProf(indexProf + 1));
+        starProf.addEventListener('mouseleave', () => highlightStarsProf(selectedRatingProf));
+        starProf.addEventListener('click', () => {
+            selectedRatingProf = indexProf + 1;
+            highlightStarsProf(selectedRatingProf);
+        });
+    });
+
+    function highlightStarsProf(ratingProf) {
+        starsProf.forEach((starProf, indexProf) => {
+            starProf.classList.toggle('active-prof', indexProf < ratingProf);
+        });
+    }
+
+    function resetModalProf() {
+        selectedRatingProf = 0;
+        highlightStarsProf(0);
+        if (commentProfEl) commentProfEl.value = '';
+    }
+
+    submitBtnProf.addEventListener('click', () => {
+        if (selectedRatingProf === 0) {
+            alert('Por favor, selecciona una calificación');
+            return;
+        }
+        const commentProf = commentProfEl ? commentProfEl.value.trim() : '';
+        // Aquí envía por fetch/XHR al servidor si necesitas persistir la calificación
+        // Ejemplo (ajusta URL y payload según tu backend):
+        /*
+        fetch('/conexion/ratings.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ providerId: 'juan-id', rating: selectedRatingProf, comment: commentProf })
+        }).then(res => res.json()).then(resp => {
+            // manejar respuesta
+        }).catch(err => console.error(err));
+        */
+        alert(`¡Gracias! Calificación enviada: ${selectedRatingProf} estrella${selectedRatingProf>1?'s':''}`);
+        closeModalProf();
+    });
+})();
 </script>
 </body>
 </html>

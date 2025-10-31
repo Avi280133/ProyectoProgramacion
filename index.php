@@ -544,14 +544,28 @@ function requireAuth() {
                     </a>
                     <a href="vistas/registro.php" class="auth-btn btn-register">
                         <i class="fa-solid fa-user-plus"></i>
-                        <span>Crear Cuenta Gratis</span>
+                        <span>Crear Cuenta </span>
                         <div class="loading-spinner"></div>
                     </a>
+
+                    </div>
+                
+                <!-- Checkbox de Términos y Condiciones -->
+                <div class="terms-checkbox">
+                    <label for="terminos">
+                        <input type="checkbox" id="terminos">
+                        <span>Acepto los términos y condiciones</a></span>
+                    </label>
+                </div>
+
+                
+            </div>
                 </div>
             </div>
 
             <div class="modal-footer">
-                <p>¿Necesitas ayuda? <a href="html/ayuda.php">Centro de Soporte</a></p>
+                <p>¿Necesitas ayuda? <a href="vistas/soporte.php">Centro de Soporte</a></p>
+            
             </div>
         </div>
     </div>

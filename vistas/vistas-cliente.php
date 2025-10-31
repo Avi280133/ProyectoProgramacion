@@ -78,7 +78,9 @@
             </div>
 
             <div class="header-icon">
-                <i class="fas fa-user"></i>
+                <a href="perfil-cliente.php" style="color: inherit; text-decoration: none;">
+                    <i class="fas fa-user"></i>
+                </a>
             </div>
         </div>
     </header>
@@ -91,8 +93,8 @@
              <form action="../conexion/controllerPublicacion.php" method="POST">
             <div class="search-container">
                 <input type="text" name="titulo" value="titulo" placeholder="Busca plomero, electricista, programador...">
-                <button><i class="fas fa-search"></i></button>
-                <button type="submit" name="action" value="buscar">Buscar2.0</button>
+                <!--<button><i class="fas fa-search"></i></button>-->
+                <button type="submit" name="action" value="buscar"><i class="fas fa-search"></i></button>
             </div>
             </form>
         </div>

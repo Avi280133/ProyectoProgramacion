@@ -12,120 +12,162 @@ body {
     height: 100%;
 }
 
-img {
-    max-width: 150px;
-    justify-items: center;
-}
+ header {
+            background: linear-gradient(135deg, #0eb27c 0%, #047857 100%);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 8px 32px rgba(14, 178, 124, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
 
-.menu_bar {
-        display: none;
-}
+        .header-logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: white;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
 
-.main-header {
-    background-color: #0eb27c;
-    padding: 10px 24px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 80px; 
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    position: relative;
-}
+        .header-logo i {
+            font-size: 2rem;
+        }
 
-.menu-left .menu-icon i {
-    font-size: 24px;
-    color: white;
-    cursor: pointer;
-    transition: transform 0.2s ease;
-}
+        .header-actions {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
 
-.logo-center {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    top: 50%;
-    transform: translate(-50%, -50%);
-}
+        .header-icon {
+            color: white;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
 
-.logo-center img {
-    height: 72px; 
-    object-fit: contain;
-    display: block;
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3)); 
-    transition: transform 0.3s ease;
-}
+        .header-icon:hover {
+            transform: scale(1.2) rotate(5deg);
+            filter: brightness(1.2);
+        }
 
-.logo-center img:hover {
-    transform: scale(1.05);
-}
+        /* Notification Modal */
+        .notification-modal {
+            position: absolute;
+            top: 100%;
+            right: -1rem;
+            background: white;
+            border-radius: 20px;
+            width: 350px;
+            max-height: 500px;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            margin-top: 1rem;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-20px) scale(0.9);
+            transition: all 0.3s ease;
+            z-index: 2000;
+        }
 
-.actions-right {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
+        .notification-modal.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0) scale(1);
+        }
 
-.white-btn {
-    background-color: white;
-    color: #0eb27c;
-    border: none;
-    padding: 6px 14px;
-    border-radius: 6px;
-    font-weight: 600;
-    font-size: 14px;
+        .notification-header {
+            padding: 1.5rem;
+            border-bottom: 2px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .notification-header h3 {
+            color: #2c3e50;
+            font-size: 1.2rem;
+        }
+
+        .notification-list {
+            padding: 0;
+        }
+
+        .notification-item {
+            padding: 1.2rem 1.5rem;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            gap: 1rem;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .notification-item:hover {
+            background: #f8f9fa;
+            padding-left: 2rem;
+        }
+
+        .notification-item.unread {
+            background: linear-gradient(135deg, #e8f5f1 0%, #d1f0e5 100%);
+        }
+
+        .notification-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #0eb27c 0%, #047857 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            flex-shrink: 0;
+            font-size: 1.2rem;
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-title {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 0.3rem;
+            font-size: 0.95rem;
+        }
+
+        .notification-text {
+            color: #7f8c8d;
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+
+        .notification-time {
+            color: #95a5a6;
+            font-size: 0.75rem;
+            margin-top: 0.5rem;
+        }
+
+.header-logo {
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
-.white-btn:hover {
-    background-color: #dffaf1;
-    color: #0b8d64;
+.header-logo:hover {
+    transform: translateY(-5px);
 }
 
-.actions-right i.fa-plus, i.fa-user {
-    font-size: 18px;
-    color: white;
-    cursor: pointer;
-    transition: transform 0.2s ease;
+.header-logo img {
+    transition: all 0.3s ease;
 }
 
-.search-container {
-    display: flex;
-    align-items: center;
-    position: relative;
-}
-
-.search-icon {
-    font-size: 18px;
-    color: white;
-    cursor: pointer;
-    transition: transform 0.3s ease;
-    z-index: 2;
-}
-
-.search-input {
-    width: 100%; /* o el valor que desees */
-    opacity: 1;
-    padding: 6px 12px;
-    border: none;
-    border-radius: 6px;
-    font-size: 14px;
-    transition: width 0.4s ease, opacity 0.4s ease;
-    margin-left: 8px;
-    background-color: white;
-    color: #0eb27c;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-}
-
-.search-container.active .search-input {
-    width: 160px;
-    opacity: 1;
-}
-
-
-.actions-right i.fa-magnifying-glass:hover, i.fa-plus:hover, i.fa-user:hover {
-    transform: scale(1.1);
+.header-logo:hover img {
+    transform: scale(1.1) rotate(-5deg);
 }
 
 .footer {
