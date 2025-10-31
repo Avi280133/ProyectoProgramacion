@@ -101,7 +101,7 @@ class Usuario {
 
     public static function eliminar($cedula){
         $cx=(new ClaseConexion())->getConexion();
-        $st=$cx->prepare("DELETE * FROM usuario WHERE cedula=?"); $st->bind_param("s",$cedula);
+        $st=$cx->prepare("DELETE FROM usuario WHERE cedula=?"); $st->bind_param("s",$cedula);
         $st->execute(); $n=$st->affected_rows; $cx->close(); return $n;
     }
 
@@ -178,15 +178,18 @@ public function login($email, $contrasena) {
     return $r;
 }
 
- public static function cargarPanelProveedores() {
+public static function cargarPanelProveedores() {
     $cx = (new ClaseConexion())->getConexion();
     $sql = "
         SELECT u.*
         FROM usuario u
-        INNER JOIN proveedor p ON p.idcliente = u.cedula
+        INNER JOIN proveedor p ON p.idproveedor = u.cedula
         ORDER BY u.nombre, u.apellido
     ";
     $st = $cx->prepare($sql);
+    if (!$st) {
+        die("Error en cargarPanelProveedores: " . $cx->error);
+    }
     $st->execute();
     $res = $st->get_result();
     $r = $res->fetch_all(MYSQLI_ASSOC);

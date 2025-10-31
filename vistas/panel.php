@@ -857,53 +857,41 @@ function enviarAction(valor) {
 
 
 
-        <div class="stats-grid">
-            <div class="stat-card active" onclick="showSection('users');">
-
-
-                <div class="stat-icon users">
-                    <i class="fas fa-users"></i>
+       <div class="stats-grid">
+    <div class="stat-card active" onclick="showSection('users', this);">
+        <div class="stat-icon users">
+            <i class="fas fa-users"></i></i>
                 </div>
-                <?php
-               echo '<div class="stat-number">' .  $numeroClientes ;
-               echo '</div>';
-               ?>
-                <div class="stat-label">Total Clientes</div>
-            </div>
+         <div class="stat-number"><?php echo $numeroClientes; ?></div>
+        <div class="stat-label">Total Clientes</div>
+    </div>
+   
 
-            <div class="stat-card" onclick="showSection('providers')">
-                <div class="stat-icon providers">
-                    <i class="fas fa-user-tie"></i>
-                </div>
-                     <?php
-               echo '<div class="stat-number">' .  $numeroProveedores ;
-               echo '</div>';
-               ?>
-                <div class="stat-label">Proveedores</div>
-            </div>
 
-            <div class="stat-card" onclick="showSection('services')">
-                <div class="stat-icon services">
-                    <i class="fas fa-briefcase"></i>
-                </div>
-                  <?php
-               echo '<div class="stat-number">' .  $numeroServicios ;
-               echo '</div>';
-               ?>
-                <div class="stat-label">Servicios Activos</div>
-            </div>
-
-            <div class="stat-card" onclick="showSection('categories')">
-                <div class="stat-icon categories">
-                    <i class="fas fa-tags"></i>
-                </div>
-                  <?php
-               echo '<div class="stat-number">' .  $numeroCategorias ;
-               echo '</div>';
-               ?>
-                <div class="stat-label">Categorías</div>
-            </div>
+              <div class="stat-card" onclick="showSection('providers', this);">
+        <div class="stat-icon providers">
+            <i class="fas fa-user-tie"></i>
         </div>
+        <div class="stat-number"><?php echo $numeroProveedores; ?></div>
+        <div class="stat-label">Proveedores</div>
+    </div>
+
+    <div class="stat-card" onclick="showSection('services', this);">
+        <div class="stat-icon services">
+            <i class="fas fa-briefcase"></i>
+        </div>
+        <div class="stat-number"><?php echo $numeroServicios; ?></div>
+        <div class="stat-label">Servicios Activos</div>
+    </div>
+
+    <div class="stat-card" onclick="showSection('categories', this);">
+        <div class="stat-icon categories">
+            <i class="fas fa-tags"></i>
+        </div>
+        <div class="stat-number"><?php echo $numeroCategorias; ?></div>
+        <div class="stat-label">Categorías</div>
+    </div>
+</div>
 
         <div class="content-section">
             <div class="section-header">
@@ -943,7 +931,7 @@ if (!empty($clientes)) {
         echo '          </div>';
         echo '          <div class="info-row">';
         echo '              <i class="fas fa-circle-check"></i>';
-        echo '              <span>' . htmlspecialchars($c['estado'] ?? "Activo") . '</span>';
+        echo '              <span>' . htmlspecialchars($c['estado'] ?? " ") . '</span>';
         echo '          </div>';
         echo '      </div>';
         echo '  </div>';
@@ -962,7 +950,7 @@ if (!empty($clientes)) {
             <div id="providersContainer" class="cards-grid" style="display: none;">
 
             <?php  
-if (!empty($clientes)) {
+if (!empty($proveedores)) {
     foreach ($proveedores as $p) {
         echo '<div class="item-card" data-id="' . htmlspecialchars($p['cedula']) . '" onclick="selectCard(this, \'providers\')">';
         echo '  <div class="card-icon-container"><i class="fas fa-user"></i></div>';
@@ -978,7 +966,7 @@ if (!empty($clientes)) {
         echo '          </div>';
         echo '          <div class="info-row">';
         echo '              <i class="fas fa-circle-check"></i>';
-        echo '              <span>' . htmlspecialchars($p['estado'] ?? "Activo") . '</span>';
+        echo '              <span>' . htmlspecialchars($p['estado'] ?? " ") . '</span>';
         echo '          </div>';
         echo '      </div>';
         echo '  </div>';
@@ -993,24 +981,16 @@ if (!empty($clientes)) {
             <!-- aquí va el listado de categorías -->
             <div id="categoriesContainer" class="cards-grid" style="display: none;">
                            <?php  
-if (!empty($clientes)) {
-    foreach ($proveedores as $p) {
-        echo '<div class="item-card" data-id="' . htmlspecialchars($p['cedula']) . '" onclick="selectCard(this, \'categories\')">';
+if (!empty($categorias)) {
+    foreach ($categorias as $c) {
+        echo '<div class="item-card" data-id="' . htmlspecialchars($c['idcategoria']) . '" onclick="selectCard(this, \'categories\')">';
         echo '  <div class="card-icon-container"><i class="fas fa-user"></i></div>';
         echo '  <div class="card-main-content">';
-        echo '      <div class="card-header">';
-        echo '          <div class="card-id">ID: ' . htmlspecialchars($p['cedula']) . '</div>';
-        echo '      </div>';
-        echo '      <div class="card-title">' . htmlspecialchars($p['nombre']) . ' ' . htmlspecialchars($p['apellido']) . '</div>';
-        echo '      <div class="card-info">';
-        echo '          <div class="info-row">';
-        echo '              <i class="fas fa-envelope"></i>';
-        echo '              <span>' . htmlspecialchars($p['email']) . '</span>';
-        echo '          </div>';
-        echo '          <div class="info-row">';
-        echo '              <i class="fas fa-circle-check"></i>';
-        echo '              <span>' . htmlspecialchars($p['estado'] ?? "Activo") . '</span>';
-        echo '          </div>';
+
+     echo '<div class="card-title">' . htmlspecialchars($p['nombre']) . '</div>';
+
+        echo '      <div class="card-title">' . htmlspecialchars($c['nombre']) . '</div>';
+        echo '      <div class="card-info">'; 
         echo '      </div>';
         echo '  </div>';
         echo '</div>';
@@ -1020,6 +1000,32 @@ if (!empty($clientes)) {
 }
 ?>
         </div>
+
+
+
+
+
+                  <div id="servicesContainer" class="cards-grid" style="display: none;">
+                           <?php  
+if (!empty($servicios)) {
+    foreach ($servicios as $s) {
+        echo '<div class="item-card" data-id="' . htmlspecialchars($s['idservicio']) . '" onclick="selectCard(this, \'services\')">';
+        echo '  <div class="card-icon-container"><i class="fas fa-user"></i></div>';
+        echo '  <div class="card-main-content">';
+
+        echo '          <div class="card-title">' . htmlspecialchars($s['titulo']) . '</div>';
+
+        echo '      <div class="card-title">$ ' . htmlspecialchars($s['precio']) . '</div>';
+        echo '      <div class="card-info">'; 
+        echo '      </div>';
+        echo '  </div>';
+        echo '</div>';
+    }
+} else {
+    echo '<div class="empty-state"><i class="fas fa-users-slash"></i><p>No hay usuarios.</p></div>';
+}
+?>
+        </div>  
     
 
     <!-- este es el modal para crear un nuevo usuario -->
@@ -1446,45 +1452,53 @@ if (!empty($clientes)) {
     </div>
 
     <script>
-        // acá guardamos en qué sección estamos (usuarios, proveedores, servicios o categorías)
-        let currentSection = 'users';
-        let selectedItem = null;
-        let selectedItemName = '';
+    let currentSection = 'users';
+    let selectedItem = null;
+    let selectedItemName = '';
 
-        // esta función cambia entre las diferentes secciones del panel
-        function showSection(section) {
-            currentSection = section;
-            selectedItem = null;
-            
-            // quitamos la clase activa de todas las tarjetas de estadísticas
-            document.querySelectorAll('.stat-card').forEach(card => {
-                card.classList.remove('active');
-            });
-            event.currentTarget.classList.add('active');
+    function showSection(section, el) {
+        currentSection = section;
+        selectedItem = null;
 
-            // cambiamos el título de la sección
-            const titles = {
-                users: 'Gestión de Usuarios',
-                providers: 'Gestión de Proveedores',
-                services: 'Gestión de Servicios',
-                categories: 'Gestión de Categorías'
-            };
-            document.getElementById('sectionTitle').textContent = titles[section];
+        // 1) quitar "active" de todas las cards
+        document.querySelectorAll('.stat-card').forEach(card => {
+            card.classList.remove('active');
+        });
 
-            // escondemos todos los contenedores de listado
-            document.getElementById('usersContainer').style.display = 'none';
-            document.getElementById('providersContainer').style.display = 'none';
-            document.getElementById('servicesContainer').style.display = 'none';
-            document.getElementById('categoriesContainer').style.display = 'none';
-
-            // mostramos el contenedor de la sección actual
-            document.getElementById(section + 'Container').style.display = 'flex';
-
-            // deshabilitamos los botones de editar y eliminar
-            document.getElementById('editBtn').disabled = true;
-            document.getElementById('deleteBtn').disabled = true;
+        // 2) marcar la que se clickeó
+        if (el) {
+            el.classList.add('active');
         }
 
+        // 3) cambiar título
+        const titles = {
+            users: 'Gestión de Usuarios',
+            providers: 'Gestión de Proveedores',
+            services: 'Gestión de Servicios',
+            categories: 'Gestión de Categorías'
+        };
+        document.getElementById('sectionTitle').textContent = titles[section];
+
+        // 4) ocultar todos los contenedores
+        document.getElementById('usersContainer').style.display = 'none';
+        document.getElementById('providersContainer').style.display = 'none';
+
+        const serv = document.getElementById('servicesContainer');
+        if (serv) serv.style.display = 'none';
+
+        document.getElementById('categoriesContainer').style.display = 'none';
+
+        // 5) mostrar el contenedor de la sección actual
+        const toShow = document.getElementById(section + 'Container');
+        if (toShow) {
+            // tus listas usan flex
+            toShow.style.display = 'flex';
+        }
+
+        // 6) deshabilitar botones hasta que elijan una card
+        document.getElementById('editBtn').disabled = true;
+        document.getElementById('deleteBtn').disabled = true;
+    }
         // esta función selecciona una tarjeta cuando hacés click en ella
         function selectCard(card, section) {
             // quitamos la selección de todas las tarjetas en esta sección
