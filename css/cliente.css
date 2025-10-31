@@ -481,3 +481,20 @@
                 flex-direction: column;
             }
         }
+
+        .header-logo {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.header-logo:hover {
+    transform: translateY(-5px);
+}
+
+.header-logo img {
+    transition: all 0.3s ease;
+}
+
+.header-logo:hover img {
+    transform: scale(1.1) rotate(-5deg);
+}

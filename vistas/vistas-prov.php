@@ -6,6 +6,112 @@
     <title>SkillMatch - Proveedores</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="../css/vistas-prov.css">
+    <style>
+         /* Footer */
+        footer {
+            background: linear-gradient(135deg, #064e3b 0%, #025939 50%, #0eb27c 100%);
+            color: white;
+            padding: 3rem 2rem 2rem;
+            margin-top: 3rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h4 {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .footer-links a {
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .footer-links a:hover {
+            color: white;
+            padding-left: 0.5rem;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            padding-top: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .social-icon {
+            width: 45px;
+            height: 45px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .social-icon:hover {
+            background: white;
+            color: #0eb27c;
+            transform: translateY(-3px);
+        }
+
+        .category-card-hover {
+            border: 2px solid transparent;
+        }
+
+        .category-card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 50px rgba(14, 178, 124, 0.2) !important;
+            border-color: #0eb27c;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- Header -->
@@ -60,17 +166,6 @@
                                 <div class="notification-time">Hace 1 día</div>
                             </div>
                         </div>
-
-                        <div class="notification-item">
-                            <div class="notification-icon" style="background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);">
-                                <i class="fas fa-user-check"></i>
-                            </div>
-                            <div class="notification-content">
-                                <div class="notification-title">Perfil verificado</div>
-                                <div class="notification-text">Tu identidad ha sido verificada exitosamente</div>
-                                <div class="notification-time">Hace 2 días</div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -115,13 +210,13 @@
         <p class="section-subtitle">Gestiona tus servicios y explora nuevas oportunidades</p>
         
         <div class="dashboard-grid">
-            <div class="action-card" onclick="location.href='html/publicar.php'">
+            <div class="action-card">
                 <div class="action-icon">
                     <i class="fa-solid fa-plus-circle"></i>
                 </div>
                 <h3 class="action-title">Publicar Servicio</h3>
                 <p class="action-description">Crea una nueva publicación y llega a miles de clientes potenciales.</p>
-                <button class="action-btn">
+                <button class="action-btn" onclick="location.href='publicar.php'; event.stopPropagation();">
                     <i class="fa-solid fa-arrow-right"></i>
                     <span>Comenzar</span>
                 </button>
@@ -133,7 +228,7 @@
                 </div>
                 <h3 class="action-title">Mis Servicios</h3>
                 <p class="action-description">Administra, edita y monitorea el rendimiento de tus publicaciones.</p>
-                <button class="action-btn">
+                <button class="action-btn" onclick="location.href='perfil.php#services?from=dashboard'; event.stopPropagation();">
                     <i class="fa-solid fa-arrow-right"></i>
                     <span>Ver Todos</span>
                 </button>
@@ -181,7 +276,7 @@
                 </div>
                 <h3 class="action-title">Mi Perfil</h3>
                 <p class="action-description">Actualiza tu información y mejora tu presencia profesional.</p>
-                <button class="action-btn">
+                <button class="action-btn" onclick="location.href='perfil.php'; event.stopPropagation();">
                     <i class="fa-solid fa-arrow-right"></i>
                     <span>Editar Perfil</span>
                 </button>
@@ -253,160 +348,67 @@
         </div>
     </section>
 
-    <!-- My Services Section -->
-    <section class="my-services-section">
-        <h2 class="section-title">Mis Servicios Publicados</h2>
-        <p class="section-subtitle">Gestiona y monitorea tus publicaciones activas</p>
-        
-        <div class="services-grid">
-            <div class="service-card">
-                <div class="service-header">
-                    <span class="service-status status-active">Activo</span>
-                </div>
-                <h3 class="service-title">Reparación de Aires Acondicionados</h3>
-                <div class="service-stats">
-                    <span><i class="fa-solid fa-eye"></i> 234 vistas</span>
-                    <span><i class="fa-solid fa-star"></i> 4.9</span>
-                    <span><i class="fa-solid fa-comments"></i> 12 msgs</span>
-                </div>
-                <div class="service-actions">
-                    <button class="btn-edit"><i class="fa-solid fa-pen"></i> Editar</button>
-                    <button class="btn-stats"><i class="fa-solid fa-chart-bar"></i> Stats</button>
-                    <button class="btn-delete"><i class="fa-solid fa-trash"></i></button>
-                </div>
-            </div>
-
-            <div class="service-card">
-                <div class="service-header">
-                    <span class="service-status status-active">Activo</span>
-                </div>
-                <h3 class="service-title">Desarrollo Web Frontend</h3>
-                <div class="service-stats">
-                    <span><i class="fa-solid fa-eye"></i> 456 vistas</span>
-                    <span><i class="fa-solid fa-star"></i> 5.0</span>
-                    <span><i class="fa-solid fa-comments"></i> 8 msgs</span>
-                </div>
-                <div class="service-actions">
-                    <button class="btn-edit"><i class="fa-solid fa-pen"></i> Editar</button>
-                    <button class="btn-stats"><i class="fa-solid fa-chart-bar"></i> Stats</button>
-                    <button class="btn-delete"><i class="fa-solid fa-trash"></i></button>
-                </div>
-            </div>
-
-            <div class="service-card">
-                <div class="service-header">
-                    <span class="service-status status-pending">Pendiente</span>
-                </div>
-                <h3 class="service-title">Instalación Eléctrica Residencial</h3>
-                <div class="service-stats">
-                    <span><i class="fa-solid fa-eye"></i> 89 vistas</span>
-                    <span><i class="fa-solid fa-star"></i> 4.7</span>
-                    <span><i class="fa-solid fa-comments"></i> 3 msgs</span>
-                </div>
-                <div class="service-actions">
-                    <button class="btn-edit"><i class="fa-solid fa-pen"></i> Editar</button>
-                    <button class="btn-stats"><i class="fa-solid fa-chart-bar"></i> Stats</button>
-                    <button class="btn-delete"><i class="fa-solid fa-trash"></i></button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Notifications Section -->
-    <section class="notifications-section">
-        <h2 class="section-title">Notificaciones Recientes</h2>
-        <p class="section-subtitle">Mantente al día con tus actividades</p>
-        
-        <div class="notifications-container">
-            <div class="notification-item">
-                <div class="notification-header">
-                    <span class="notification-title"><i class="fa-solid fa-message"></i> Nuevo mensaje de Juan Pérez</span>
-                    <span class="notification-time">Hace 5 minutos</span>
-                </div>
-                <p class="notification-message">Te ha enviado una consulta sobre tu servicio de "Reparación de Aires Acondicionados"</p>
-            </div>
-
-            <div class="notification-item">
-                <div class="notification-header">
-                    <span class="notification-title"><i class="fa-solid fa-star"></i> Nueva calificación recibida</span>
-                    <span class="notification-time">Hace 2 horas</span>
-                </div>
-                <p class="notification-message">María González te ha calificado con 5 estrellas por tu servicio de desarrollo web.</p>
-            </div>
-
-            <div class="notification-item">
-                <div class="notification-header">
-                    <span class="notification-title"><i class="fa-solid fa-chart-line"></i> Tu servicio está destacado</span>
-                    <span class="notification-time">Hace 1 día</span>
-                </div>
-                <p class="notification-message">"Reparación de Aires Acondicionados" ha alcanzado 200 visualizaciones esta semana.</p>
-            </div>
-
-            <div class="notification-item">
-                <div class="notification-header">
-                    <span class="notification-title"><i class="fa-solid fa-bell"></i> Recordatorio de pago</span>
-                    <span class="notification-time">Hace 2 días</span>
-                </div>
-                <p class="notification-message">Tienes un pago pendiente de $150 por el proyecto "Instalación Eléctrica" completado.</p>
-            </div>
-        </div>
-    </section>
-
     <!-- Footer -->
-    <footer class="footer">
+    <footer>
         <div class="footer-content">
             <div class="footer-section">
-                <h3>SkillMatch</h3>
-                <p style="color: rgba(255, 255, 255, 0.8); line-height: 1.6;">
-                    La plataforma líder que conecta profesionales con clientes. Publica tus servicios y encuentra oportunidades.
-                </p>
-                <div class="social-icons">
-                    <a href="#" class="social-icon">
-                        <i class="fa-brands fa-facebook-f"></i>
-                    </a>
-                    <a href="#" class="social-icon">
-                        <i class="fa-brands fa-instagram"></i>
-                    </a>
-                    <a href="#" class="social-icon">
-                        <i class="fa-brands fa-twitter"></i>
-                    </a>
-                    <a href="#" class="social-icon">
-                        <i class="fa-brands fa-linkedin-in"></i>
-                    </a>
+                <h4>Empresa</h4>
+                <div class="footer-links">
+                    <a href="#acerca">Acerca de SkillMatch</a>
+                    <a href="#blog">Blog</a>
+                    <a href="#prensa">Prensa</a>
+                    <a href="#carreras">Carreras</a>
                 </div>
             </div>
 
             <div class="footer-section">
-                <h3>Para Proveedores</h3>
-                <a href="html/publicar.php">Publicar Servicio</a>
-                <a href="html/mis-servicios.php">Mis Servicios</a>
-                <a href="html/estadisticas.php">Estadísticas</a>
-                <a href="html/mensajes.php">Mensajes</a>
-                <a href="html/perfil.php">Mi Perfil</a>
+                <h4>Servicio</h4>
+                <div class="footer-links">
+                    <a href="#como-funciona">Cómo Funciona</a>
+                    <a href="#tarifas">Tarifas</a>
+                    <a href="#categorias">Categorías</a>
+                    <a href="#garantia">Garantía de Calidad</a>
+                </div>
             </div>
 
             <div class="footer-section">
-                <h3>Para Clientes</h3>
-                <a href="index-cliente.php">Buscar Servicios</a>
-                <a href="html/categorias.php">Categorías</a>
-                <a href="html/favoritos.php">Mis Favoritos</a>
-                <a href="html/historial.php">Historial</a>
+                <h4>Soporte</h4>
+                <div class="footer-links">
+                    <a href="#ayuda">Centro de Ayuda</a>
+                    <a href="#contacto">Contacto</a>
+                    <a href="#seguridad">Seguridad</a>
+                    <a href="#privacidad">Privacidad</a>
+                </div>
             </div>
 
             <div class="footer-section">
-                <h3>Soporte</h3>
-                <a href="html/ayuda.php">Centro de Ayuda</a>
-                <a href="html/politicas.php">Políticas de Seguridad</a>
-                <a href="html/terminos.php">Términos y Condiciones</a>
-                <a href="html/contacto.php">Contáctanos</a>
-                <a href="html/acerca.php">Acerca de Nosotros</a>
+                <h4>Conecta</h4>
+                <div class="footer-links">
+                    <a href="#descarga">Descargar App</a>
+                    <a href="#newsletter">Newsletter</a>
+                    <a href="#comunidad">Comunidad</a>
+                </div>
             </div>
         </div>
-        <div style="text-align: center; margin-top: 40px; padding-top: 30px; border-top: 1px solid rgba(255, 255, 255, 0.1); color: rgba(255, 255, 255, 0.7);">
-            <p>&copy; 2025 SkillMatch. Todos los derechos reservados.</p>
+
+        <div class="footer-bottom">
+            <p>&copy; 2024 SkillMatch. Todos los derechos reservados.</p>
+            <div class="social-links">
+                <a href="#facebook" class="social-icon" title="Facebook">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                <a href="https://www.instagram.com/skillmatch.sm/" class="social-icon" title="Instagram">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="#twitter" class="social-icon" title="Twitter">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a href="#linkedin" class="social-icon" title="LinkedIn">
+                    <i class="fab fa-linkedin-in"></i>
+                </a>
+            </div>
         </div>
     </footer>
-
     <script>
         // Animaciones al scroll
         const observerOptions = {
@@ -642,6 +644,81 @@
                 notificationModal.classList.remove('active');
             }
         });
+    </script>
+    <script>
+      (function initNotificationBox() {
+    const bell = document.getElementById('notificationBell');
+    const modal = document.getElementById('notificationModal');
+    const closeBtn = document.getElementById('closeNotifications');
+    const list = modal ? modal.querySelector('.notification-list') : null;
+    const badge = bell ? bell.querySelector('span') : null;
+
+    if (!bell || !modal || !list) return;
+
+    function updateBadge() {
+        const unread = list.querySelectorAll('.notification-item.unread').length;
+        if (!badge) return;
+        badge.textContent = unread > 0 ? unread : '';
+        badge.style.display = unread > 0 ? 'flex' : 'none';
+    }
+
+    function markAsRead(item) {
+        if (!item.classList.contains('unread')) return;
+        item.classList.remove('unread');
+        // opcional: enviar al servidor que la notificación fue leída
+        // const id = item.dataset.notificationId;
+        // fetch('/conexion/notifications.php', { method: 'POST', body: new URLSearchParams({ action: 'mark_read', id }) });
+        updateBadge();
+    }
+
+    // Toggle modal
+    bell.addEventListener('click', (e) => {
+        e.stopPropagation();
+        modal.classList.toggle('active');
+    });
+
+    // Close icon
+    if (closeBtn) closeBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        modal.classList.remove('active');
+    });
+
+    // Click fuera para cerrar
+    document.addEventListener('click', (e) => {
+        if (!bell.contains(e.target) && !modal.contains(e.target)) {
+            modal.classList.remove('active');
+        }
+    });
+
+    // Manejo de click en cada notificación
+    list.addEventListener('click', (e) => {
+        const item = e.target.closest('.notification-item');
+        if (!item) return;
+        // prevenir que el click cierre el modal
+        e.stopPropagation();
+        markAsRead(item);
+
+        // acción asociada (si tiene link o detalle)
+        const actionUrl = item.dataset.href;
+        if (actionUrl) {
+            // abrir en misma pestaña; usar target _blank si querés nueva pestaña
+            window.location.href = actionUrl;
+        }
+    });
+
+    // Inicializar estado del badge al cargar
+    document.addEventListener('DOMContentLoaded', updateBadge);
+    updateBadge();
+
+    // Exponer funciones para uso manual (opcional)
+    window.notifications = {
+        updateBadge,
+        markAsReadAll: () => {
+            list.querySelectorAll('.notification-item.unread').forEach(item => markAsRead(item));
+            // opcional: notificar servidor
+        }
+    };
+})();
     </script>
 </body>
 </html>
