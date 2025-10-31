@@ -1,5 +1,3 @@
-modelUsuario.php
-
 <?php
 require_once('ClaseConexion.php');
 session_start();

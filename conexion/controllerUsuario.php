@@ -1,12 +1,7 @@
-ControllerUsuario.php
-
 <?php
-
-
 require_once('modelUsuario.php');  // Incluir el modelo Usuario
 require_once('modelProveedor.php');
 require_once('ClaseConexion.php'); // Incluir la clase de conexión
-
 
 
 // Detectar la acción: preferir POST (botones submit con name="action"), si no existe buscar en GET
