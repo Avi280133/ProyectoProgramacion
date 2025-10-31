@@ -544,7 +544,7 @@ function requireAuth() {
                     </a>
                     <a href="vistas/registro.php" class="auth-btn btn-register">
                         <i class="fa-solid fa-user-plus"></i>
-                        <span>Crear Cuenta Gratis</span>
+                        <span>Crear Cuenta </span>
                         <div class="loading-spinner"></div>
                     </a>
 
