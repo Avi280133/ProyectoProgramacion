@@ -107,31 +107,28 @@ class Usuario {
 
 public function login($email, $contrasena) {
     $cx = (new ClaseConexion())->getConexion();
-
     $sql = "SELECT cedula, nombre, apellido, username, email, fotoperfil, edad, contrasena
             FROM usuario 
             WHERE email = ? LIMIT 1";
-
     $st = $cx->prepare($sql);
     if (!$st) { die("Error en prepare: " . $cx->error); }
-
     $st->bind_param("s", $email);
     $st->execute();
-
     $res = $st->get_result();
     $usuario = $res ? $res->fetch_assoc() : null;
-
     $st->close();
     $cx->close();
-
-    if ($usuario && password_verify($contrasena, $usuario['contrasena'])) {
+      if ($usuario && password_verify($contrasena, $usuario['contrasena'])) {
         if (session_status() === PHP_SESSION_NONE) session_start();
         $_SESSION['cedula'] = $usuario['cedula'];
         unset($usuario['contrasena']); // no exponer hash
         return $usuario;
     }
-    return null;
-}
+    }
+
+
+
+ 
 
 
 

@@ -135,7 +135,7 @@ switch ($action) {
             $role = Usuario::detectarRol($_SESSION['cedula'] ?? '');
             $_SESSION['role'] = $role;
 
-            switch ($role) {
+          switch ($role) {
                 case 'cliente':
                     include('../vistas/vistas-cliente.php');
                     break;
@@ -144,15 +144,17 @@ switch ($action) {
                     break;
                 case 'admin':
                     include('../vistas/panel.php');
+
                     break;
                 default:
-                   // include('../vistas/perfil.php');
+                     echo "❌ .";
+           
                     break;
             }
         } else {
             echo "❌ Usuario o contraseña incorrectos.";
-            $clave = "AdminSkillmatchPSWD";
-            echo password_hash($clave, PASSWORD_DEFAULT);
+           // $clave = "AdminSkillmatchPSWD";
+          //  echo password_hash($clave, PASSWORD_DEFAULT);
         }
     }
     break;

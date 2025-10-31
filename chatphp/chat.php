@@ -2,32 +2,40 @@
 session_start();
 include '../conexion/ClaseConexion.php';
 
+echo "<pre>DEBUG CHAT.PHP\n";
+echo "SESSION:\n";
+print_r($_SESSION);
+echo "POST:\n";
+print_r($_POST);
+echo "</pre>";
+
+
 //if (!isset($_SESSION['cedula'])) {
 //    header("Location: login.php");
 //    exit;
 //}
 
 
-//$emisor = $_POST['emite'];
-if (isset($_POST['emite'])) {
-    //AVRIIIIIIL
+if (isset($_POST['emite']) && $_POST['emite'] !== '') {
+    // usar lo que vino por POST
     $_SESSION['receiver_id'] = $_POST['emite'];
-    $emisor = $_SESSION['receiver_id'];
-    //print_r($emisor);
-} else {
+}
+
+if (!isset($_SESSION['cedula'])) {
     echo "Error: Usuario no autenticado.";
     exit;
 }
 
+if (!isset($_SESSION['receiver_id'])) {
+    echo "Error: No se indicó con quién chatear.";
+    exit;
+}
 
-$user_id = $_SESSION['cedula'];
-//$user_name = $_SESSION['user_name'];
+$user_id  = $_SESSION['cedula'];
+$emisor   = $_SESSION['receiver_id'];   // este es el otro
 $user_name = '--';
-//echo '<pre>';
-//print_r($_SESSION); // Muestra el contenido de $_SESSION
-//echo '</pre>';
-?>
 
+?>
 <!DOCTYPE html>
 <html>
 <head>
