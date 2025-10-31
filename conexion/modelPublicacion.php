@@ -92,7 +92,7 @@ class Servicio {
     if ($result) $result->free();
     if ($servicio) {
        
-        $_SESSION['idreceptor'] = $servicio['proveedor_cedula'];
+        $_SESSION['receiver_id'] = $servicio['proveedor_cedula'];
     }
     $st->close();
     $cx->close();

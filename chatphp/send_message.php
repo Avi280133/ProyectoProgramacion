@@ -2,7 +2,7 @@
 session_start();
 require_once('../conexion/ClaseConexion.php');
 
-if (!isset($_SESSION['cedula']) || !isset($_SESSION['idreceptor']) || !isset($_POST['message'])) {
+if (!isset($_SESSION['cedula']) || !isset($_SESSION['receiver_id']) || !isset($_POST['message'])) {
     http_response_code(400);
     echo json_encode(['error' => 'Faltan datos necesarios']);
     exit;
@@ -10,7 +10,7 @@ if (!isset($_SESSION['cedula']) || !isset($_SESSION['idreceptor']) || !isset($_P
 
 $cx = (new ClaseConexion())->getConexion();
 $sender_id = $_SESSION['cedula'];
-$receiver_id = $_SESSION['idreceptor'];
+$receiver_id = $_SESSION['receiver_id'];
 $message = $_POST['message'];
 
 $cx->begin_transaction();

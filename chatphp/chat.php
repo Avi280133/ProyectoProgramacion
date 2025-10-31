@@ -8,12 +8,21 @@ include '../conexion/ClaseConexion.php';
 //}
 
 
-$emisor = $_POST['emite'];
+//$emisor = $_POST['emite'];
+if (isset($_POST['emite'])) {
+    //AVRIIIIIIL
+    $_SESSION['receiver_id'] = $_POST['emite'];
+    $emisor = $_SESSION['receiver_id'];
+    //print_r($emisor);
+} else {
+    echo "Error: Usuario no autenticado.";
+    exit;
+}
 
 
 $user_id = $_SESSION['cedula'];
 //$user_name = $_SESSION['user_name'];
-$user_name = 'VARIABLE_TEST';
+$user_name = '--';
 //echo '<pre>';
 //print_r($_SESSION); // Muestra el contenido de $_SESSION
 //echo '</pre>';
