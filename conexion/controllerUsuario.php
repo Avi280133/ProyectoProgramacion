@@ -140,7 +140,7 @@ switch ($action) {
                     include('../vistas/vistas-cliente.php');
                     break;
                 case 'proveedor':
-                    include('../vistas/perfil.php');
+                    include('../vistas/panel.php');
                     break;
                 case 'admin':
                     include('../vistas/panel.php');
