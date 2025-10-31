@@ -1632,15 +1632,17 @@ $chats = Usuario::cargarChatsProv();
  
 <?php  
 if (!empty($chats)) {
+  echo '<form action="../chatphp/chat.php" method="POST">';
   echo "<ul>";
     foreach ($chats as $c) {
-
-        //echo '<div class="card-title">' . htmlspecialchars($c['nombre'])  . '</div>';
-        //echo '<div class="card-title">' . htmlspecialchars($c['idemisor'])  . '</div>';
-        echo "<li><a href='../chatphp/chat.php'>"   . htmlspecialchars($c['nombre'])  .  "</a></li>";
-       
+        // Agregar un campo oculto para el idemisor
+        echo '<li>';
+        //echo '<input type="submit" name="emite" value="' . htmlspecialchars($c['idemisor']) . '">';
+        echo '<button type="submit" name="emite" value="' . htmlspecialchars($c['idemisor']) . '">' . htmlspecialchars($c['nombre']) . '</button>';
+        echo '</li>';
     }
     echo "</ul>";
+    echo '</form>'; // Asegúrate de cerrar el formulario aquí
 } else {
     echo '<div class="empty-state"><i class="fas fa-users-slash"></i><p>No hay usuarios.</p></div>';
 }
