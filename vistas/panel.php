@@ -11,7 +11,6 @@
 
 
 
-    <style> 
 
 
 <?php
@@ -961,283 +960,67 @@ if (!empty($clientes)) {
 
             <!-- aquí va el listado de proveedores -->
             <div id="providersContainer" class="cards-grid" style="display: none;">
-                <div class="item-card" data-id="1" onclick="selectCard(this, 'providers')">
-                    <div class="card-icon-container provider-icon">
-                        <i class="fas fa-user-tie"></i>
-                    </div>
-                    <div class="card-main-content">
-                        <div class="card-header">
-                            <div class="card-id">ID: 1</div>
-                        </div>
-                        <div class="card-title">Juan Pérez</div>
-                        <div class="card-subtitle">Desarrollo Web</div>
-                        <div class="card-info">
-                            <div class="info-row">
-                                <i class="fas fa-star"></i>
-                                <span>4.8 / 5.0</span>
-                            </div>
-                            <div class="info-row">
-                                <i class="fas fa-briefcase"></i>
-                                <span>45 trabajos</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="item-card" data-id="2" onclick="selectCard(this, 'providers')">
-                    <div class="card-icon-container provider-icon">
-                        <i class="fas fa-user-tie"></i>
-                    </div>
-                    <div class="card-main-content">
-                        <div class="card-header">
-                            <div class="card-id">ID: 2</div>
-                        </div>
-                        <div class="card-title">Carlos López</div>
-                        <div class="card-subtitle">Reparación del Hogar</div>
-                        <div class="card-info">
-                            <div class="info-row">
-                                <i class="fas fa-star"></i>
-                                <span>4.9 / 5.0</span>
-                            </div>
-                            <div class="info-row">
-                                <i class="fas fa-briefcase"></i>
-                                <span>67 trabajos</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="item-card" data-id="3" onclick="selectCard(this, 'providers')">
-                    <div class="card-icon-container provider-icon">
-                        <i class="fas fa-user-tie"></i>
-                    </div>
-                    <div class="card-main-content">
-                        <div class="card-header">
-                            <div class="card-id">ID: 3</div>
-                        </div>
-                        <div class="card-title">Pedro Sánchez</div>
-                        <div class="card-subtitle">Diseño Gráfico</div>
-                        <div class="card-info">
-                            <div class="info-row">
-                                <i class="fas fa-star"></i>
-                                <span>4.7 / 5.0</span>
-                            </div>
-                            <div class="info-row">
-                                <i class="fas fa-briefcase"></i>
-                                <span>32 trabajos</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="item-card" data-id="4" onclick="selectCard(this, 'providers')">
-                    <div class="card-icon-container provider-icon">
-                        <i class="fas fa-user-tie"></i>
-                    </div>
-                    <div class="card-main-content">
-                        <div class="card-header">
-                            <div class="card-id">ID: 4</div>
-                        </div>
-                        <div class="card-title">Diego Fernández</div>
-                        <div class="card-subtitle">Plomería</div>
-                        <div class="card-info">
-                            <div class="info-row">
-                                <i class="fas fa-star"></i>
-                                <span>4.6 / 5.0</span>
-                            </div>
-                            <div class="info-row">
-                                <i class="fas fa-briefcase"></i>
-                                <span>28 trabajos</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- aquí va el listado de servicios -->
-            <div id="servicesContainer" class="cards-grid" style="display: none;">
-                <div class="item-card" data-id="1" onclick="selectCard(this, 'services')">
-                    <div class="card-icon-container service-icon">
-                        <i class="fas fa-laptop-code"></i>
-                    </div>
-                    <div class="card-main-content">
-                        <div class="card-header">
-                            <div class="card-id">ID: 1</div>
-                        </div>
-                        <div class="card-title">Desarrollo Web Completo</div>
-                        <div class="card-info">
-                            <div class="info-row">
-                                <i class="fas fa-user-tie"></i>
-                                <span>Juan Pérez</span>
-                            </div>
-                            <div class="info-row">
-                                <i class="fas fa-tag"></i>
-                                <span>Tecnología</span>
-                            </div>
-                            <div class="price-badge">
-                                <i class="fas fa-dollar-sign"></i>
-                                <span>1,500</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="item-card" data-id="2" onclick="selectCard(this, 'services')">
-                    <div class="card-icon-container service-icon">
-                        <i class="fas fa-wrench"></i>
-                    </div>
-                    <div class="card-main-content">
-                        <div class="card-header">
-                            <div class="card-id">ID: 2</div>
-                        </div>
-                        <div class="card-title">Reparación de Plomería</div>
-                        <div class="card-info">
-                            <div class="info-row">
-                                <i class="fas fa-user-tie"></i>
-                                <span>Carlos López</span>
-                            </div>
-                            <div class="info-row">
-                                <i class="fas fa-tag"></i>
-                                <span>Hogar</span>
-                            </div>
-                            <div class="price-badge">
-                                <i class="fas fa-dollar-sign"></i>
-                                <span>350</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="item-card" data-id="3" onclick="selectCard(this, 'services')">
-                    <div class="card-icon-container service-icon">
-                        <i class="fas fa-palette"></i>
-                    </div>
-                    <div class="card-main-content">
-                        <div class="card-header">
-                            <div class="card-id">ID: 3</div>
-                        </div>
-                        <div class="card-title">Diseño de Logotipo</div>
-                        <div class="card-info">
-                            <div class="info-row">
-                                <i class="fas fa-user-tie"></i>
-                                <span>Pedro Sánchez</span>
-                            </div>
-                            <div class="info-row">
-                                <i class="fas fa-tag"></i>
-                                <span>Diseño</span>
-                            </div>
-                            <div class="price-badge">
-                                <i class="fas fa-dollar-sign"></i>
-                                <span>800</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="item-card" data-id="4" onclick="selectCard(this, 'services')">
-                    <div class="card-icon-container service-icon">
-                        <i class="fas fa-bolt"></i>
-                    </div>
-                    <div class="card-main-content">
-                        <div class="card-header">
-                            <div class="card-id">ID: 4</div>
-                        </div>
-                        <div class="card-title">Instalación Eléctrica</div>
-                        <div class="card-info">
-                            <div class="info-row">
-                                <i class="fas fa-user-tie"></i>
-                                <span>Diego Fernández</span>
-                            </div>
-                            <div class="info-row">
-                                <i class="fas fa-tag"></i>
-                                <span>Hogar</span>
-                            </div>
-                            <div class="price-badge">
-                                <i class="fas fa-dollar-sign"></i>
-                                <span>450</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <?php  
+if (!empty($clientes)) {
+    foreach ($proveedores as $p) {
+        echo '<div class="item-card" data-id="' . htmlspecialchars($p['cedula']) . '" onclick="selectCard(this, \'providers\')">';
+        echo '  <div class="card-icon-container"><i class="fas fa-user"></i></div>';
+        echo '  <div class="card-main-content">';
+        echo '      <div class="card-header">';
+        echo '          <div class="card-id">ID: ' . htmlspecialchars($p['cedula']) . '</div>';
+        echo '      </div>';
+        echo '      <div class="card-title">' . htmlspecialchars($p['nombre']) . ' ' . htmlspecialchars($p['apellido']) . '</div>';
+        echo '      <div class="card-info">';
+        echo '          <div class="info-row">';
+        echo '              <i class="fas fa-envelope"></i>';
+        echo '              <span>' . htmlspecialchars($p['email']) . '</span>';
+        echo '          </div>';
+        echo '          <div class="info-row">';
+        echo '              <i class="fas fa-circle-check"></i>';
+        echo '              <span>' . htmlspecialchars($p['estado'] ?? "Activo") . '</span>';
+        echo '          </div>';
+        echo '      </div>';
+        echo '  </div>';
+        echo '</div>';
+    }
+} else {
+    echo '<div class="empty-state"><i class="fas fa-users-slash"></i><p>No hay usuarios.</p></div>';
+}
+?>
+</div>
 
             <!-- aquí va el listado de categorías -->
             <div id="categoriesContainer" class="cards-grid" style="display: none;">
-                <div class="item-card" data-id="1" onclick="selectCard(this, 'categories')">
-                    <div class="card-icon-container category-icon">
-                        <i class="fas fa-laptop-code"></i>
-                    </div>
-                    <div class="card-main-content">
-                        <div class="card-header">
-                            <div class="card-id">ID: 1</div>
-                        </div>
-                        <div class="card-title">Tecnología</div>
-                        <div class="card-info">
-                            <div class="info-row">
-                                <i class="fas fa-briefcase"></i>
-                                <span>23 servicios activos</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="item-card" data-id="2" onclick="selectCard(this, 'categories')">
-                    <div class="card-icon-container category-icon">
-                        <i class="fas fa-home"></i>
-                    </div>
-                    <div class="card-main-content">
-                        <div class="card-header">
-                            <div class="card-id">ID: 2</div>
-                        </div>
-                        <div class="card-title">Hogar</div>
-                        <div class="card-info">
-                            <div class="info-row">
-                                <i class="fas fa-briefcase"></i>
-                                <span>34 servicios activos</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="item-card" data-id="3" onclick="selectCard(this, 'categories')">
-                    <div class="card-icon-container category-icon">
-                        <i class="fas fa-palette"></i>
-                    </div>
-                    <div class="card-main-content">
-                        <div class="card-header">
-                            <div class="card-id">ID: 3</div>
-                        </div>
-                        <div class="card-title">Diseño</div>
-                        <div class="card-info">
-                            <div class="info-row">
-                                <i class="fas fa-briefcase"></i>
-                                <span>18 servicios activos</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="item-card" data-id="4" onclick="selectCard(this, 'categories')">
-                    <div class="card-icon-container category-icon">
-                        <i class="fas fa-graduation-cap"></i>
-                    </div>
-                    <div class="card-main-content">
-                        <div class="card-header">
-                            <div class="card-id">ID: 4</div>
-                        </div>
-                        <div class="card-title">Educación</div>
-                        <div class="card-info">
-                            <div class="info-row">
-                                <i class="fas fa-briefcase"></i>
-                                <span>14 servicios activos</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
+                           <?php  
+if (!empty($clientes)) {
+    foreach ($proveedores as $p) {
+        echo '<div class="item-card" data-id="' . htmlspecialchars($p['cedula']) . '" onclick="selectCard(this, \'categories\')">';
+        echo '  <div class="card-icon-container"><i class="fas fa-user"></i></div>';
+        echo '  <div class="card-main-content">';
+        echo '      <div class="card-header">';
+        echo '          <div class="card-id">ID: ' . htmlspecialchars($p['cedula']) . '</div>';
+        echo '      </div>';
+        echo '      <div class="card-title">' . htmlspecialchars($p['nombre']) . ' ' . htmlspecialchars($p['apellido']) . '</div>';
+        echo '      <div class="card-info">';
+        echo '          <div class="info-row">';
+        echo '              <i class="fas fa-envelope"></i>';
+        echo '              <span>' . htmlspecialchars($p['email']) . '</span>';
+        echo '          </div>';
+        echo '          <div class="info-row">';
+        echo '              <i class="fas fa-circle-check"></i>';
+        echo '              <span>' . htmlspecialchars($p['estado'] ?? "Activo") . '</span>';
+        echo '          </div>';
+        echo '      </div>';
+        echo '  </div>';
+        echo '</div>';
+    }
+} else {
+    echo '<div class="empty-state"><i class="fas fa-users-slash"></i><p>No hay usuarios.</p></div>';
+}
+?>
         </div>
-    </div>
+    
 
     <!-- este es el modal para crear un nuevo usuario -->
     <div class="modal-overlay" id="createUserModal">

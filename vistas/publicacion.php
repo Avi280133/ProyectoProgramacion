@@ -931,9 +931,14 @@
           <div class="botones-accion">
             <a href="solicitud.php"><button class="btn btn-solicitar">Solicitar Servicio</button></a>
 
-            <a href="../chatphp/chat.php"><button >Enviar Mensaje</button></a>
-            <button class="btn btn-calificar">Calificar Usuario</button>
+          
+            <form action="../chatphp/chat.php" method="post">
+  <input type="hidden" name="emite" value="<?php echo htmlspecialchars($usuario['cedula']); ?>">
+  <button type="submit" class="btn btn-mensaje">Enviar Mensaje</button>
+</form>
+
             <button class="btn btn-reportar">Reportar Usuario</button>
+
 
           </div>
         </div>
@@ -1036,35 +1041,7 @@
   <script>
   let chatModalLoaded = false;
 
-  async function loadChatModal() {
-    if (chatModalLoaded) {
-      if (typeof openChat === 'function') return openChat();
-      return;
-    }
 
-    try {
-      // rutas relativas (archivo debe estar en la misma carpeta 'vistas')
-      const htmlResp = await fetch('../vistas/mensajeria-modal.php');
-      if (!htmlResp.ok) throw new Error('mensajeria-modal.php not found: ' + htmlResp.status);
-      const html = await htmlResp.text();
-      document.getElementById('chatModalContainer').innerHTML = html;
-
-      // cargar script del modal
-      await new Promise((resolve, reject) => {
-        const script = document.createElement('script');
-        script.src = '../vistas/mensajeria-modal.js';
-        script.onload = resolve;
-        script.onerror = () => reject(new Error('mensajeria-modal.js failed to load'));
-        document.body.appendChild(script);
-      });
-
-      chatModalLoaded = true;
-      if (typeof openChat === 'function') openChat();
-    } catch (err) {
-      console.error('Error loading chat modal:', err);
-      alert('No se pudo abrir el chat (revisa la consola para más detalles).');
-    }
-  }
 
   document.addEventListener('DOMContentLoaded', function() {
     // Captura botones y enlaces que abren el modal y previene navegación
