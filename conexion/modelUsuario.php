@@ -1,7 +1,7 @@
 <?php
 require_once('ClaseConexion.php');
 session_start();
-
+//Comentario agregado
 class Usuario {
     private $cedula,$nombre,$apellido,$username,$email,$contrasena,$fotoperfil,$edad,$localidad,$tipo;
 
@@ -61,6 +61,11 @@ class Usuario {
     return $n;
 }
 
+<<<<<<< HEAD
+        $cx->close(); return $n;
+    }
+=======
+>>>>>>> af4ff67031b7b5f794eba562fe7297c9b83c9e09
 
 	public function modificarUsuario(){
         $cx=(new ClaseConexion())->getConexion();
@@ -95,9 +100,11 @@ class Usuario {
         $st=$cx->prepare("SELECT * FROM usuario WHERE cedula=?"); $st->bind_param("s",$cedula);
         $st->execute(); $r=$st->get_result()->fetch_assoc(); $cx->close(); return $r;
     }
+
+
     public static function eliminar($cedula){
         $cx=(new ClaseConexion())->getConexion();
-        $st=$cx->prepare("DELETE FROM usuario WHERE cedula=?"); $st->bind_param("s",$cedula);
+        $st=$cx->prepare("DELETE * FROM usuario WHERE cedula=?"); $st->bind_param("s",$cedula);
         $st->execute(); $n=$st->affected_rows; $cx->close(); return $n;
     }
 
@@ -130,6 +137,38 @@ public function login($email, $contrasena) {
 }
 
 
+<<<<<<< HEAD
+
+
+
+public function mensaje() {
+    $cx = (new ClaseConexion())->getConexion();
+print_r($_SESSION);
+  //  $sql = "SELECT cedula, nombre, apellido, username, email, fotoperfil, edad 
+   //         FROM usuario 
+   //         WHERE email = ? AND contrasena = ?";
+
+ //   $st = $cx->prepare($sql);
+  //  if (!$st) {
+ //       die("Error en prepare: " . $cx->error);
+  //  }
+
+    // Usar los parámetros recibidos, no las propiedades vacías
+  //  $st->bind_param("ss", $email, $contrasena);
+   // $st->execute();
+
+ //   $res = $st->get_result();
+ //   $usuario = $res->fetch_assoc();
+
+ //   $st->close();
+  //  $cx->close();
+
+  //  if ($usuario) {
+       
+    //    $_SESSION['cedula'] = $usuario['cedula'];
+  //  }
+   // return $usuario ? $usuario : null;
+=======
 public static function cargarPanelClientes() {
     $cx = (new ClaseConexion())->getConexion();
     $sql = "
@@ -144,11 +183,17 @@ public static function cargarPanelClientes() {
     $r = $res->fetch_all(MYSQLI_ASSOC);
     $cx->close();
     return $r;
+>>>>>>> af4ff67031b7b5f794eba562fe7297c9b83c9e09
 }
 
 
 
 
+<<<<<<< HEAD
+
+
+=======
+>>>>>>> af4ff67031b7b5f794eba562fe7297c9b83c9e09
 public static function detectarRol($cedula) {
     $cx = (new ClaseConexion())->getConexion();
     $role = null;

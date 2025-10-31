@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="../css/styles.css">
   <link rel="stylesheet" href="../css/publi.css">
   <link rel="icon" type="image/png" href="../img/favicon_SkillMatch.png">
+    <link rel="conexion" href="../conexion/controllerPublicacion.php">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     * {
@@ -461,12 +462,10 @@
         
         <div class="contenido-servicio">
           <div class="categoria">Diseño y Creatividad</div>
-          <h1 class="titulo-principal">Diseño Gráfico y Branding Profesional</h1>
+          <h1 class="titulo-principal"><?php echo htmlspecialchars($servicio['titulo']); ?></h1>
           
           <p class="descripcion">
-            Transformo ideas en identidades visuales memorables. Especializado en diseño de marca, 
-            material publicitario y contenido digital. Con más de 8 años de experiencia trabajando 
-            con startups y empresas consolidadas, entrego soluciones creativas que conectan con tu audiencia.
+           <?php echo htmlspecialchars($servicio['descripcion']); ?>
           </p>
 
           <div class="caracteristicas">
@@ -506,8 +505,8 @@
       <!-- Sidebar Proveedor -->
       <aside class="sidebar-proveedor">
         <div class="card-proveedor">
-          <img src="../img/usuario-juan.jpg" alt="Foto de Juan" class="foto-proveedor" />
-          <a href="../perfil-externo.php" class="nombre-proveedor">Juan Martínez</a>
+          <img src="../img/usuario-juan.jpg" alt="Foto de <?php echo htmlspecialchars($usuario['fotoperfil'] ?? 'Proveedor'); ?>" class="foto-proveedor" />
+          <a href="../vistas/perfil-externo.php" class="nombre-proveedor"><?php echo htmlspecialchars($usuario['nombre'] ?? 'Proveedor', ENT_QUOTES); ?></a>
           <div class="rating">
             <span>★</span>
             <span>★</span>
@@ -523,10 +522,10 @@
             <div class="precio-label">Desde</div>
             <div class="precio">$120<span class="precio-periodo">/proyecto</span></div>
           </div>
-          
+          <!-- class="btn btn-mensaje" -->
           <div class="botones-accion">
             <a href="solicitud.php"><button class="btn btn-solicitar">Solicitar Servicio</button></a>
-            <a href="mensajeria.php"><button class="btn btn-mensaje">Enviar Mensaje</button></a>
+            <a href="../chatphp/chat.php"><button >Enviar Mensaje</button></a>
           </div>
         </div>
       </aside>
@@ -575,37 +574,56 @@
   </footer>
 
   <script>
-    let chatModalLoaded = false;
-    function loadChatModal() {
-      if (chatModalLoaded) {
-        openChat();
-        return;
-      }
-      fetch('mensajeria-modal.html')
-        .then(res => res.text())
-        .then(html => {
-          document.getElementById('chatModalContainer').innerHTML = html;
-          const script = document.createElement('script');
-          script.src = 'mensajeria-modal.js';
-          script.onload = () => {
-            chatModalLoaded = true;
-            setTimeout(() => {
-              openChat();
-            }, 0);
-          };
-          document.body.appendChild(script);
-        });
+  let chatModalLoaded = false;
+
+  async function loadChatModal() {
+    if (chatModalLoaded) {
+      if (typeof openChat === 'function') return openChat();
+      return;
     }
 
-    document.addEventListener('DOMContentLoaded', function() {
-      const btnMensajeria = document.querySelector('.btn-mensaje');
-      if (btnMensajeria) {
-        btnMensajeria.onclick = function(e) {
+    try {
+      // rutas relativas (archivo debe estar en la misma carpeta 'vistas')
+      const htmlResp = await fetch('../vistas/mensajeria-modal.php');
+      if (!htmlResp.ok) throw new Error('mensajeria-modal.php not found: ' + htmlResp.status);
+      const html = await htmlResp.text();
+      document.getElementById('chatModalContainer').innerHTML = html;
+
+      // cargar script del modal
+      await new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = '../vistas/mensajeria-modal.js';
+        script.onload = resolve;
+        script.onerror = () => reject(new Error('mensajeria-modal.js failed to load'));
+        document.body.appendChild(script);
+      });
+
+      chatModalLoaded = true;
+      if (typeof openChat === 'function') openChat();
+    } catch (err) {
+      console.error('Error loading chat modal:', err);
+      alert('No se pudo abrir el chat (revisa la consola para más detalles).');
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    // Captura botones y enlaces que abren el modal y previene navegación
+    document.querySelectorAll('a, button').forEach(el => {
+      // Si el elemento o su hijo tiene la clase .btn-mensaje lo enlazamos
+      if (el.matches('.btn-mensaje') || el.querySelector?.('.btn-mensaje')) {
+        el.addEventListener('click', function(e) {
           e.preventDefault();
+          e.stopPropagation();
           loadChatModal();
-        };
+        });
       }
     });
-  </script>
+
+    // debug helper: muestra si el botón existe
+    if (!document.querySelector('.btn-mensaje')) {
+      console.warn('No se encontró elemento .btn-mensaje en publicacion.php');
+    }
+  });
+</script>
 </body>
 </html>
