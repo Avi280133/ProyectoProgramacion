@@ -224,6 +224,28 @@ public function login($email, $contrasena) {
 }
 
 
+
+
+
+public static function cargarChatsProv() {
+    $cx = (new ClaseConexion())->getConexion();
+        $sql1="SELECT DISTINCT m.idemisor, u.nombre FROM `mensaje` as m join usuario as u on m.idemisor = 
+u.cedula WHERE m.idreceptor = ?;";
+        $st=$cx->prepare($sql1);
+        $st->bind_param("i", $_SESSION['cedula']);
+        $st->execute(); 
+            $res = $st->get_result();
+    $r = $res->fetch_all(MYSQLI_ASSOC);
+        //$chats = $res['nombre'] ? $st->get_result()->fetch_all(MYSQLI_ASSOC) : [];
+    
+    $cx->close();
+    return $res;
+}
+
+
+
+
+
 public static function detectarRol($cedula) {
     $cx = (new ClaseConexion())->getConexion();
     $role = null;

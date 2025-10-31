@@ -1605,6 +1605,60 @@ body {
     </div>
   </div>
 
+
+<div>
+
+
+
+
+
+<?php
+require_once '../conexion/controllerUsuario.php';
+
+
+  $cx=(new ClaseConexion())->getConexion();
+   
+
+require_once '../conexion/modelUsuario.php';
+
+$chats = Usuario::cargarChatsProv();
+
+?>
+
+
+
+
+
+ 
+<?php  
+if (!empty($chats)) {
+  echo "<ul>";
+    foreach ($chats as $c) {
+
+        //echo '<div class="card-title">' . htmlspecialchars($c['nombre'])  . '</div>';
+        //echo '<div class="card-title">' . htmlspecialchars($c['idemisor'])  . '</div>';
+        echo "<li><a href='../chatphp/chat.php'>"   . htmlspecialchars($c['nombre'])  .  "</a></li>";
+       
+    }
+    echo "</ul>";
+} else {
+    echo '<div class="empty-state"><i class="fas fa-users-slash"></i><p>No hay usuarios.</p></div>';
+}
+?>
+
+
+
+
+
+
+
+
+
+
+</div>
+
+
+
   <div class="modal-overlay-edit" id="editProfileModalOverlay">
     <div class="modal-edit">
       <div class="modal-header-edit">
