@@ -492,11 +492,6 @@
                 <div class="stat-label">Servicios Activos</div>
             </div>
             <div class="stat-item">
-                <div class="stat-icon"><i class="fa-solid fa-eye"></i></div>
-                <div class="stat-number">1,234</div>
-                <div class="stat-label">Visualizaciones</div>
-            </div>
-            <div class="stat-item">
                 <div class="stat-icon"><i class="fa-solid fa-star"></i></div>
                 <div class="stat-number">4.8</div>
                 <div class="stat-label">Calificación</div>
