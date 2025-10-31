@@ -21,22 +21,23 @@ try {
     $stmt->bind_param("iis", $sender_id, $receiver_id, $message);
     $stmt->execute();
 
-     $cx->commit();
-    echo json_encode(['success' => true]);
+    // $cx->commit();
+    //echo json_encode(['success' => true]);
 
-    // Segunda inserción 
-   // $stmt1 = $conn->prepare("INSERT INTO notifications (user_id, message, is_read) VALUES (?, ?, ?)");
-   // $notification_message = "Nuevo mensaje recibido";
-   // $is_read = 0;
-   // $stmt1->bind_param("isi", $receiver_id, $message, $is_read);
-   // $stmt1->execute();
+    //Segunda inserción 
+    $stmt1 = $cx->prepare("INSERT INTO notimsj (cedula, contenido, is_read) VALUES (?, ?, ?)");
+    $notification_message = "Nuevo mensaje recibido";
+    $is_read = 0;
+    $stmt1->bind_param("isi", $sender_id, $message, $is_read);
+    $stmt1->execute();
 
     // Confirma la transacción
-    //$cx->commit();
+    $cx->commit();
+    echo json_encode(['success' => true]);
 } catch (Exception $e) {
-    // Si ocurre un error, deshace la transacción
-  //  $cx->rollback();
-   // echo "Error: " . $e->getMessage();
+     //Si ocurre un error, deshace la transacción
+     $cx->rollback();
+    echo json_encode(['error' => $e->getMessage()]);
 }
 
 ?>
