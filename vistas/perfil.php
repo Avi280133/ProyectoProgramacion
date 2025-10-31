@@ -1513,7 +1513,7 @@ body {
   <header class="header-nuevo">
     <div class="header-logo">
       <img src="../img/logomini.png" alt="SkillMatch Logo" style="height: 50px; width: auto; margin-right: 0.5rem;">
-      <a href="vistas-prov.php" style="text-decoration: none; color: white;">
+      <a href="../vistas/vistas-prov.php" style="text-decoration: none; color: white;">
         SkillMatch
       </a>
     </div>
@@ -1829,7 +1829,7 @@ body {
 
 <!-- Modal Editar Servicio -->
 <div class="modal-overlay-edit-service" id="editServiceModal">
-  <div class="modal-edit-service">
+  <div class="modal-edit_service">
     <div class="modal-header-edit-service">
       <h2 class="modal-title-edit-service">Editar Servicio</h2>
       <button class="close-btn-edit-service" id="closeEditServiceBtn">×</button>
@@ -2378,8 +2378,28 @@ document.addEventListener('DOMContentLoaded', function() {
   initCalendar();
   initEventListeners();
   
-  console.log('✅ Sistema inicializado correctamente');
-  console.log(`📅 Fechas reservadas: ${reservedDates.length}`);
+  console.log(' Sistema inicializado correctamente');
+  console.log(` Fechas reservadas: ${reservedDates.length}`);
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Verificar si venimos del dashboard y hay un hash #services
+    const hash = window.location.hash;
+    const searchParams = new URLSearchParams(hash.split('?')[1]);
+    
+    if(hash.includes('#services') && searchParams.get('from') === 'dashboard') {
+        // Encontrar el div de servicios
+        const servicesDiv = document.getElementById('services');
+        if(servicesDiv) {
+            // Activar la pestaña de servicios
+            document.querySelector('[data-tab="services"]').click();
+            
+            // Scroll suave hacia la sección
+            setTimeout(() => {
+                servicesDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
+        }
+    }
 });
 </script>
 
