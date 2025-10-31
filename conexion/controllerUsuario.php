@@ -185,6 +185,30 @@ switch ($action) {
       //  }
         break;
 
+    case 'cancelReservation':
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['fecha'])) {
+            $fecha = $_POST['fecha'];
+            if (session_status() === PHP_SESSION_NONE) session_start();
+            $idproveedor = $_SESSION['cedula'] ?? null;
+            
+            if ($idproveedor) {
+                $cx = (new ClaseConexion())->getConexion();
+                $sql = "UPDATE reserva r 
+                        INNER JOIN servicio s ON r.idservicio = s.idservicio
+                        INNER JOIN ofrece o ON s.idservicio = o.idservicio
+                        SET r.estado = 'cancelada'
+                        WHERE o.idproveedor = ? AND r.fecha = ?";
+                
+                $st = $cx->prepare($sql);
+                $st->bind_param("ss", $idproveedor, $fecha);
+                $success = $st->execute();
+                
+                echo json_encode(['success' => $success]);
+                exit;
+            }
+        }
+        echo json_encode(['success' => false]);
+        break;
 
     default:
         echo "No se especificó una acción válida. Use el parámetro 'action' (registrar, modificar, eliminar, buscar, login).";

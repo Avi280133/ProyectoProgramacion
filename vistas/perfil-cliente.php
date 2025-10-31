@@ -860,6 +860,28 @@
         padding: 2rem 1.5rem;
       }
     }
+
+    /* Modificar el estilo existente o agregar después del edit-profile-btn */
+.sign-out-btn {
+    width: 100%;
+    padding: 0.9rem;
+    background: linear-gradient(135deg, #ff4d4d 0%, #cc0000 100%);
+    color: white;
+    border: none;
+    border-radius: 15px;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.sign-out-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(255, 77, 77, 0.3);
+}
   </style>
 </head>
 <body>
@@ -945,7 +967,7 @@
       <!-- SIDEBAR -->
       <div class="profile-sidebar">
         <div class="profile-photo-wrapper">
-          <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop" alt="Foto de perfil" class="profile-photo">
+          <img src="../img/4ae62d57-16c3-4974-b494-e9c26f8036fe.jpg" alt="Foto de perfil" class="profile-photo">
         </div>
         <h2 class="profile-name">María González</h2>
         <p class="profile-username">@maria.gonzalez</p>
@@ -960,6 +982,9 @@
 
         <button class="edit-profile-btn" onclick="openEditModal()">
           <i class="fas fa-edit"></i> Editar Perfil
+        </button>
+        <button class="sign-out-btn" style="margin-top: 1rem; background: #ff4d4d; color: white; border: none; padding: 0.9rem; border-radius: 15px; font-weight: 700; font-size: 1rem; cursor: pointer; transition: all 0.3s ease;">
+          <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
         </button>
       </div>
 

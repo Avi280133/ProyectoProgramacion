@@ -100,6 +100,38 @@ class Servicio {
     
 }
 
+    public static function crearReserva($idservicio, $idcliente, $fecha, $hora) {
+        $cx = (new ClaseConexion())->getConexion();
+        $sql = "INSERT INTO reserva (idservicio, idcliente, fecha, hora, estado) 
+                VALUES (?, ?, ?, ?, 'pendiente')";
+        
+        $st = $cx->prepare($sql);
+        $st->bind_param("isss", $idservicio, $idcliente, $fecha, $hora);
+        $result = $st->execute();
+        
+        $st->close();
+        $cx->close();
+        return $result;
+    }
 
+    public static function obtenerReservasServicio($idservicio) {
+        $cx = (new ClaseConexion())->getConexion();
+        $sql = "SELECT fecha, hora, estado FROM reserva 
+                WHERE idservicio = ? AND estado != 'cancelada'";
+        
+        $st = $cx->prepare($sql);
+        $st->bind_param("i", $idservicio);
+        $st->execute();
+        $result = $st->get_result();
+        
+        $reservas = [];
+        while ($row = $result->fetch_assoc()) {
+            $reservas[] = $row;
+        }
+        
+        $st->close();
+        $cx->close();
+        return $reservas;
+    }
 }
 

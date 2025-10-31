@@ -690,8 +690,9 @@ textarea.campo-formulario {
               }
             </style>-->
           </div>
-
-        <button type="submit" name="action" value="publicar"class="boton-enviar-formulario">📩 Publicar servicio</button>
+        <a href="../vistas/vistas-prov.php" style="text-decoration: none;">
+            <button type="submit" name="action" value="publicar"class="boton-enviar-formulario">📩 Publicar servicio</button>
+        </a>
       </form>
     </div>
   </main>

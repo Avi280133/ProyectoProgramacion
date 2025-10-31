@@ -849,15 +849,48 @@ footer {
       }
     }
 
+    let idservicio = <?php echo $_GET['idservicio'] ?? 'null'; ?>;
+    let reservasExistentes = [];
+
+    // Cargar reservas existentes al iniciar
+    function cargarReservasExistentes() {
+        if (!idservicio) return;
+        
+        fetch('../conexion/controllerReserva.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `action=obtener_reservas&idservicio=${idservicio}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                reservasExistentes = data.reservas;
+                renderCalendar(); // Volver a renderizar el calendario
+            }
+        });
+    }
+
+    // Modificar la función selectDate
     function selectDate(year, month, day) {
-      selectedDate = new Date(year, month, day);
-      const formattedDate = day + ' de ' + monthNames[month] + ' de ' + year;
-      selectedDateText.textContent = formattedDate;
-      
-      const dateForPHP = year + '-' + String(month + 1).padStart(2, '0') + '-' + String(day).padStart(2, '0');
-      fechaSeleccionadaInput.value = dateForPHP;
-      
-      renderCalendar();
+        const dateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        
+        // Verificar si la fecha está reservada
+        const reservada = reservasExistentes.some(r => r.fecha === dateString);
+        if (reservada) {
+            alert('Esta fecha ya está reservada');
+            return;
+        }
+        
+        selectedDate = new Date(year, month, day);
+        const formattedDate = day + ' de ' + monthNames[month] + ' de ' + year;
+        selectedDateText.textContent = formattedDate;
+        
+        const dateForPHP = year + '-' + String(month + 1).padStart(2, '0') + '-' + String(day).padStart(2, '0');
+        fechaSeleccionadaInput.value = dateForPHP;
+        
+        renderCalendar();
     }
 
     prevMonthBtn.onclick = function() {
@@ -871,11 +904,40 @@ footer {
     };
 
     document.querySelector('form').onsubmit = function(e) {
-      if (!selectedDate) {
-        e.preventDefault();
-        alert('Por favor, seleccioná una fecha en el calendario');
+      e.preventDefault();
+      
+      if (!selectedDate || !idservicio) {
+        alert('Por favor, selecciona una fecha y asegúrate de que el servicio sea válido');
+        return;
       }
+
+      const formData = new FormData(this);
+      const hora = document.querySelector('select[name="hora"]').value;
+      
+      fetch('../conexion/controllerReserva.php', {
+        method: 'POST',
+        body: new URLSearchParams({
+            'action': 'crear_reserva',
+            'idservicio': idservicio,
+            'fecha': fechaSeleccionadaInput.value,
+            'hora': hora
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Reserva creada exitosamente');
+            window.location.href = 'perfil-cliente.php';
+        } else {
+            alert('Error al crear la reserva: ' + (data.error || 'Error desconocido'));
+        }
+    });
     };
+
+    // Cargar reservas al iniciar
+    document.addEventListener('DOMContentLoaded', function() {
+        cargarReservasExistentes();
+    });
 
     renderCalendar();
   </script>

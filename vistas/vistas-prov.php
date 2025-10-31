@@ -111,6 +111,311 @@
                 flex-direction: column;
             }
         }
+        /* Features Showcase Section */
+.features-showcase {
+    padding: 5rem 2rem;
+    background: linear-gradient(180deg, #f8fffe 0%, #ffffff 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.features-showcase::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 300px;
+    background: radial-gradient(circle at 50% 0%, rgba(14, 178, 124, 0.1) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.features-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
+
+.features-header {
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.features-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+}
+
+.feature-item {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 3rem;
+    align-items: center;
+    padding: 2rem;
+    border-radius: 20px;
+    transition: all 0.4s ease;
+}
+
+.feature-item:hover {
+    background: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+    transform: translateY(-5px);
+}
+
+.feature-item-reverse {
+    grid-template-columns: 1fr 300px;
+}
+
+.feature-item-reverse .feature-visual {
+    order: 2;
+}
+
+.feature-visual {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 250px;
+}
+
+.feature-circle {
+    width: 150px;
+    height: 150px;
+    background: linear-gradient(135deg, #0eb27c 0%, #064e3b 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+    box-shadow: 0 20px 60px rgba(14, 178, 124, 0.3);
+    transition: all 0.4s ease;
+}
+
+.feature-item:hover .feature-circle {
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 25px 80px rgba(14, 178, 124, 0.4);
+}
+
+.feature-circle i {
+    font-size: 4rem;
+    color: white;
+}
+
+.feature-glow {
+    position: absolute;
+    width: 250px;
+    height: 250px;
+    background: radial-gradient(circle, rgba(14, 178, 124, 0.3) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: pulse 3s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 0.5;
+    }
+    50% {
+        transform: scale(1.2);
+        opacity: 0.8;
+    }
+}
+
+.feature-content h3 {
+    font-size: 1.8rem;
+    color: #025939;
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+.feature-content p {
+    font-size: 1.1rem;
+    color: #64748b;
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+}
+
+.feature-list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.feature-list li {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    color: #475569;
+    font-size: 0.95rem;
+}
+
+.feature-list i {
+    color: #0eb27c;
+    font-size: 1.1rem;
+}
+
+/* Features CTA */
+.features-cta {
+    margin-top: 5rem;
+    padding: 3rem;
+    background: linear-gradient(135deg, #064e3b 0%, #0eb27c 100%);
+    border-radius: 25px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 3rem;
+    align-items: center;
+    box-shadow: 0 20px 60px rgba(14, 178, 124, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.features-cta::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -10%;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+    border-radius: 50%;
+}
+
+.cta-content {
+    position: relative;
+    z-index: 1;
+}
+
+.cta-content h3 {
+    font-size: 2rem;
+    color: white;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+}
+
+.cta-content p {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+}
+
+.cta-button {
+    background: white;
+    color: #025939;
+    padding: 1rem 2.5rem;
+    border: none;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.cta-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+    background: #f0fdf9;
+}
+
+.cta-button i {
+    font-size: 1.2rem;
+    transition: transform 0.3s ease;
+}
+
+.cta-button:hover i {
+    transform: translateX(5px);
+}
+
+.cta-stats {
+    display: flex;
+    gap: 2rem;
+    position: relative;
+    z-index: 1;
+}
+
+.cta-stat {
+    text-align: center;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    min-width: 120px;
+}
+
+.cta-stat-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 0.3rem;
+}
+
+.cta-stat-label {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.9rem;
+}
+
+/* Responsive Design */
+@media (max-width: 968px) {
+    .feature-item,
+    .feature-item-reverse {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .feature-item-reverse .feature-visual {
+        order: 1;
+    }
+
+    .features-cta {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .cta-stats {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .features-showcase {
+        padding: 3rem 1rem;
+    }
+
+    .features-grid {
+        gap: 2.5rem;
+    }
+
+    .feature-circle {
+        width: 120px;
+        height: 120px;
+    }
+
+    .feature-circle i {
+        font-size: 3rem;
+    }
+
+    .feature-content h3 {
+        font-size: 1.5rem;
+    }
+
+    .cta-stats {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .cta-stat {
+        width: 100%;
+    }
+}
     </style>
 </head>
 <body>
@@ -171,7 +476,7 @@
             </div>
 
             <div class="header-icon">
-                <a href="perfil.php" style="color: inherit; text-decoration: none;">
+                <a href="../vistas/perfil.php" style="color: inherit; text-decoration: none;">
                     <i class="fas fa-user"></i>
                 </a>
             </div>
@@ -234,18 +539,6 @@
                 </button>
             </div>
 
-            <div class="action-card" onclick="location.href='index-cliente.php'">
-                <div class="action-icon">
-                    <i class="fa-solid fa-search"></i>
-                </div>
-                <h3 class="action-title">Buscar Servicios</h3>
-                <p class="action-description">Explora y contrata profesionales para tus propios proyectos.</p>
-                <button class="action-btn">
-                    <i class="fa-solid fa-arrow-right"></i>
-                    <span>Explorar</span>
-                </button>
-            </div>
-
             <div class="action-card" onclick="location.href='html/mensajes.php'">
                 <div class="action-icon">
                     <i class="fa-solid fa-envelope"></i>
@@ -257,96 +550,137 @@
                     <span>Ver Mensajes</span>
                 </button>
             </div>
-
-            <div class="action-card" onclick="location.href='html/estadisticas.php'">
-                <div class="action-icon">
-                    <i class="fa-solid fa-chart-line"></i>
-                </div>
-                <h3 class="action-title">Estadísticas</h3>
-                <p class="action-description">Analiza el rendimiento de tus servicios y optimiza tus resultados.</p>
-                <button class="action-btn">
-                    <i class="fa-solid fa-arrow-right"></i>
-                    <span>Ver Datos</span>
-                </button>
-            </div>
-
-            <div class="action-card" onclick="location.href='html/perfil.php'">
-                <div class="action-icon">
-                    <i class="fa-solid fa-user-gear"></i>
-                </div>
-                <h3 class="action-title">Mi Perfil</h3>
-                <p class="action-description">Actualiza tu información y mejora tu presencia profesional.</p>
-                <button class="action-btn" onclick="location.href='perfil.php'; event.stopPropagation();">
-                    <i class="fa-solid fa-arrow-right"></i>
-                    <span>Editar Perfil</span>
-                </button>
-            </div>
         </div>
     </section>
 
-    <!-- Services Carousel -->
-    <section class="carousel-section">
-        <div class="carousel-container">
-            <h2 class="section-title">Servicios Destacados</h2>
-            <p class="section-subtitle">Descubre la amplia gama de servicios profesionales disponibles</p>
-            
-            <div class="carousel">
-                <article>
-                    <img src="../img/Albañil.png" alt="Albañilería">
-                    <h2>Albañilería</h2>
-                    <div class="text-container">
-                        <p>Profesionales de la construcción listos para tu proyecto con garantía de calidad.</p>
-                    </div>
-                    <a href="vistas/categoria.php?cat=albanileria">Ver más</a>
-                </article>
+    <!-- Features Showcase Section -->
+<section class="features-showcase">
+    <div class="features-container">
+        <div class="features-header">
+            <h2 class="section-title">Todo lo que necesitas para crecer</h2>
+            <p class="section-subtitle">Herramientas profesionales diseñadas para impulsar tu negocio</p>
+        </div>
 
-                <article>
-                    <img src="../img/Costura.png" alt="Costura">
-                    <h2>Costureros</h2>
-                    <div class="text-container">
-                        <p>Servicios de costura profesional para arreglos y diseños personalizados.</p>
+        <div class="features-grid">
+            <div class="feature-item">
+                <div class="feature-visual">
+                    <div class="feature-circle">
+                        <i class="fa-solid fa-bullhorn"></i>
                     </div>
-                    <a href="vistas/categoria.php?cat=costura">Ver más</a>
-                </article>
+                    <div class="feature-glow"></div>
+                </div>
+                <div class="feature-content">
+                    <h3>Publicar Servicios</h3>
+                    <p>Crea publicaciones atractivas con fotos, descripciones detalladas y precios competitivos. Llega a miles de clientes potenciales en minutos.</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check-circle"></i> Galería de hasta 10 fotos</li>
+                        <li><i class="fas fa-check-circle"></i> Categorización automática</li>
+                        <li><i class="fas fa-check-circle"></i> SEO optimizado</li>
+                    </ul>
+                </div>
+            </div>
 
-                <article>
-                    <img src="../img/Mecanico.png" alt="Mecánicos">
-                    <h2>Mecánicos</h2>
-                    <div class="text-container">
-                        <p>Expertos en reparación y mantenimiento vehicular con tecnología moderna.</p>
+            <div class="feature-item feature-item-reverse">
+                <div class="feature-visual">
+                    <div class="feature-circle" style="background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);">
+                        <i class="fa-solid fa-chart-line"></i>
                     </div>
-                    <a href="vistas/categoria.php?cat=mecanica">Ver más</a>
-                </article>
+                    <div class="feature-glow" style="background: radial-gradient(circle, rgba(52,152,219,0.3) 0%, transparent 70%);"></div>
+                </div>
+                <div class="feature-content">
+                    <h3>Gestionar Servicios</h3>
+                    <p>Controla todos tus servicios desde un solo lugar. Visualiza estadísticas en tiempo real y optimiza tu presencia en la plataforma.</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check-circle"></i> Panel de métricas detalladas</li>
+                        <li><i class="fas fa-check-circle"></i> Estado de publicaciones</li>
+                        <li><i class="fas fa-check-circle"></i> Análisis de rendimiento</li>
+                    </ul>
+                </div>
+            </div>
 
-                <article>
-                    <img src="../img/Programacion.png" alt="Programación">
-                    <h2>Programación</h2>
-                    <div class="text-container">
-                        <p>Desarrollo de software y soluciones tecnológicas innovadoras.</p>
+            <div class="feature-item">
+                <div class="feature-visual">
+                    <div class="feature-circle" style="background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);">
+                        <i class="fa-solid fa-pen-to-square"></i>
                     </div>
-                    <a href="vistas/categoria.php?cat=programacion">Ver más</a>
-                </article>
+                    <div class="feature-glow" style="background: radial-gradient(circle, rgba(243,156,18,0.3) 0%, transparent 70%);"></div>
+                </div>
+                <div class="feature-content">
+                    <h3>Editar Fácilmente</h3>
+                    <p>Actualiza tus servicios en cualquier momento. Modifica precios, descripciones, disponibilidad y mucho más con solo unos clics.</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check-circle"></i> Edición en tiempo real</li>
+                        <li><i class="fas fa-check-circle"></i> Vista previa instantánea</li>
+                        <li><i class="fas fa-check-circle"></i> Historial de cambios</li>
+                    </ul>
+                </div>
+            </div>
 
-                <article>
-                    <img src="../img/Limpieza.png" alt="Limpieza">
-                    <h2>Limpieza</h2>
-                    <div class="text-container">
-                        <p>Personal capacitado para mantener tus espacios impecables.</p>
+            <div class="feature-item feature-item-reverse">
+                <div class="feature-visual">
+                    <div class="feature-circle" style="background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);">
+                        <i class="fa-solid fa-shield-halved"></i>
                     </div>
-                    <a href="vistas/categoria.php?cat=limpieza">Ver más</a>
-                </article>
+                    <div class="feature-glow" style="background: radial-gradient(circle, rgba(231,76,60,0.3) 0%, transparent 70%);"></div>
+                </div>
+                <div class="feature-content">
+                    <h3>Control Total</h3>
+                    <p>Elimina o pausa servicios cuando lo necesites. Mantén tu portafolio actualizado y relevante para tus clientes.</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check-circle"></i> Eliminación segura</li>
+                        <li><i class="fas fa-check-circle"></i> Pausar temporalmente</li>
+                        <li><i class="fas fa-check-circle"></i> Confirmación de seguridad</li>
+                    </ul>
+                </div>
+            </div>
 
-                <article>
-                    <img src="../img/Trabajo.png" alt="Trabajos Generales">
-                    <h2>Trabajos Generales</h2>
-                    <div class="text-container">
-                        <p>Amplia gama de servicios profesionales para todas tus necesidades.</p>
+            <div class="feature-item">
+                <div class="feature-visual">
+                    <div class="feature-circle" style="background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);">
+                        <i class="fa-solid fa-user-gear"></i>
                     </div>
-                    <a href="vistas/categoria.php?cat=general">Ver más</a>
-                </article>
+                    <div class="feature-glow" style="background: radial-gradient(circle, rgba(155,89,182,0.3) 0%, transparent 70%);"></div>
+                </div>
+                <div class="feature-content">
+                    <h3>Perfil Profesional</h3>
+                    <p>Construye tu marca personal. Personaliza tu perfil con portafolio, certificaciones y reseñas de clientes satisfechos.</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check-circle"></i> Portafolio visual</li>
+                        <li><i class="fas fa-check-circle"></i> Verificación de identidad</li>
+                        <li><i class="fas fa-check-circle"></i> Sistema de reputación</li>
+                    </ul>
+                </div>
             </div>
         </div>
-    </section>
+
+        <div class="features-cta">
+            <div class="cta-content">
+                <h3>¿Listo para destacar?</h3>
+                <p>Únete a miles de profesionales que ya están creciendo con SkillMatch</p>
+                <button class="cta-button" onclick="location.href='publicar.php'">
+                    <span>Publicar Mi Primer Servicio</span>
+                    <i class="fa-solid fa-rocket"></i>
+                </button>
+            </div>
+            <div class="cta-stats">
+                <div class="cta-stat">
+                    <div class="cta-stat-number">10K+</div>
+                    <div class="cta-stat-label">Proveedores</div>
+                </div>
+                <div class="cta-stat">
+                    <div class="cta-stat-number">50K+</div>
+                    <div class="cta-stat-label">Servicios</div>
+                </div>
+                <div class="cta-stat">
+                    <div class="cta-stat-number">4.9</div>
+                    <div class="cta-stat-label">Calificación</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+    
 
     <!-- Footer -->
     <footer>

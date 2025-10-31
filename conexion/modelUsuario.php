@@ -282,5 +282,27 @@ public static function detectarRol($cedula) {
     return $role; // 'cliente' | 'proveedor' | 'admin' | null
 }
 
+public static function obtenerReservas($idproveedor) {
+    $cx = (new ClaseConexion())->getConexion();
+    $sql = "SELECT r.fecha, r.hora, r.estado 
+            FROM reserva r 
+            INNER JOIN servicio s ON r.idservicio = s.idservicio 
+            INNER JOIN ofrece o ON s.idservicio = o.idservicio 
+            WHERE o.idproveedor = ?";
+            
+    $st = $cx->prepare($sql);
+    $st->bind_param("i", $idproveedor);
+    $st->execute();
+    $result = $st->get_result();
+    
+    $reservas = [];
+    while ($row = $result->fetch_assoc()) {
+        $reservas[] = $row;
+    }
+    
+    $st->close();
+    $cx->close();
+    return $reservas;
+}
 }
 
