@@ -502,76 +502,109 @@ body {
 }
 
 /* ===== FOOTER ===== */
-.footer {
-  background: linear-gradient(135deg, #059669 0%, #10b981 100%);
-  padding: 3rem 2rem;
-  color: white;
-  margin-top: auto;
-}
+footer {
+            background: linear-gradient(135deg, #064e3b 0%, #025939 50%, #0eb27c 100%);
+            color: white;
+            padding: 3rem 2rem 2rem;
+            margin-top: 3rem;
+        }
 
-.footer-content {
-  max-width: 1200px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 40px;
-}
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
 
-.footer-section h3 {
-  margin-bottom: 20px;
-  font-size: 1.3rem;
-}
+        .footer-section h4 {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
 
-.footer-section p {
-  color: rgba(255, 255, 255, 0.8);
-  line-height: 1.6;
-}
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
 
-.footer-section a {
-  color: rgba(255, 255, 255, 0.8);
-  text-decoration: none;
-  display: block;
-  margin-bottom: 10px;
-  transition: all 0.3s ease;
-}
+        .footer-links a {
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
 
-.footer-section a:hover {
-  color: white;
-  transform: translateX(5px);
-}
+        .footer-links a:hover {
+            color: white;
+            padding-left: 0.5rem;
+        }
 
-.social-icons {
-  display: flex;
-  gap: 15px;
-  margin-top: 15px;
-}
+        .footer-bottom {
+            text-align: center;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            padding-top: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
 
-.social-icon {
-  width: 40px;
-  height: 40px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-  color: white;
-  text-decoration: none;
-}
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
 
-.social-icon:hover {
-  background: rgba(255, 255, 255, 0.2);
-  transform: translateY(-3px);
-}
+        .social-icon {
+            width: 45px;
+            height: 45px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
 
-.footer-bottom {
-  text-align: center;
-  margin-top: 40px;
-  padding-top: 30px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.7);
-}
+        .social-icon:hover {
+            background: white;
+            color: #0eb27c;
+            transform: translateY(-3px);
+        }
 
+        .category-card-hover {
+            border: 2px solid transparent;
+        }
+
+        .category-card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 50px rgba(14, 178, 124, 0.2) !important;
+            border-color: #0eb27c;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+            }
+        }
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
   .modal-edit {
@@ -1587,7 +1620,7 @@ body {
     <div class="perfil">
       <!-- Foto de perfil -->
     
-      <img src="../img/<?php echo htmlspecialchars($usuario['fotoperfil'] ?? 'mujercita.jpeg'); ?>" 
+      <img src="../img/<?php echo htmlspecialchars($usuario['fotoperfil'] ?? '4ae62d57-16c3-4974-b494-e9c26f8036fe.jpg'); ?>" 
            alt="Foto de perfil" class="redonda" />
 
       <!-- Nombre y correo -->
@@ -1767,65 +1800,6 @@ if (!empty($chats)) {
         <div class="service-card-description">Aplicaciones con React, Node.js y bases de datos.</div>
         <div class="service-card-price">$1200</div>
       </div>
-      <!-- Servicio 2 -->
-      <div class="service-card" data-service-id="2" onclick="selectService(2)">
-        <img src="https://images.unsplash.com/photo-1626785774625-ddcddc3445e9?w=400&h=250&fit=crop" alt="Diseño Gráfico" style="width: 100%; height: 180px; object-fit: cover; border-radius: 10px; margin-bottom: 15px;">
-        <div class="service-card-title">Identidad Visual Corporativa</div>
-        <div class="service-card-meta">
-          <span><i class="fas fa-map-marker-alt"></i> Salto</span>
-          <span><i class="fas fa-tag"></i> Diseño</span>
-        </div>
-        <div class="service-card-description">Logo, manual de identidad, papelería y redes sociales.</div>
-        <div class="service-card-price">$650</div>
-      </div>
-
-      <!-- Servicio 3 -->
-      <div class="service-card" data-service-id="3" onclick="selectService(3)">
-        <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=250&fit=crop" alt="Marketing Digital" style="width: 100%; height: 180px; object-fit: cover; border-radius: 10px; margin-bottom: 15px;">
-        <div class="service-card-title">Estrategia de Marketing Digital</div>
-        <div class="service-card-meta">
-          <span><i class="fas fa-map-marker-alt"></i> Maldonado</span>
-          <span><i class="fas fa-tag"></i> Marketing</span>
-        </div>
-        <div class="service-card-description">Análisis de mercado, redes sociales, campañas y métricas.</div>
-        <div class="service-card-price">$890</div>
-      </div>
-
-      <!-- Servicio 4 -->
-      <div class="service-card" data-service-id="4" onclick="selectService(4)">
-        <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400&h=250&fit=crop" alt="Soporte IT" style="width: 100%; height: 180px; object-fit: cover; border-radius: 10px; margin-bottom: 15px;">
-        <div class="service-card-title">Mantenimiento y Soporte IT</div>
-        <div class="service-card-meta">
-          <span><i class="fas fa-map-marker-alt"></i> Montevideo</span>
-          <span><i class="fas fa-tag"></i> Soporte Técnico</span>
-        </div>
-        <div class="service-card-description">Actualización de sistemas y resolución de incidencias en 24h.</div>
-        <div class="service-card-price">$280</div>
-      </div>
-
-      <!-- Servicio 5 -->
-      <div class="service-card" data-service-id="5" onclick="selectService(5)">
-        <img src="https://images.unsplash.com/photo-1542038784456-1ea8e935640e?w=400&h=250&fit=crop" alt="Fotografía" style="width: 100%; height: 180px; object-fit: cover; border-radius: 10px; margin-bottom: 15px;">
-        <div class="service-card-title">Sesión Fotográfica de Producto</div>
-        <div class="service-card-meta">
-          <span><i class="fas fa-map-marker-alt"></i> Punta del Este</span>
-          <span><i class="fas fa-tag"></i> Fotografía</span>
-        </div>
-        <div class="service-card-description">Fotos para e-commerce con edición y entrega en 72h.</div>
-        <div class="service-card-price">$420</div>
-      </div>
-
-      <!-- Servicio 6 -->
-      <div class="service-card" data-service-id="6" onclick="selectService(6)">
-        <img src="https://images.unsplash.com/photo-1455390582262-044cdead277a?w=400&h=250&fit=crop" alt="Redacción" style="width: 100%; height: 180px; object-fit: cover; border-radius: 10px; margin-bottom: 15px;">
-        <div class="service-card-title">Redacción de Contenido SEO</div>
-        <div class="service-card-meta">
-          <span><i class="fas fa-map-marker-alt"></i> Montevideo</span>
-          <span><i class="fas fa-tag"></i> Redacción</span>
-        </div>
-        <div class="service-card-description">10 artículos optimizados con keywords y meta descripciones.</div>
-        <div class="service-card-price">$350</div>
-      </div>
     </div>
   </div>
 
@@ -1938,57 +1912,66 @@ if (!empty($chats)) {
 </div>
 
 
-  <footer class="footer">
-    <div class="footer-content">
-      <div class="footer-section">
-        <h3>SkillMatch</h3>
-        <p>La plataforma líder que conecta profesionales con clientes. Publica tus servicios y encuentra oportunidades.</p>
-        <div class="social-icons">
-          <a href="#" class="social-icon">
-            <i class="fa-brands fa-facebook-f"></i>
-          </a>
-          <a href="#" class="social-icon">
-            <i class="fa-brands fa-instagram"></i>
-          </a>
-          <a href="#" class="social-icon">
-            <i class="fa-brands fa-twitter"></i>
-          </a>
-          <a href="#" class="social-icon">
-            <i class="fa-brands fa-linkedin-in"></i>
-          </a>
+  <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Empresa</h4>
+                <div class="footer-links">
+                    <a href="#acerca">Acerca de SkillMatch</a>
+                    <a href="#blog">Blog</a>
+                    <a href="#prensa">Prensa</a>
+                    <a href="#carreras">Carreras</a>
+                </div>
+            </div>
+
+            <div class="footer-section">
+                <h4>Servicio</h4>
+                <div class="footer-links">
+                    <a href="#como-funciona">Cómo Funciona</a>
+                    <a href="#tarifas">Tarifas</a>
+                    <a href="#categorias">Categorías</a>
+                    <a href="#garantia">Garantía de Calidad</a>
+                </div>
+            </div>
+
+            <div class="footer-section">
+                <h4>Soporte</h4>
+                <div class="footer-links">
+                    <a href="#ayuda">Centro de Ayuda</a>
+                    <a href="#contacto">Contacto</a>
+                    <a href="#seguridad">Seguridad</a>
+                    <a href="#privacidad">Privacidad</a>
+                </div>
+            </div>
+
+            <div class="footer-section">
+                <h4>Conecta</h4>
+                <div class="footer-links">
+                    <a href="#descarga">Descargar App</a>
+                    <a href="#newsletter">Newsletter</a>
+                    <a href="#comunidad">Comunidad</a>
+                </div>
+            </div>
         </div>
-      </div>
 
-      <div class="footer-section">
-        <h3>Para Proveedores</h3>
-        <a href="#">Publicar Servicio</a>
-        <a href="#">Mis Servicios</a>
-        <a href="#">Estadísticas</a>
-        <a href="#">Mensajes</a>
-        <a href="#">Mi Perfil</a>
-      </div>
-
-      <div class="footer-section">
-        <h3>Para Clientes</h3>
-        <a href="#">Buscar Servicios</a>
-        <a href="#">Categorías</a>
-        <a href="#">Mis Favoritos</a>
-        <a href="#">Historial</a>
-      </div>
-
-      <div class="footer-section">
-        <h3>Soporte</h3>
-        <a href="#">Centro de Ayuda</a>
-        <a href="#">Políticas de Seguridad</a>
-        <a href="#">Términos y Condiciones</a>
-        <a href="#">Contáctanos</a>
-        <a href="#">Acerca de Nosotros</a>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <p>&copy; 2025 SkillMatch. Todos los derechos reservados.</p>
-    </div>
-  </footer>
+        <div class="footer-bottom">
+            <p>&copy; 2024 SkillMatch. Todos los derechos reservados.</p>
+            <div class="social-links">
+                <a href="#facebook" class="social-icon" title="Facebook">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                <a href="https://www.instagram.com/skillmatch.sm/" class="social-icon" title="Instagram">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="#twitter" class="social-icon" title="Twitter">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a href="#linkedin" class="social-icon" title="LinkedIn">
+                    <i class="fab fa-linkedin-in"></i>
+                </a>
+            </div>
+        </div>
+    </footer>
 
   <script>
     document.querySelector('.btneditar').onclick = function() {
@@ -2055,22 +2038,17 @@ let currentYear = 2025;
 let dateToCancel = null;
 
 // Fechas reservadas en formato YYYY-MM-DD (mutable para poder eliminar)
-let reservedDates = [
-  '2025-10-30',
-  '2025-10-31',
-  '2025-11-05',
-  '2025-11-06',
-  '2025-11-12',
-  '2025-11-15',
-  '2025-11-20',
-  '2025-11-25',
-  '2025-12-01',
-  '2025-12-08',
-  '2025-12-15',
-  '2025-12-24',
-  '2025-12-25',
-  '2025-12-31'
-];
+let reservedDates = <?php 
+    if(isset($_SESSION['cedula'])) {
+        $reservas = Usuario::obtenerReservas($_SESSION['cedula']);
+        $fechas = array_map(function($r) {
+            return $r['fecha'];
+        }, $reservas);
+        echo json_encode($fechas);
+    } else {
+        echo '[]';
+    }
+?>;
 
 // Datos de servicios
 const serviceData = {
@@ -2164,6 +2142,10 @@ function selectService(serviceId) {
     clickedCard.classList.add('selected');
     updateActionButtons(true);
   }
+
+  if (selectedServiceId) {
+    initCalendar(); // Recargar calendario con las reservas del servicio seleccionado
+  }
 }
 
 function updateActionButtons(active) {
@@ -2242,7 +2224,21 @@ function handleEditServiceSubmit(e) {
 
 // ===== FUNCIONES DEL CALENDARIO =====
 function initCalendar() {
-  renderCalendar(currentMonth, currentYear);
+  // Cargar reservas al iniciar
+  fetch('../conexion/controllerReserva.php', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: 'action=obtener_reservas&idservicio=' + selectedServiceId
+})
+.then(response => response.json())
+.then(data => {
+    if (data.success) {
+        reservedDates = data.reservas.map(r => r.fecha);
+        renderCalendar(currentMonth, currentYear);
+    }
+});
 }
 
 function renderCalendar(month, year) {
@@ -2277,25 +2273,20 @@ function renderCalendar(month, year) {
     currentDate.setHours(0, 0, 0, 0);
     const dateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
     
-    // Marcar hoy
     if (currentDate.getTime() === today.getTime()) {
       dayDiv.classList.add('today');
     }
     
-    // Deshabilitar fechas pasadas
     if (currentDate < today) {
       dayDiv.classList.add('disabled');
-    }
-    // Marcar fechas reservadas - CLICKEABLES para cancelar
-    else if (reservedDates.includes(dateString)) {
+    } else if (reservedDates.includes(dateString)) {
       dayDiv.classList.add('reserved');
-      dayDiv.addEventListener('click', function(e) {
+      dayDiv.title = 'Reservado';
+      dayDiv.addEventListener('click', (e) => {
         e.stopPropagation();
         openCancelReservationModal(dateString);
       });
-    }
-    // Fechas disponibles
-    else {
+    } else {
       dayDiv.classList.add('available');
     }
     
@@ -2340,28 +2331,40 @@ function closeCancelReservationModal() {
 }
 
 function confirmCancelReservation() {
-  if (!dateToCancel) return;
-  
-  // Eliminar la fecha del array de reservadas
-  const index = reservedDates.indexOf(dateToCancel);
-  if (index > -1) {
-    reservedDates.splice(index, 1);
-  }
-  
-  // Guardar la fecha cancelada para el mensaje
-  const [year, month, day] = dateToCancel.split('-');
-  const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
-                      "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
-  const formattedDate = `${day} de ${monthNames[parseInt(month) - 1]} de ${year}`;
-  
-  // Cerrar modal de confirmación
-  closeCancelReservationModal();
-  
-  // Re-renderizar calendario para reflejar el cambio
-  renderCalendar(currentMonth, currentYear);
-  
-  // Mostrar notificación de éxito
-  showNotificationModal('¡Cancelado con Éxito!', `La reserva del ${formattedDate} ha sido cancelada correctamente.`);
+    if (!dateToCancel) return;
+    
+    // Send cancellation request to server
+    fetch('../conexion/controllerUsuario.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `action=cancelReservation&fecha=${dateToCancel}`
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Remove from local array
+            const index = reservedDates.indexOf(dateToCancel);
+            if (index > -1) {
+                reservedDates.splice(index, 1);
+            }
+            
+            // Update calendar
+            renderCalendar(currentMonth, currentYear);
+            
+            // Show success message
+            showNotificationModal('¡Cancelado con Éxito!', 
+                'La reserva ha sido cancelada correctamente.');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showNotificationModal('Error', 
+            'No se pudo cancelar la reserva. Por favor intente nuevamente.');
+    });
+    
+    closeCancelReservationModal();
 }
 
 // ===== EVENT LISTENERS =====
