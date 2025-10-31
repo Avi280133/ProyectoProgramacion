@@ -1,3 +1,5 @@
+modelUsuario.php
+
 <?php
 require_once('ClaseConexion.php');
 session_start();
@@ -61,11 +63,8 @@ class Usuario {
     return $n;
 }
 
-<<<<<<< HEAD
-        $cx->close(); return $n;
-    }
-=======
->>>>>>> af4ff67031b7b5f794eba562fe7297c9b83c9e09
+
+
 
 	public function modificarUsuario(){
         $cx=(new ClaseConexion())->getConexion();
@@ -137,13 +136,12 @@ public function login($email, $contrasena) {
 }
 
 
-<<<<<<< HEAD
 
 
 
-public function mensaje() {
-    $cx = (new ClaseConexion())->getConexion();
-print_r($_SESSION);
+//public function mensaje() {
+  //  $cx = (new ClaseConexion())->getConexion();
+//print_r($_SESSION);
   //  $sql = "SELECT cedula, nombre, apellido, username, email, fotoperfil, edad 
    //         FROM usuario 
    //         WHERE email = ? AND contrasena = ?";
@@ -168,8 +166,8 @@ print_r($_SESSION);
     //    $_SESSION['cedula'] = $usuario['cedula'];
   //  }
    // return $usuario ? $usuario : null;
-=======
-public static function cargarPanelClientes() {
+
+ public static function cargarPanelClientes() {
     $cx = (new ClaseConexion())->getConexion();
     $sql = "
         SELECT u.*
@@ -183,17 +181,51 @@ public static function cargarPanelClientes() {
     $r = $res->fetch_all(MYSQLI_ASSOC);
     $cx->close();
     return $r;
->>>>>>> af4ff67031b7b5f794eba562fe7297c9b83c9e09
+}
+
+ public static function cargarPanelProveedores() {
+    $cx = (new ClaseConexion())->getConexion();
+    $sql = "
+        SELECT u.*
+        FROM usuario u
+        INNER JOIN proveedor p ON p.idcliente = u.cedula
+        ORDER BY u.nombre, u.apellido
+    ";
+    $st = $cx->prepare($sql);
+    $st->execute();
+    $res = $st->get_result();
+    $r = $res->fetch_all(MYSQLI_ASSOC);
+    $cx->close();
+    return $r;
+}
+
+ public static function cargarPanelServicios() {
+    $cx = (new ClaseConexion())->getConexion();
+    $sql = "
+        SELECT * FROM servicio
+    ";
+    $st = $cx->prepare($sql);
+    $st->execute();
+    $res = $st->get_result();
+    $r = $res->fetch_all(MYSQLI_ASSOC);
+    $cx->close();
+    return $r;
+}
+
+ public static function cargarPanelCategorias() {
+    $cx = (new ClaseConexion())->getConexion();
+    $sql = "
+        SELECT * FROM categoria
+    ";
+    $st = $cx->prepare($sql);
+    $st->execute();
+    $res = $st->get_result();
+    $r = $res->fetch_all(MYSQLI_ASSOC);
+    $cx->close();
+    return $r;
 }
 
 
-
-
-<<<<<<< HEAD
-
-
-=======
->>>>>>> af4ff67031b7b5f794eba562fe7297c9b83c9e09
 public static function detectarRol($cedula) {
     $cx = (new ClaseConexion())->getConexion();
     $role = null;

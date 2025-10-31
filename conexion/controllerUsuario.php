@@ -1,3 +1,5 @@
+ControllerUsuario.php
+
 <?php
 
 
@@ -154,8 +156,8 @@ switch ($action) {
             }
         } else {
             echo "❌ Usuario o contraseña incorrectos.";
-           // $clave = "AdminSkillmatchPSWD";
-           // echo password_hash($clave, PASSWORD_DEFAULT);
+            $clave = "AdminSkillmatchPSWD";
+            echo password_hash($clave, PASSWORD_DEFAULT);
         }
     }
     break;

@@ -1,3 +1,5 @@
+panel.php
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -7,16 +9,13 @@
           <link rel="conexion" href="../conexion/controllerPublicacion.php">
            <link rel="conexion" href="../conexion/controllerUsuario.php">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<<<<<<< HEAD
     <link rel="conexion" href="../conexion/controllerPublicacion.php">
 
 
-=======
 
     <style> 
 
 
->>>>>>> af4ff67031b7b5f794eba562fe7297c9b83c9e09
 <?php
 require_once '../conexion/controllerUsuario.php';
 
@@ -49,6 +48,9 @@ require_once '../conexion/controllerUsuario.php';
 
 require_once '../conexion/modelUsuario.php';
 $clientes = Usuario::cargarPanelClientes();
+$proveedores = Usuario::cargarPanelProveedores();
+$servicios = Usuario::cargarPanelServicios();
+$categorias = Usuario::cargarPanelCategorias();
 
 ?>
 
