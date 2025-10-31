@@ -41,6 +41,7 @@ $user_name = 'VARIABLE_TEST';
         $('#chat-form').submit(function(e) {
             e.preventDefault();
             const message = $('#message').val();
+        
             $.post('send_message.php', { message: message }, function() {
                 $('#message').val('');
                 loadMessages();
