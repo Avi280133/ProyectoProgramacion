@@ -1,10 +1,7 @@
 <?php
-
-
 require_once('modelUsuario.php');  // Incluir el modelo Usuario
 require_once('modelProveedor.php');
 require_once('ClaseConexion.php'); // Incluir la clase de conexión
-
 
 
 // Detectar la acción: preferir POST (botones submit con name="action"), si no existe buscar en GET
@@ -85,17 +82,15 @@ switch ($action) {
     case 'eliminar':
         // Eliminar Usuario
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            if (isset($_POST['cedula']) && !empty(trim($_POST['cedula']))) {
-                $cedula = trim($_POST['cedula']);
+          
+                $cedula = $_SESSION['cedula'];
                 $resultado = Usuario::eliminar($cedula);
                 if ($resultado > 0) {
-                    Header('Location: ../index.html');
+                    include('../index.html');
                 } else {
                     echo "Error al eliminar el usuario.";
                 }
-            } else {
-                echo "Se requiere 'cedula' para eliminar.";
-            }
+         
         }
         break;
 
@@ -156,9 +151,37 @@ switch ($action) {
             }
         } else {
             echo "❌ Usuario o contraseña incorrectos.";
+            $clave = "AdminSkillmatchPSWD";
+            echo password_hash($clave, PASSWORD_DEFAULT);
         }
     }
     break;
+
+
+ case 'mensaje':
+        // Buscar Usuario por Cédula (GET o POST)
+       // $cedula = null;
+      //  if (isset($_GET['cedula']) && !empty(trim($_GET['cedula']))) $cedula = trim($_GET['cedula']);
+       // if (isset($_POST['cedula']) && !empty(trim($_POST['cedula']))) $cedula = trim($_POST['cedula']);
+      //  if ($cedula) {
+         $usuario = Usuario::mensaje();
+         //   if ($usuario) {
+          //      echo "Usuario encontrado: <br>";
+          //      echo "Cédula: " . $usuario['cedula'] . "<br>";
+            //    echo "Nombre: " . $usuario['nombre'] . "<br>";
+              //  echo "Apellido: " . $usuario['apellido'] . "<br>";
+               // echo "Username: " . $usuario['username'] . "<br>";
+               // echo "Calle: " . $usuario['calle'] . "<br>";
+               // echo "Número Puerta: " . $usuario['numeropuerta'] . "<br>";
+               // echo "Email: " . $usuario['email'] . "<br>";
+              //  echo "Edad: " . $usuario['edad'] . "<br>";
+         //   } else {
+         //       echo "Usuario no encontrado.";
+         //   }
+     //   } else {
+      //     echo "Falta parámetro 'cedula' para buscar.";
+      //  }
+        break;
 
 
     default:

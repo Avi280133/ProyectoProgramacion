@@ -374,26 +374,32 @@ footer {
                 <button class="filter-btn">Distancia</button>
             </div>
         </div>
+
 <?php  
 
 foreach ($servicio as $servicio) {
-     echo '<div class="services-grid">';
-       echo '  <div class="service-card fade-in" style="animation-delay: 0.1s">';
-             echo '    <div class="service-icon">💻</div>';
-            echo '    <h3 class="service-title"> '
-                    . htmlspecialchars($servicio['titulo']) ;
-            echo '</h3>';
-            echo '    <p class="service-description">'
-             . htmlspecialchars($servicio['descripcion']) ;
-           echo ' </p>';
-            echo '    <div class="service-meta">';
-            echo '      <div class="rating">⭐ 4.9 (127 reviews)</div>';
-            echo '      <div class="price">'
-             . htmlspecialchars($servicio['precio']) ;
-            '</div>';
-            echo '    </div>';
-            echo '    <button class="contact-btn">Contactar Ahora</button>';
-            echo '  </div>';}
+    echo ' <form action="../conexion/controllerPublicacion.php" method="POST">';
+    echo '<div class="services-grid">';
+    echo '<div class="service-card fade-in" style="animation-delay: 0.1s">';
+    echo '<div class="service-icon">💻</div>';
+    echo '<h3 class="service-title"> '
+    . htmlspecialchars($servicio['titulo']) ;
+    echo '</h3>';
+    echo '<p class="service-description">'
+    . htmlspecialchars($servicio['descripcion']) ;
+    echo '</p>';
+    echo '<div class="service-meta">';
+    echo '<div class="rating">⭐ 4.9 (127 reviews)</div>';
+    echo '<div class="price">'
+    . htmlspecialchars($servicio['precio']) ;
+    echo '</div>';
+    echo '</div>';
+    echo '<input type="hidden" name="action" value="cargarServicio">';
+    echo '<input type="hidden" name="idservicio" value="' . htmlspecialchars($servicio['idservicio']) . '">';
+    echo '<button type="submit">Contactar Ahora</button>';
+    echo '</div>';
+    echo '</form>';
+        }
 ?>
             <!-- <div class="service-card fade-in" style="animation-delay: 0.2s">
                 <div class="service-icon">⚙️</div>
@@ -503,6 +509,11 @@ foreach ($servicio as $servicio) {
         searchInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') performSearch();
         });
+
+       //   abrirServicio.addEventListener('click', performSearch);
+      //  searchInput.addEventListener('keypress', (e) => {
+      //      if (e.key === 'Enter') performSearch();
+      //  });
 
         const filterBtns = document.querySelectorAll('.filter-btn');
         filterBtns.forEach(btn => {

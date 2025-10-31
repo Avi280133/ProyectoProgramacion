@@ -1605,6 +1605,62 @@ body {
     </div>
   </div>
 
+
+<div>
+
+
+
+
+
+<?php
+require_once '../conexion/controllerUsuario.php';
+
+
+  $cx=(new ClaseConexion())->getConexion();
+   
+
+require_once '../conexion/modelUsuario.php';
+
+$chats = Usuario::cargarChatsProv();
+
+?>
+
+
+
+
+
+ 
+<?php  
+if (!empty($chats)) {
+  echo '<form action="../chatphp/chat.php" method="POST">';
+  echo "<ul>";
+    foreach ($chats as $c) {
+        // Agregar un campo oculto para el idemisor
+        echo '<li>';
+        //echo '<input type="submit" name="emite" value="' . htmlspecialchars($c['idemisor']) . '">';
+        echo '<button type="submit" name="emite" value="' . htmlspecialchars($c['idemisor']) . '">' . htmlspecialchars($c['nombre']) . '</button>';
+        echo '</li>';
+    }
+    echo "</ul>";
+    echo '</form>'; // Asegúrate de cerrar el formulario aquí
+} else {
+    echo '<div class="empty-state"><i class="fas fa-users-slash"></i><p>No hay usuarios.</p></div>';
+}
+?>
+
+
+
+
+
+
+
+
+
+
+</div>
+
+
+
   <div class="modal-overlay-edit" id="editProfileModalOverlay">
     <div class="modal-edit">
       <div class="modal-header-edit">
@@ -1674,7 +1730,7 @@ body {
           </div>
 
           <button type="submit" name="action" value="modificar" class="save-btn-edit" id="saveBtn">Guardar</button>
-          <button class="delete-btn-edit" id="deleteBtn">Eliminar Usuario</button>
+          <button type="submit" name="action" value="eliminar"   class="delete-btn-edit" id="deleteBtn">Eliminar Usuario</button>
         </div>
       </div>
     </div>

@@ -5,19 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Administrador - SkillMatch</title>
           <link rel="conexion" href="../conexion/controllerPublicacion.php">
+           <link rel="conexion" href="../conexion/controllerUsuario.php">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="conexion" href="../conexion/controllerPublicacion.php">
+
+
 
     <style> 
 
 
 <?php
 require_once '../conexion/controllerUsuario.php';
+
+
   $cx=(new ClaseConexion())->getConexion();
-        $sql1="SELECT COUNT(*) AS total_usuarios FROM usuario;";
+        $sql1="SELECT COUNT(*) AS total_clientes FROM cliente;";
         $st=$cx->prepare($sql1);
         $st->execute(); 
         $res=$st->get_result()->fetch_assoc();
-        $numeroUsuarios = $res['total_usuarios'];
+        $numeroClientes = $res['total_clientes'];
 
         $sql2="SELECT COUNT(*) AS total_proveedores FROM proveedor;";
         $st=$cx->prepare($sql2);
@@ -36,6 +42,13 @@ require_once '../conexion/controllerUsuario.php';
         $st->execute(); 
         $res=$st->get_result()->fetch_assoc();
         $numeroCategorias = $res['total_categorias'];
+
+
+require_once '../conexion/modelUsuario.php';
+$clientes = Usuario::cargarPanelClientes();
+$proveedores = Usuario::cargarPanelProveedores();
+$servicios = Usuario::cargarPanelServicios();
+$categorias = Usuario::cargarPanelCategorias();
 
 ?>
 
@@ -832,16 +845,31 @@ require_once '../conexion/controllerUsuario.php';
             Panel de Administración
         </h1>
 
+<form id="formAction" action="../conexion/controllerUsuario.php" method="POST" style="display:none;">
+  <input type="hidden" name="action" id="actionField">
+</form>
+
+<script>
+function enviarAction(valor) {
+  document.getElementById('actionField').value = valor;
+  document.getElementById('formAction').submit();
+}
+</script>
+
+
+
         <div class="stats-grid">
-            <div class="stat-card active" onclick="showSection('users')">
+            <div class="stat-card active" onclick="showSection('users');">
+
+
                 <div class="stat-icon users">
                     <i class="fas fa-users"></i>
                 </div>
                 <?php
-               echo '<div class="stat-number">' .  $numeroUsuarios ;
+               echo '<div class="stat-number">' .  $numeroClientes ;
                echo '</div>';
                ?>
-                <div class="stat-label">Total Usuarios</div>
+                <div class="stat-label">Total Clientes</div>
             </div>
 
             <div class="stat-card" onclick="showSection('providers')">
@@ -880,7 +908,7 @@ require_once '../conexion/controllerUsuario.php';
 
         <div class="content-section">
             <div class="section-header">
-                <h2 class="section-title" id="sectionTitle">Gestión de Usuarios</h2>
+                <h2 class="section-title" id="sectionTitle">Gestión de Clientes</h2>
                 <div class="action-buttons">
                     <button class="btn btn-create" onclick="createItem()">
                         <i class="fas fa-plus"></i>
@@ -898,122 +926,38 @@ require_once '../conexion/controllerUsuario.php';
             </div>
 
             <!-- aquí va el listado de usuarios -->
-            <div id="usersContainer" class="cards-grid">
-                <div class="item-card" data-id="1" onclick="selectCard(this, 'users')">
-                    <div class="card-icon-container">
-                        <i class="fas fa-user"></i>
-                    </div>
-                    <div class="card-main-content">
-                        <div class="card-header">
-                            <div class="card-id">ID: 1</div>
-                            <span class="badge badge-client">Cliente</span>
-                        </div>
-                        <div class="card-title">María González</div>
-                        <div class="card-info">
-                            <div class="info-row">
-                                <i class="fas fa-envelope"></i>
-                                <span>maria@email.com</span>
-                            </div>
-                            <div class="info-row">
-                                <i class="fas fa-circle-check"></i>
-                                <span>Activo</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+   <div id="usersContainer" class="cards-grid">
+<?php  
+if (!empty($clientes)) {
+    foreach ($clientes as $c) {
+        echo '<div class="item-card" data-id="' . htmlspecialchars($c['cedula']) . '" onclick="selectCard(this, \'users\')">';
+        echo '  <div class="card-icon-container"><i class="fas fa-user"></i></div>';
+        echo '  <div class="card-main-content">';
+        echo '      <div class="card-header">';
+        echo '          <div class="card-id">ID: ' . htmlspecialchars($c['cedula']) . '</div>';
+        echo '      </div>';
+        echo '      <div class="card-title">' . htmlspecialchars($c['nombre']) . ' ' . htmlspecialchars($c['apellido']) . '</div>';
+        echo '      <div class="card-info">';
+        echo '          <div class="info-row">';
+        echo '              <i class="fas fa-envelope"></i>';
+        echo '              <span>' . htmlspecialchars($c['email']) . '</span>';
+        echo '          </div>';
+        echo '          <div class="info-row">';
+        echo '              <i class="fas fa-circle-check"></i>';
+        echo '              <span>' . htmlspecialchars($c['estado'] ?? "Activo") . '</span>';
+        echo '          </div>';
+        echo '      </div>';
+        echo '  </div>';
+        echo '</div>';
+    }
+} else {
+    echo '<div class="empty-state"><i class="fas fa-users-slash"></i><p>No hay usuarios.</p></div>';
+}
+?>
+</div>
 
-                <div class="item-card" data-id="2" onclick="selectCard(this, 'users')">
-                    <div class="card-icon-container">
-                        <i class="fas fa-user"></i>
-                    </div>
-                    <div class="card-main-content">
-                        <div class="card-header">
-                            <div class="card-id">ID: 2</div>
-                            <span class="badge badge-provider">Proveedor</span>
-                        </div>
-                        <div class="card-title">Juan Pérez</div>
-                        <div class="card-info">
-                            <div class="info-row">
-                                <i class="fas fa-envelope"></i>
-                                <span>juan@email.com</span>
-                            </div>
-                            <div class="info-row">
-                                <i class="fas fa-circle-check"></i>
-                                <span>Activo</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="item-card" data-id="3" onclick="selectCard(this, 'users')">
-                    <div class="card-icon-container">
-                        <i class="fas fa-user"></i>
-                    </div>
-                    <div class="card-main-content">
-                        <div class="card-header">
-                            <div class="card-id">ID: 3</div>
-                            <span class="badge badge-client">Cliente</span>
-                        </div>
-                        <div class="card-title">Ana Rodríguez</div>
-                        <div class="card-info">
-                            <div class="info-row">
-                                <i class="fas fa-envelope"></i>
-                                <span>ana@email.com</span>
-                            </div>
-                            <div class="info-row">
-                                <i class="fas fa-circle-check"></i>
-                                <span>Activo</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="item-card" data-id="4" onclick="selectCard(this, 'users')">
-                    <div class="card-icon-container">
-                        <i class="fas fa-user"></i>
-                    </div>
-                    <div class="card-main-content">
-                        <div class="card-header">
-                            <div class="card-id">ID: 4</div>
-                            <span class="badge badge-provider">Proveedor</span>
-                        </div>
-                        <div class="card-title">Carlos López</div>
-                        <div class="card-info">
-                            <div class="info-row">
-                                <i class="fas fa-envelope"></i>
-                                <span>carlos@email.com</span>
-                            </div>
-                            <div class="info-row">
-                                <i class="fas fa-circle-check"></i>
-                                <span>Activo</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="item-card" data-id="5" onclick="selectCard(this, 'users')">
-                    <div class="card-icon-container">
-                        <i class="fas fa-user"></i>
-                    </div>
-                    <div class="card-main-content">
-                        <div class="card-header">
-                            <div class="card-id">ID: 5</div>
-                            <span class="badge badge-client">Cliente</span>
-                        </div>
-                        <div class="card-title">Laura Martínez</div>
-                        <div class="card-info">
-                            <div class="info-row">
-                                <i class="fas fa-envelope"></i>
-                                <span>laura@email.com</span>
-                            </div>
-                            <div class="info-row">
-                                <i class="fas fa-circle-check"></i>
-                                <span>Activo</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             <!-- aquí va el listado de proveedores -->
             <div id="providersContainer" class="cards-grid" style="display: none;">

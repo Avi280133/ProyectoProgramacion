@@ -51,4 +51,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['titulo']) && !empty($
    
     $servicio = $resultados; // Asignar el primer resultado a $serv
 include('../vistas/busqueda.php');
-}}
+}
+ case 'cargarServicio':
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['idservicio'])) {
+        $idservicio = (int) $_POST['idservicio'];
+
+        // Llamada al modelo (devuelve fila asociativa o null)
+        $resultados = Servicio::cargarServicio($idservicio);
+
+        if ($resultados) {
+            // $resultados contiene columnas del servicio (s.*) y aliases del proveedor (proveedor_*)
+            // Separar datos de servicio y usuario para la vista
+            $servicio = $resultados;
+
+            $usuario = [
+                'nombre'    => $servicio['proveedor_nombre'] ?? ($servicio['username'] ?? ''),
+                'fotoperfil'=> $servicio['proveedor_fotoperfil'] ?? ($servicio['fotoperfil'] ?? ''),
+                'cedula'    => $servicio['proveedor_cedula'] ?? ($servicio['cedula'] ?? ''),
+                'localidad' => $servicio['proveedor_localidad'] ?? ($servicio['localidad'] ?? ''),
+            ];
+
+            // opcional: quitar las claves del proveedor del array $servicio para evitar duplicados en la vista
+            unset($servicio['proveedor_nombre'], $servicio['proveedor_fotoperfil'], $servicio['proveedor_cedula'], $servicio['proveedor_localidad']);
+
+            // incluir la vista; la vista podrá usar $servicio y $usuario
+            include('../vistas/publicacion.php');
+        } else {
+            header('HTTP/1.1 404 Not Found');
+            echo 'Servicio no encontrado.';
+        }
+    } else {
+        echo 'Parámetro idservicio no recibido.';
+    }
+
+
+ 
+    break;
+//include('../vistas/publicacion.php');
+
+}
