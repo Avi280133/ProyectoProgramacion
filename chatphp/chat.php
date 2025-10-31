@@ -7,9 +7,22 @@ include '../conexion/ClaseConexion.php';
 //    exit;
 //}
 
+
+//$emisor = $_POST['emite'];
+if (isset($_POST['emite'])) {
+    //AVRIIIIIIL
+    $_SESSION['receiver_id'] = $_POST['emite'];
+    $emisor = $_SESSION['receiver_id'];
+    //print_r($emisor);
+} else {
+    echo "Error: Usuario no autenticado.";
+    exit;
+}
+
+
 $user_id = $_SESSION['cedula'];
 //$user_name = $_SESSION['user_name'];
-$user_name = 'VARIABLE_TEST';
+$user_name = '--';
 //echo '<pre>';
 //print_r($_SESSION); // Muestra el contenido de $_SESSION
 //echo '</pre>';
@@ -32,15 +45,21 @@ $user_name = 'VARIABLE_TEST';
     </form>
 
     <script>
+       // 1. Hacemos que la variable PHP $emisor esté disponible en JavaScript
+        const emisorId = '<?php echo $emisor; ?>'; 
+
         function loadMessages() {
-            $.get('get_messages.php', function(data) {
-                $('#chat-box').html(data);
-            });
-        }
+        // 2. Pasamos emisorId como dato en la solicitud $.get
+        $.get('get_messages.php', { emisor: emisorId }, function(data) {
+        $('#chat-box').html(data);
+});
+
+    }
 
         $('#chat-form').submit(function(e) {
             e.preventDefault();
             const message = $('#message').val();
+        
             $.post('send_message.php', { message: message }, function() {
                 $('#message').val('');
                 loadMessages();
