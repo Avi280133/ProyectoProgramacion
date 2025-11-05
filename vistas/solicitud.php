@@ -696,14 +696,6 @@ footer {
             <input type="email" id="email" name="email" class="form-control" placeholder="juan@ejemplo.com" required>
           </div>
 
-          <div class="form-group">
-            <label for="detalles">
-              <i class="fas fa-comment-dots"></i>
-              Detalles adicionales
-            </label>
-            <textarea id="detalles" name="detalles" class="form-control" placeholder="Contanos más sobre el servicio que necesitás..."></textarea>
-          </div>
-
           <button type="submit" class="submit-btn">
             <i class="fas fa-check-circle"></i>
             Confirmar Reserva
