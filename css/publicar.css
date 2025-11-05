@@ -1,0 +1,186 @@
+/* === Publicar Servicio — SkillMatch === */
+
+/* Base */
+:root{
+  --sm-green:#10b981;
+  --sm-green-dark:#059669;
+  --sm-bg:#f7fafc;
+  --sm-text:#1f2937;
+  --sm-muted:#6b7280;
+  --sm-border:#e5e7eb;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  background:var(--sm-bg);
+  color:var(--sm-text);
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Ubuntu,"Helvetica Neue","Noto Sans",Arial,sans-serif;
+}
+
+/* Sección principal */
+.seccion-formulario-solicitud{
+  padding:48px 16px 72px;
+}
+.contenedor-formulario{
+  max-width:900px;
+  margin:0 auto;
+  background:#fff;
+  border:1px solid var(--sm-border);
+  border-radius:16px;
+  box-shadow:0 6px 24px rgba(2,6,23,.06);
+  padding:32px;
+}
+
+/* Título */
+.titulo-formulario{
+  margin:0 0 24px;
+  font-size:28px;
+  font-weight:800;
+  letter-spacing:.2px;
+  color:#065f46;
+}
+
+/* Formulario */
+.formulario-servicio{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px 24px;
+}
+
+/* Etiquetas y campos */
+.etiqueta-campo{
+  grid-column:span 2;
+  font-size:14px;
+  font-weight:700;
+  color:#064e3b;
+}
+
+.campo-formulario,
+.price-input,
+.imagen-equipo input[type="file"],
+select.campo-formulario,
+textarea.campo-formulario{
+  width:100%;
+  border:2px solid var(--sm-border);
+  border-radius:12px;
+  padding:12px 14px;
+  font-size:16px;
+  background:#fff;
+  color:var(--sm-text);
+  transition:border-color .2s, box-shadow .2s, transform .04s;
+}
+.campo-formulario:focus,
+.price-input:focus,
+select.campo-formulario:focus,
+textarea.campo-formulario:focus{
+  outline:0;
+  border-color:var(--sm-green);
+  box-shadow:0 0 0 4px rgba(16,185,129,.15);
+}
+
+/* Distribución de campos */
+#titulo, #ubicacion, #categoria, .imagen-equipo, #descripcion, .price-input-container{
+  grid-column:span 2;
+}
+
+/* Textarea */
+textarea.campo-formulario{
+  min-height:110px;
+  resize:vertical;
+  line-height:1.6;
+}
+
+/* Input precio con símbolo */
+.price-input-container{
+  position:relative;
+}
+.price-symbol{
+  position:absolute;
+  left:14px;
+  top:50%;
+  transform:translateY(-50%);
+  font-weight:700;
+  color:#6b7280;
+  pointer-events:none;
+}
+.price-input{
+  padding-left:34px !important;
+}
+
+/* File input */
+.imagen-equipo input[type="file"]{
+  padding:12px;
+  background:#f9fafb;
+  cursor:pointer;
+}
+.imagen-equipo input[type="file"]::-webkit-file-upload-button{
+  border:0;
+  background:linear-gradient(135deg, var(--sm-green), var(--sm-green-dark));
+  color:#fff;
+  padding:10px 14px;
+  border-radius:10px;
+  font-weight:700;
+  cursor:pointer;
+  margin-right:10px;
+}
+.imagen-equipo input[type="file"]::file-selector-button{
+  border:0;
+  background:linear-gradient(135deg, var(--sm-green), var(--sm-green-dark));
+  color:#fff;
+  padding:10px 14px;
+  border-radius:10px;
+  font-weight:700;
+  cursor:pointer;
+  margin-right:10px;
+}
+
+/* Botón enviar */
+.boton-enviar-formulario{
+  grid-column:span 2;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  padding:14px 18px;
+  border:0;
+  border-radius:12px;
+  font-size:16px;
+  font-weight:800;
+  color:#fff;
+  background:linear-gradient(135deg, var(--sm-green), var(--sm-green-dark));
+  box-shadow:0 10px 24px rgba(16,185,129,.25);
+  cursor:pointer;
+  transition:transform .06s ease, box-shadow .2s ease, filter .2s ease;
+}
+.boton-enviar-formulario:hover{
+  filter:brightness(1.03);
+  box-shadow:0 14px 30px rgba(16,185,129,.32);
+}
+.boton-enviar-formulario:active{
+  transform:translateY(1px);
+}
+
+/* Placeholders */
+::placeholder{color:#94a3b8}
+
+/* Footer de esta página */
+.pie-de-pagina{
+  margin-top:12px;
+  background:#0f172a;
+  color:#cbd5e1;
+  padding:24px 16px;
+  border-top:1px solid rgba(255,255,255,.06);
+}
+.pie-de-pagina .contenedor-pie{
+  max-width:900px;
+  margin:0 auto;
+  text-align:center;
+  font-size:14px;
+}
+
+/* Responsive */
+@media (max-width:860px){
+  .formulario-servicio{grid-template-columns:1fr}
+  .titulo-formulario{font-size:24px}
+}

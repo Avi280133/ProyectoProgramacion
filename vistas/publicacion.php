@@ -910,7 +910,7 @@
         <div class="card-proveedor">
 
           <img src="../img/usuario-juan.jpg" alt="Foto de <?php echo htmlspecialchars($usuario['fotoperfil'] ?? 'Proveedor'); ?>" class="foto-proveedor" />
-          <a href="../vistas/perfil-externo.php" class="nombre-proveedor"><?php echo htmlspecialchars($usuario['nombre'] ?? 'Proveedor', ENT_QUOTES); ?></a>
+          <p class="nombre-proveedor"><?php echo htmlspecialchars($usuario['nombre'] ?? 'Proveedor', ENT_QUOTES); ?></p>
 
           <div class="rating">
             <span>★</span>
@@ -929,12 +929,13 @@
           </div>
           <!-- class="btn btn-mensaje" -->
           <div class="botones-accion">
-            <!-- Botón para solicitar (navega a solicitud.php) -->
-            <a href="solicitud.php"><button class="btn btn-solicitar" id="solicitarBtn">Solicitar Servicio</button></a>
-            
+
+            <a href="../vistas/solicitud.php"><button class="btn btn-solicitar">Solicitar Servicio</button></a>
+ 
             <!-- Botón específico para abrir modal de calificar -->
             <button class="btn btn-calificar" id="openModal-prof" type="button">Calificar</button>
             
+
             <form action="../chatphp/chat.php" method="post">
               <input type="hidden" name="emite" value="<?php echo htmlspecialchars($usuario['cedula']); ?>">
               <button type="submit" class="btn btn-mensaje">Enviar Mensaje</button>

@@ -1773,35 +1773,12 @@ if (!empty($chats)) {
     <!-- Tabs Section -->
 <section class="tabs-section">
   <div class="tabs-header">
-    <button class="tab-button" data-tab="services">
-      <i class="fas fa-briefcase"></i> Mis Servicios
-    </button>
     <button class="tab-button" data-tab="calendar">
       <i class="fas fa-calendar-alt"></i> Disponibilidad
     </button>
   </div>
 
 
-  <!-- Services Tab -->
-  <div class="tab-content" id="services">
-    <div class="service-actions-top">
-      <button class="btn-action-top btn-modify active" id="btnModify"><i class="fas fa-edit"></i> Modificar</button>
-      <button class="btn-action-top btn-delete-top active" id="btnDelete"><i class="fas fa-trash"></i> Eliminar</button>
-    </div>
-    <div class="services-grid" id="servicesGrid">
-      <!-- Cards de servicios -->
-      <div class="service-card" data-service-id="1" onclick="selectService(1)">
-        <img src="https://images.unsplash.com/photo-1547658719-da2b51169166?w=400&h=250&fit=crop" alt="Desarrollo Web" style="width: 100%; height: 180px; object-fit: cover; border-radius: 10px; margin-bottom: 15px;">
-        <div class="service-card-title">Desarrollo Web Full Stack</div>
-        <div class="service-card-meta">
-          <span><i class="fas fa-map-marker-alt"></i> Montevideo</span>
-          <span><i class="fas fa-tag"></i> Tecnología</span>
-        </div>
-        <div class="service-card-description">Aplicaciones con React, Node.js y bases de datos.</div>
-        <div class="service-card-price">$1200</div>
-      </div>
-    </div>
-  </div>
 
   <!-- Calendar Tab -->
   <div class="tab-content" id="calendar">
