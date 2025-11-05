@@ -2,33 +2,35 @@
 require_once('ClaseConexion.php');
 session_start();
 class Servicio {
-    private $idservicio,$titulo,$ubicacion,$precio,$descripcion,$imagen;
+    private $idservicio,$titulo,$ubicacion,$precio,$descripcion,$imagen,$categoria;
 
 
-    public function __construct($idservicio,$titulo,$ubicacion,$precio,$descripcion,$imagen){
+    public function __construct($idservicio,$titulo,$ubicacion,$precio,$descripcion,$imagen,$categoria){
         $this->idservicio=$idservicio; $this->titulo=$titulo; $this->ubicacion=$ubicacion; $this->precio=$precio;
-        $this->descripcion=$descripcion;  $this->imagen=$imagen;
+        $this->descripcion=$descripcion;  $this->imagen=$imagen; $this->categoria=$categoria;
     }
     public function getIdServicio(){return $this->idservicio;} 
     public function getTitulo(){return $this->titulo;}
     public function getUbicacion(){return $this->ubicacion;} 
     public function getPrecio(){return $this->precio;}
     public function getDescripcion(){return $this->descripcion;} 
-     public function getImagen(){return $this->imagen;} 
+    public function getImagen(){return $this->imagen;} 
+    public function getCategoria(){return $this->categoria;} 
 
     public function setTitulo($v){$this->titulo=$v;} 
     public function setUbicacion($v){$this->ubicacion=$v;}
     public function setPrecio($v){$this->precio=$v;}
     public function setDescrpcion($v){$this->descripcion=$v;}
     public function setImagen($v){$this->imagen=$v;} 
+    public function setCategoria($v){$this->categoria=$v;}
     
     public function publicarServicio(){
            if (isset($_SESSION['cedula'])) {
         $cx=(new ClaseConexion())->getConexion();
-        $sql="INSERT INTO servicio(titulo,ubicacion,precio,descripcion,imagen)
-              VALUES(?,?,?,?,?)";
+        $sql="INSERT INTO servicio(titulo,ubicacion,precio,descripcion,imagen,categoria)
+              VALUES(?,?,?,?,?,?)";
         $st=$cx->prepare($sql);
-        $st->bind_param("ssdss",$this->titulo,$this->ubicacion,$this->precio,$this->descripcion,$this->imagen);
+        $st->bind_param("ssdsss",$this->titulo,$this->ubicacion,$this->precio,$this->descripcion,$this->imagen,$this->categoria);
         $st->execute(); 
         $n=$st->affected_rows;
         $idservicio = $cx->insert_id;
