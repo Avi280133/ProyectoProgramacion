@@ -910,7 +910,7 @@
         <div class="card-proveedor">
 
           <img src="../img/usuario-juan.jpg" alt="Foto de <?php echo htmlspecialchars($usuario['fotoperfil'] ?? 'Proveedor'); ?>" class="foto-proveedor" />
-          <a href="../vistas/perfil-externo.php" class="nombre-proveedor"><?php echo htmlspecialchars($usuario['nombre'] ?? 'Proveedor', ENT_QUOTES); ?></a>
+          <p class="nombre-proveedor"><?php echo htmlspecialchars($usuario['nombre'] ?? 'Proveedor', ENT_QUOTES); ?></p>
 
           <div class="rating">
             <span>★</span>
@@ -929,7 +929,7 @@
           </div>
           <!-- class="btn btn-mensaje" -->
           <div class="botones-accion">
-            <a href="solicitud.php"><button class="btn btn-solicitar">Solicitar Servicio</button></a>
+            <a href="../vistas/solicitud.php"><button class="btn btn-solicitar">Solicitar Servicio</button></a>
 
           
             <form action="../chatphp/chat.php" method="post">
