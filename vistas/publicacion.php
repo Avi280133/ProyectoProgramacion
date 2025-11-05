@@ -941,17 +941,19 @@
           </div>
           <!-- class="btn btn-mensaje" -->
           <div class="botones-accion">
+
             <a href="../vistas/solicitud.php"><button class="btn btn-solicitar">Solicitar Servicio</button></a>
+ 
+            <!-- Botón específico para abrir modal de calificar -->
+            <button class="btn btn-calificar" id="openModal-prof" type="button">Calificar</button>
+            
 
-          
             <form action="../chatphp/chat.php" method="post">
-  <input type="hidden" name="emite" value="<?php echo htmlspecialchars($usuario['cedula']); ?>">
-  <button type="submit" class="btn btn-mensaje">Enviar Mensaje</button>
-</form>
-
+              <input type="hidden" name="emite" value="<?php echo htmlspecialchars($usuario['cedula']); ?>">
+              <button type="submit" class="btn btn-mensaje">Enviar Mensaje</button>
+            </form>
+            
             <button class="btn btn-reportar">Reportar Usuario</button>
-
-
           </div>
         </div>
       </aside>
@@ -1148,7 +1150,8 @@
     const modalProf = document.getElementById('ratingModal-prof');
     if (!modalProf) return;
 
-    const openModalBtnProf = document.querySelector('.btn-calificar') || document.querySelector('.btn-solicitar') || document.getElementById('openModal-prof');
+    // Selección explícita: solo el botón de calificar abre el modal
+    const openModalBtnProf = document.querySelector('.btn-calificar') || document.getElementById('openModal-prof');
     const closeModalBtnProf = modalProf.querySelector('.close-prof');
     const cancelBtnProf = document.getElementById('cancelBtn-prof');
     const submitBtnProf = document.getElementById('submitRating-prof');
