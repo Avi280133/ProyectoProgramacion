@@ -374,6 +374,7 @@ function requireAuth() {
             text-align: center;
             border-top: 1px solid rgba(14, 178, 124, 0.1);
             grid-column: 1 / -1;
+            z-index: 10001; /* asegurar encima de decoraciones */
         }
 
         .modal-footer p {
@@ -560,59 +561,13 @@ function requireAuth() {
 
                 
             </div>
-                </div>
-            </div>
 
             <div class="modal-footer">
                 <p>¿Necesitas ayuda? <a href="vistas/soporte.php">Centro de Soporte</a></p>
-            
             </div>
-        </div>
-    </div>
 
-    <script>
-        // Prevenir cierre del modal con ESC
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                e.preventDefault();
-                return false;
-            }
-        });
-
-        // Prevenir cierre con click fuera del modal
-        document.getElementById('authModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                e.preventDefault();
-                // Pequeña animación de "sacudida" para indicar que no se puede cerrar
-                const container = document.querySelector('.auth-modal-container');
-                container.style.animation = 'shake 0.5s ease';
-                setTimeout(() => {
-                    container.style.animation = 'slideUp 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
-                }, 500);
-            }
-        });
-
-        // Animación de sacudida
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes shake {
-                0%, 100% { transform: translateX(0); }
-                25% { transform: translateX(-10px); }
-                75% { transform: translateX(10px); }
-            }
-        `;
-        document.head.appendChild(style);
-
-        // Simular carga en botones (opcional)
-        document.querySelectorAll('.auth-btn').forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                // Si quieres agregar un estado de carga antes de navegar:
-                // e.preventDefault();
-                // this.disabled = true;
-                // setTimeout(() => window.location.href = this.href, 1000);
-            });
-        });
-    </script>
+        </div> <!-- .auth-modal-container -->
+    </div> <!-- .auth-modal-overlay -->
     <?php endif; ?>
 </body>
 </html>
