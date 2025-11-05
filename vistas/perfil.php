@@ -1610,9 +1610,12 @@ footer {
         </div>
       </div>
 
-      <a href="perfil.php" class="header-icon" style="text-decoration: none; color: white;">
-        <i class="fas fa-user"></i>
-      </a>
+      <!-- Botón Cerrar sesión -->
+      <form action="../logout.php" method="POST" style="display:inline; margin:0;">
+        <button type="submit" class="header-icon" title="Cerrar sesión" style="background:none; border:none; color:white; cursor:pointer;">
+          <i class="fas fa-sign-out-alt"></i>
+        </button>
+      </form>
     </div>
   </header>
 
