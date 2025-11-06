@@ -78,7 +78,7 @@
             </div>
 
             <div class="header-icon">
-                <a href="perfil-cliente.php" style="color: inherit; text-decoration: none;">
+                <a href="../vistas/perfil-cliente.php" style="color: inherit; text-decoration: none;">
                     <i class="fas fa-user"></i>
                 </a>
             </div>

@@ -1,3 +1,20 @@
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+require_once('../conexion/modelUsuario.php');
+
+// Verificamos que haya alguien logueado
+if (!isset($_SESSION['cedula'])) {
+    header("Location: ../vistas/login.php");
+    exit();
+}
+
+// Cargamos datos del usuario
+$usuario = Usuario::buscarPorCedula($_SESSION['cedula']);
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>

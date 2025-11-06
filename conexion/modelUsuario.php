@@ -1,6 +1,6 @@
 <?php
 require_once('ClaseConexion.php');
-session_start();
+//session_start();
 //Comentario agregado
 class Usuario {
     private $cedula,$nombre,$apellido,$username,$email,$contrasena,$fotoperfil,$edad,$localidad,$tipo;
@@ -46,19 +46,28 @@ class Usuario {
     $n=$st->affected_rows; 
 
     if ($this->tipo === 'cliente') {
-        $st2 = $cx->prepare("INSERT INTO cliente (idcliente) VALUES (?)");
-        $st2->bind_param("s", $this->cedula);
-        $st2->execute();
-        include('../vistas/vistas-cliente.php');
-    } elseif ($this->tipo === 'proveedor') {
-        $st2 = $cx->prepare("INSERT INTO proveedor (idproveedor) VALUES (?)");
-        $st2->bind_param("s", $this->cedula);
-        $st2->execute();
-        include('../vistas/vistas-prov.php');
-    }
+    if (session_status() === PHP_SESSION_NONE) { session_start(); }
+    $_SESSION['cedula'] = $this->cedula;
 
-    $cx->close(); 
-    return $n;
+    $st2 = $cx->prepare("INSERT INTO cliente (idcliente) VALUES (?)");
+    $st2->bind_param("s", $this->cedula);
+    $st2->execute();
+
+    // Redirigir, no incluir
+    header('Location: ../vistas/vistas-cliente.php');
+    exit;
+} elseif ($this->tipo === 'proveedor') {
+    if (session_status() === PHP_SESSION_NONE) { session_start(); }
+    $_SESSION['cedula'] = $this->cedula;
+
+    $st2 = $cx->prepare("INSERT INTO proveedor (idproveedor) VALUES (?)");
+    $st2->bind_param("s", $this->cedula);
+    $st2->execute();
+
+    // Redirigir al perfil del proveedor
+    header('Location: ../vistas/perfil.php');
+    exit;
+}
 }
 
 
