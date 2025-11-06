@@ -78,6 +78,26 @@ switch ($action) {
     }
     break;
 
+    case 'crearCategoria':
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['nombre'])) {
+        $nombreCategoria = trim($_POST['nombre']);
+
+        $categoria = new Servicio('', '', '', '', '', '', $nombreCategoria);
+        $ok = $categoria->crearCategoria();
+
+        if ($ok > 0) {
+            // Redirigir al panel con mensaje
+            header('Location: ../vistas/panel.php?cat=ok');
+            exit;
+        } else {
+            echo "❌ No se pudo crear la categoría.";
+        }
+    } else {
+        echo "⚠️ Faltó el nombre de la categoría.";
+    }
+    break;
+
+
   /* ======================
      ELIMINAR SERVICIO
      ====================== */

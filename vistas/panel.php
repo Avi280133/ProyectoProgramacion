@@ -1276,6 +1276,7 @@ if (!empty($servicios)) {
     </div>
 
     <!-- este es el modal para crear una nueva categoría -->
+     
     <div class="modal-overlay" id="createCategoryModal">
         <div class="modal">
             <div class="modal-header">
@@ -1287,10 +1288,12 @@ if (!empty($servicios)) {
                     <i class="fas fa-times"></i>
                 </button>
             </div>
+           
             <div class="modal-body">
                 <div class="form-group">
                     <label class="form-label">Nombre de la Categoría *</label>
-                    <input type="text" class="form-input" id="createCategoryName" placeholder="Ej: Tecnología" required>
+                     <form id="formCategoria" action="../conexion/controllerPublicacion.php" method="POST">
+                    <input type="text" class="form-input" id="nombre" name="nombre"  value="nombre" placeholder="Ej: Tecnología" required>
                 </div>
             </div>
             <div class="modal-footer">
@@ -1298,44 +1301,50 @@ if (!empty($servicios)) {
                     <i class="fas fa-times"></i>
                     Cancelar
                 </button>
-                <button class="btn btn-save" onclick="saveCategory('create')">
-                    <i class="fas fa-check"></i>
-                    Guardar
-                </button>
+                
+                <button type="submit" name="action" value="crearCategoria"  onclick="saveCategory('create')" class="btn btn-save">
+                        <a href="../vistas/panel.php" style="text-decoration:none;">
+                        <i class="fas fa-check"></i>
+                        Guardar
+                    </a>        
+                    </button>
             </div>
         </div>
+    </div>
+    </form>
+
+   <!-- este es el modal para crear una nueva categoría -->
+<div class="modal-overlay" id="createCategoryModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>
+        <i class="fas fa-tags"></i>
+        Crear Categoría
+      </h3>
+      <button class="modal-close" onclick="closeModal('createCategoryModal')">
+        <i class="fas fa-times"></i>
+      </button>
     </div>
 
-    <!-- este es el modal para modificar una categoría existente -->
-    <div class="modal-overlay" id="editCategoryModal">
-        <div class="modal">
-            <div class="modal-header">
-                <h3>
-                    <i class="fas fa-tags"></i>
-                    Editar Categoría
-                </h3>
-                <button class="modal-close" onclick="closeModal('editCategoryModal')">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label class="form-label">Nombre de la Categoría *</label>
-                    <input type="text" class="form-input" id="editCategoryName" placeholder="Ej: Tecnología" required>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-cancel" onclick="closeModal('editCategoryModal')">
-                    <i class="fas fa-times"></i>
-                    Cancelar
-                </button>
-                <button class="btn btn-save" onclick="saveCategory('edit')">
-                    <i class="fas fa-check"></i>
-                    Actualizar
-                </button>
-            </div>
-        </div>
-    </div>
+    <form id="formCategoria" action="../conexion/controllerPublicacion.php" method="POST" class="modal-body">
+      <input type="hidden" name="action" value="crearCategoria">
+      <div class="form-group">
+        <label class="form-label">Nombre de la Categoría *</label>
+        <input type="text" class="form-input" name="nombre" placeholder="Ej: Tecnología, Hogar, Diseño..." required>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-cancel" onclick="closeModal('createCategoryModal')">
+          <i class="fas fa-times"></i> Cancelar
+        </button>
+        <button type="submit" class="btn btn-save">
+          <i class="fas fa-check"></i> Guardar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
 
     <!-- este es el modal que pregunta si realmente querés eliminar algo -->
     <div class="modal-overlay" id="deleteModal">

@@ -945,7 +945,7 @@
             <a href="../vistas/solicitud.php"><button class="btn btn-solicitar">Solicitar Servicio</button></a>
  
             <!-- Botón específico para abrir modal de calificar -->
-            <button class="btn btn-calificar" id="openModal-prof" type="button">Calificar</button>
+          <!--  <button class="btn btn-calificar" id="openModal-prof" type="button">Calificar</button>-->
             
 
             <form action="../chatphp/chat.php" method="post">

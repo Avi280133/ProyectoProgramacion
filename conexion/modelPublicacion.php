@@ -57,6 +57,21 @@ class Servicio {
     }
 
 
+public function crearCategoria() {
+    $cx = (new ClaseConexion())->getConexion();
+    $sql = "INSERT INTO categoria (nombre) VALUES (?)";
+    $st = $cx->prepare($sql);
+    if (!$st) { $cx->close(); return 0; }
+
+    $st->bind_param("s", $this->categoria);
+    $st->execute();
+    $ok = $st->affected_rows > 0;
+
+    $st->close();
+    $cx->close();
+    return $ok ? 1 : 0;
+}
+
     public static function buscarPorTitulo($titulo) {
     $cx = (new ClaseConexion())->getConexion();
     $sql = "SELECT * FROM servicio WHERE titulo LIKE ?";

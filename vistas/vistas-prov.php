@@ -42,7 +42,7 @@ $misServicios = Servicio::serviciosDeProveedor($idProveedor);
     .profile-menu a:hover { background: #f3f4f6; color: #10b981; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px);} to { opacity: 1; transform: translateY(0);} }
 
-    /* Enlace para “Mensajes Nuevos” */
+    /* Enlace para "Mensajes Nuevos" */
     .stat-link { text-decoration: none; color: inherit; }
     .stat-item.clickable { cursor: pointer; }
 
@@ -119,6 +119,20 @@ $misServicios = Servicio::serviciosDeProveedor($idProveedor);
       color:#059669;
       transform:translateY(-4px);
       box-shadow:0 8px 20px rgba(5,150,105,0.12);
+    }
+
+    /* Día especial: 3 de diciembre */
+    #calendario-section .day.highlight-red {
+      background: #ef4444 !important;
+      color: #fff !important;
+      box-shadow: 0 8px 20px rgba(239, 68, 68, 0.25);
+      transform: translateY(-2px);
+    }
+
+    /* Si el usuario lo selecciona, mantené el rojo (un poco más oscuro) */
+    #calendario-section .day.highlight-red.selected {
+      background: #b91c1c !important;
+      color: #fff !important;
     }
 
     /* Right panel */
@@ -217,7 +231,7 @@ $misServicios = Servicio::serviciosDeProveedor($idProveedor);
 
       <!-- Ícono de Usuario + Menú -->
       <div class="header-icon" id="userMenuWrapper" style="position: relative;">
-        <a href="perfil.php" style="color: inherit; text-decoration: none;">
+        <a href="../vistas/perfil.php" style="color: inherit; text-decoration: none;">
           <i class="fas fa-user" id="userIcon"></i>
         </a>
       </div>
@@ -283,7 +297,7 @@ $misServicios = Servicio::serviciosDeProveedor($idProveedor);
 
     <div class="services-grid">
       <?php if (empty($misServicios)): ?>
-        <p style="padding:1rem 0; color:#555;">Todavía no publicaste servicios. ¡Empezá con “Publicar Servicio”! 🚀</p>
+        <p style="padding:1rem 0; color:#555;">Todavía no publicaste servicios. ¡Empezá con "Publicar Servicio"! 🚀</p>
       <?php else: ?>
         <?php foreach ($misServicios as $svc): ?>
           <div class="service-card service-open"
@@ -324,111 +338,8 @@ $misServicios = Servicio::serviciosDeProveedor($idProveedor);
     </div>
   </section>
 
-  <!-- Sección: Calendario (moved from perfil.php) -->
+  <!-- Sección: Calendario -->
   <section id="calendario-section" style="padding:2rem 1rem;">
-    <style>
-      /* Calendario: estilos autocontenidos para evitar conflictos */
-      #calendario-section .calendar-wrap {
-        max-width: 960px;
-        margin: 0 auto;
-        background:#fff;
-        border-radius:16px;
-        box-shadow:0 8px 30px rgba(2,6,23,0.08);
-        display:grid;
-        grid-template-columns: 340px 1fr;
-        overflow:hidden;
-        font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-      }
-      #calendario-section .left {
-        background: linear-gradient(135deg,#10b981 0%,#059669 100%);
-        color:#fff;
-        padding:24px;
-        display:flex;
-        flex-direction:column;
-        gap:18px;
-        align-items:flex-start;
-      }
-      #calendario-section .left h3 { margin:0; font-size:1.15rem; }
-      #calendario-section .calendar-container {
-        background: rgba(255,255,255,0.12);
-        border-radius:12px;
-        padding:12px;
-        width:100%;
-      }
-      #calendario-section .calendar-header {
-        display:flex;
-        justify-content:space-between;
-        align-items:center;
-        margin-bottom:8px;
-      }
-      #calendario-section .calendar-nav button {
-        background: rgba(255,255,255,0.18);
-        border: none;
-        color: #fff;
-        width:36px;
-        height:36px;
-        border-radius:8px;
-        cursor:pointer;
-      }
-      #calendario-section .calendar-weekdays,
-      #calendario-section .calendar-days {
-        display:grid;
-        grid-template-columns: repeat(7,1fr);
-        gap:6px;
-      }
-      #calendario-section .weekday {
-        text-align:center;
-        font-size:0.75rem;
-        opacity:0.9;
-        font-weight:700;
-      }
-      #calendario-section .day {
-        aspect-ratio:1;
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        border-radius:8px;
-        background: rgba(255,255,255,0.06);
-        color:#fff;
-        cursor:pointer;
-        font-weight:600;
-      }
-      #calendario-section .day.other-month { opacity:0.35; }
-      #calendario-section .day.disabled { opacity:0.25; cursor:not-allowed; }
-      #calendario-section .day.selected {
-        background:#fff;
-        color:#059669;
-        transform:translateY(-4px);
-        box-shadow:0 8px 20px rgba(5,150,105,0.12);
-      }
-
-      /* Right panel */
-      #calendario-section .right {
-        padding:20px;
-      }
-      #calendario-section .selected-info {
-        display:flex;
-        gap:12px;
-        align-items:center;
-        margin-bottom:12px;
-      }
-      #calendario-section .selected-info .dot {
-        width:46px;
-        height:46px;
-        border-radius:10px;
-        background:linear-gradient(135deg,#0eb27c,#047857);
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        color:#fff;
-        font-size:1.1rem;
-      }
-      #calendario-section .selected-text { font-weight:700; color:#0f172a; }
-      @media (max-width:900px){
-        #calendario-section .calendar-wrap { grid-template-columns: 1fr; }
-      }
-    </style>
-
     <div class="calendar-wrap">
       <div class="left">
         <div>
@@ -491,7 +402,7 @@ $misServicios = Servicio::serviciosDeProveedor($idProveedor);
             const month = viewDate.getMonth();
             monthLabel.textContent = viewDate.toLocaleString('es-ES', { month: 'long', year: 'numeric' });
 
-            const firstWeekday = (new Date(year, month, 1).getDay() + 6) % 7; // lunes=0
+            const firstWeekday = (new Date(year, month, 1).getDay() + 6) % 7;
             const daysInMonth = new Date(year, month + 1, 0).getDate();
             const prevDays = firstWeekday;
             const totalCells = Math.ceil((prevDays + daysInMonth) / 7) * 7;
@@ -518,6 +429,11 @@ $misServicios = Servicio::serviciosDeProveedor($idProveedor);
               cell.textContent = dayNumber;
               cell.dataset.date = cellDate.toISOString();
 
+              // Marcar 3 de diciembre en rojo
+              if (cellDate.getMonth() === 11 && cellDate.getDate() === 3) {
+                cell.classList.add('highlight-red');
+              }
+
               const today = new Date();
               today.setHours(0,0,0,0);
               if (cellDate < today) {
@@ -529,8 +445,13 @@ $misServicios = Servicio::serviciosDeProveedor($idProveedor);
                   cell.classList.add('selected');
                   selectedDate = cellDate;
                   selectedText.textContent = selectedDate.toLocaleDateString('es-ES', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
-                  selectedSub.textContent = 'Fecha seleccionada: ' + selectedDate.toLocaleDateString('es-ES');
-                  // Aquí podés disparar fetch para obtener horarios/ reservas de la publicación
+                  
+                  // Verificar si es 3 de diciembre
+                  if (selectedDate.getMonth() === 11 && selectedDate.getDate() === 3) {
+                    selectedSub.textContent = 'Servicio reservado: 15:00';
+                  } else {
+                    selectedSub.textContent = 'Fecha seleccionada: ' + selectedDate.toLocaleDateString('es-ES');
+                  }
                 });
               }
 
@@ -582,121 +503,25 @@ $misServicios = Servicio::serviciosDeProveedor($idProveedor);
 
     if (!wrapper || !profileMenu) return;
 
-    // Toggle por click (mejor que hover para evitar cierres por propagación)
     wrapper.addEventListener('click', function (e) {
-      // evitar que el click burbujee al document (que cierra el menú)
       e.stopPropagation();
       profileMenu.classList.toggle('active');
     });
 
-    // Evitar que clicks dentro del menú cierren por accidente
     profileMenu.addEventListener('click', function (e) {
       e.stopPropagation();
     });
 
-    // Cerrar al hacer click fuera
     document.addEventListener('click', function () {
       profileMenu.classList.remove('active');
     });
 
-    // Cerrar con Escape
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape') profileMenu.classList.remove('active');
     });
   })();
 
-  // Notificaciones (mantener loader real)
-  const bell = document.getElementById('notificationBell');
-  const modalNotif = document.getElementById('notificationModal');
-  const closeBtnNotif = document.getElementById('closeNotifications');
-  const notifListEl = modalNotif.querySelector('.notification-list');
-  const badgeEl = document.getElementById('notifBadge');
-
-  function escapeHtml(s){ return String(s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-
-  async function loadNotifications() {
-    try {
-      const res = await fetch('../conexion/getNotifications.php?action=list', { credentials: 'same-origin' });
-      const json = await res.json();
-      if (!json.success) return console.error(json.error || 'No success');
-      notifListEl.innerHTML = '';
-      const list = json.notifications || [];
-      const unread = json.unread || 0;
-      badgeEl.textContent = unread > 0 ? unread : '';
-
-      if (list.length === 0) {
-        notifListEl.innerHTML = '<div style="padding:12px;color:#6b7280;">No hay notificaciones</div>';
-        return;
-      }
-
-      list.forEach(n => {
-        // sólo tipos permitidos (defensa extra)
-        if (!['reporte','solicitud','calificacion'].includes(n.tipo)) return;
-        const item = document.createElement('div');
-        item.className = 'notification-item' + (n.leida == 0 ? ' unread' : '');
-        item.style.display = 'flex';
-        item.style.padding = '10px';
-        item.style.borderBottom = '1px solid #eef2f7';
-        item.style.gap = '10px';
-        item.innerHTML = `
-          <div class="notification-icon" style="font-size:18px;color:#045a4a;"><i class="fas fa-bell"></i></div>
-          <div class="notification-content" style="flex:1;">
-            <div class="notification-title" style="font-weight:600">${escapeHtml(n.mensaje)}</div>
-            <div class="notification-time" style="font-size:12px;color:#6b7280">${new Date(n.fecha).toLocaleString()}</div>
-          </div>
-        `;
-        item.dataset.id = n.idnotificacion;
-        item.dataset.tipo = n.tipo;
-        item.dataset.ref = n.referencia;
-        item.addEventListener('click', async () => {
-          await markAsRead(n.idnotificacion);
-          item.classList.remove('unread');
-          // redirección según tipo (ajusta rutas si hace falta)
-          if (n.tipo === 'reporte') {
-            // si sos admin podrías llevar a panel de reports; por ahora abrir listado
-            window.location.href = 'admin/reports.php';
-          } else if (n.tipo === 'solicitud') {
-            window.location.href = 'reservas.php';
-          } else if (n.tipo === 'calificacion') {
-            window.location.href = 'mis-calificaciones.php';
-          }
-        });
-        notifListEl.appendChild(item);
-      });
-    } catch (err) {
-      console.error('loadNotifications', err);
-    }
-  }
-
-  async function markAsRead(id) {
-    try {
-      const res = await fetch('../conexion/getNotifications.php?action=mark', {
-        method: 'POST',
-        credentials: 'same-origin',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: 'id=' + encodeURIComponent(id)
-      });
-      const j = await res.json();
-      if (j.success) loadNotifications(); // actualizar badge
-      return j.success;
-    } catch (e) {
-      console.error('markAsRead', e);
-      return false;
-    }
-  }
-
-  bell?.addEventListener('click', async (e) => {
-    modalNotif.classList.toggle('active');
-    if (modalNotif.classList.contains('active')) await loadNotifications();
-  });
-  closeBtnNotif?.addEventListener('click', () => modalNotif.classList.remove('active'));
-
-  // carga inicial y poll cada 45s
-  loadNotifications();
-  setInterval(loadNotifications, 45000);
-</script>
-
-<script>
+  // Notificaciones
   (function(){
     const bell = document.getElementById('notificationBell');
     const modal = document.getElementById('notificationModal');
@@ -725,7 +550,6 @@ $misServicios = Servicio::serviciosDeProveedor($idProveedor);
 
         listEl.innerHTML = '';
         list.forEach(n => {
-          // defensa extra: solo permitir tipos válidos
           if (!['reporte','solicitud','calificacion'].includes(n.tipo)) return;
           const item = document.createElement('div');
           item.className = 'notification-item' + (n.leida == 0 ? ' unread' : '');
@@ -746,10 +570,9 @@ $misServicios = Servicio::serviciosDeProveedor($idProveedor);
           item.addEventListener('click', async () => {
             await markAsRead(n.idnotificacion);
             item.classList.remove('unread');
-            // redirecciones ejemplo (ajustar rutas según tu app)
-            if (n.tipo === 'reporte') window.location.href = '/ProyectoProgramacion/vistas/admin/reports.php';
-            else if (n.tipo === 'solicitud') window.location.href = '/ProyectoProgramacion/vistas/reservas.php';
-            else if (n.tipo === 'calificacion') window.location.href = '/ProyectoProgramacion/vistas/mis-calificaciones.php';
+            if (n.tipo === 'reporte') window.location.href = 'admin/reports.php';
+            else if (n.tipo === 'solicitud') window.location.href = 'reservas.php';
+            else if (n.tipo === 'calificacion') window.location.href = 'mis-calificaciones.php';
           });
           listEl.appendChild(item);
         });
@@ -790,7 +613,6 @@ $misServicios = Servicio::serviciosDeProveedor($idProveedor);
       }
     }
 
-    // Toggle modal & listeners
     if (bell && modal) {
       bell.addEventListener('click', async (e) => {
         modal.classList.toggle('active');
@@ -799,13 +621,11 @@ $misServicios = Servicio::serviciosDeProveedor($idProveedor);
     }
     if (closeBtn && modal) closeBtn.addEventListener('click', () => modal.classList.remove('active'));
 
-    // Close when click outside
     document.addEventListener('click', (e) => {
       if (!modal || !bell) return;
       if (!bell.contains(e.target) && !modal.contains(e.target)) modal.classList.remove('active');
     });
 
-    // load initial badge and poll
     loadNotifications();
     setInterval(loadNotifications, 45000);
   })();

@@ -696,10 +696,40 @@ footer {
             <input type="email" id="email" name="email" class="form-control" placeholder="juan@ejemplo.com" required>
           </div>
 
-          <button type="submit" class="submit-btn">
-            <i class="fas fa-check-circle"></i>
-            Confirmar Reserva
-          </button>
+          <div class="terms-checkbox">
+                    <label for="terminos">
+                        <input type="checkbox" id="terminos">
+                        <span>10:00</a></span>
+                    </label>
+                </div>
+
+                <div class="terms-checkbox">
+                    <label for="terminos">
+                        <input type="checkbox" id="terminos">
+                        <span>12:00</a></span>
+                    </label>
+                </div>
+
+                <div class="terms-checkbox">
+                    <label for="terminos">
+                        <input type="checkbox" id="terminos">
+                        <span>15:00</a></span>
+                    </label>
+                </div>
+
+                <div class="terms-checkbox">
+                    <label for="terminos">
+                        <input type="checkbox" id="terminos">
+                        <span>18:00</a></span>
+                    </label>
+                </div>
+
+                <button type="submit" class="submit-btn">
+                    <a href="vistas-cliente.php" style="text-decoration: none;">
+                    <i class="fas fa-check-circle"></i>
+                    Confirmar Reserva
+                  </a>
+                  </button>
         </form>
       </div>
     </div>

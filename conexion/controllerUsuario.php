@@ -128,11 +128,9 @@ switch ($action) {
         $usuario = $modelo->login($email, $contrasena);
 
         if ($usuario) {
-            if (session_status() === PHP_SESSION_NONE) session_start();
+            $_SESSION['cedula'] = $usuario['cedula'] ?? null;
 
-            // <-- Reemplazado: uso de session_control para mayor seguridad
-            require_once __DIR__ . '/session_control.php';
-            set_session_on_login($usuario['cedula'] ?? null);
+
 
             // detectar rol mediante el modelo
             $role = Usuario::detectarRol($_SESSION['cedula'] ?? '');
@@ -143,7 +141,7 @@ switch ($action) {
                     include('../vistas/vistas-cliente.php');
                     break;
                 case 'proveedor':
-                    include('../vistas/vistas-prov.php');
+                    include('../vistas/perfil.php');
                     break;
                 case 'admin':
                     include('../vistas/panel.php');
