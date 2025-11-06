@@ -15,25 +15,199 @@
   <!-- FontAwesome (para iconos del header) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="../css/publicar.css">
+  <style>
+     header {
+            background: linear-gradient(135deg, #0eb27c 0%, #047857 100%);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 8px 32px rgba(14, 178, 124, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: white;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .header-logo i {
+            font-size: 2rem;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .header-icon {
+            color: white;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .header-icon:hover {
+            transform: scale(1.2) rotate(5deg);
+            filter: brightness(1.2);
+        }
+
+        /* Notification Modal */
+        .notification-modal {
+            position: absolute;
+            top: 100%;
+            right: -1rem;
+            background: white;
+            border-radius: 20px;
+            width: 350px;
+            max-height: 500px;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            margin-top: 1rem;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-20px) scale(0.9);
+            transition: all 0.3s ease;
+            z-index: 2000;
+        }
+
+        .notification-modal.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0) scale(1);
+        }
+
+        .notification-header {
+            padding: 1.5rem;
+            border-bottom: 2px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .notification-header h3 {
+            color: #2c3e50;
+            font-size: 1.2rem;
+        }
+
+        .notification-list {
+            padding: 0;
+        }
+
+        .notification-item {
+            padding: 1.2rem 1.5rem;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            gap: 1rem;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .notification-item:hover {
+            background: #f8f9fa;
+            padding-left: 2rem;
+        }
+
+        .notification-item.unread {
+            background: linear-gradient(135deg, #e8f5f1 0%, #d1f0e5 100%);
+        }
+
+        .notification-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #0eb27c 0%, #047857 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            flex-shrink: 0;
+            font-size: 1.2rem;
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-title {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 0.3rem;
+            font-size: 0.95rem;
+        }
+
+        .notification-text {
+            color: #7f8c8d;
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+
+        .notification-time {
+            color: #95a5a6;
+            font-size: 0.75rem;
+            margin-top: 0.5rem;
+        }
+
+.header-logo {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.header-logo:hover {
+    transform: translateY(-5px);
+}
+
+.header-logo img {
+    transition: all 0.3s ease;
+}
+
+.header-logo:hover img {
+    transform: scale(1.1) rotate(-5deg);
+}
+
+  </style>
 </head>
 <body>
-  <header class="main-header">
-    <div class="menu-left">
-      <a href="#" class="menu-icon">
-        <i class="fa-solid fa-magnifying-glass" style="color: #ffffff;"></i>
-      </a>
-    </div>
+  <header>
+        
+        <div class="header-logo">
+          <a href="vistas-prov.php" style="color: inherit; text-decoration: none; display: flex; align-items: center;">
+            <img src="../img/logomini.png" alt="SkillMatch Logo" style="height: 50px; width: auto; margin-right: 0.5rem;">
+            SkillMatch
+          </a>
+        </div>
+        <div class="header-actions">
+            <!-- Notificaciones -->
+<div style="position: relative;">
+  <div class="header-icon" id="notificationBell" style="position:relative; cursor:pointer;">
+    <i class="fas fa-bell"></i>
+    <span id="notifBadge" style="position: absolute; top: -6px; right: -10px; min-width: 20px; height: 20px; background: #ff6b6b; color: white; border-radius: 50%; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; font-weight: bold; padding:0 6px;"></span>
+  </div>
 
-    <div class="logo-center">
-      <a href="../index.html"><img src="../img/logo-SkillMatch-v3.png" alt="SkillMatch Logo"></a>
+  <div class="notification-modal" id="notificationModal">
+    <div class="notification-header">
+      <h3>Notificaciones</h3>
+      <i class="fas fa-times" id="closeNotifications" style="cursor:pointer;color:#7f8c8d;"></i>
     </div>
-
-    <div class="actions-right">
-      <i class="fa-solid fa-magnifying-glass" style="color: #ffffff;"></i>
-      <i class="fa-solid fa-plus" style="color: #ffffff;"></i>
-      <a href="perfil.php"><i class="fa-solid fa-user" style="color: #ffffff;"></i></a>
-    </div>
-  </header>
+    <div class="notification-list"></div>
+  </div>
+</div>
+            <div class="header-icon">
+                <a href="perfil.php" style="color: inherit; text-decoration: none;">
+                    <i class="fas fa-user"></i>
+                </a>
+            </div>
+        </div>
+    </header>
 
   <!-- Formulario de publicación -->
   <main class="seccion-formulario-solicitud">
@@ -94,5 +268,119 @@
       <p>&copy; 2025 ServiciosPro. Todos los derechos reservados.</p>
     </div>
   </footer>
+  <script>
+  (function(){
+    const bell = document.getElementById('notificationBell');
+    const modal = document.getElementById('notificationModal');
+    const closeBtn = document.getElementById('closeNotifications');
+    const listEl = modal ? modal.querySelector('.notification-list') : null;
+    const badge = document.getElementById('notifBadge');
+
+    function escapeHtml(s){ return String(s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+    async function loadNotifications() {
+      if (!listEl) return;
+      try {
+        const res = await fetch('../conexion/getNotifications.php?action=list', { credentials: 'same-origin' });
+        const json = await res.json();
+        if (!json.success) { listEl.innerHTML = emptyState('Error al cargar'); return; }
+        const list = json.notifications || [];
+        const unread = json.unread || 0;
+        badge.textContent = unread > 0 ? unread : '';
+
+        if (list.length === 0) {
+          listEl.innerHTML = emptyState('Buzón vacío', 'No hay notificaciones por ahora. Volvé más tarde o tocá actualizar.');
+          const btn = document.getElementById('notifRefresh');
+          if (btn) btn.addEventListener('click', loadNotifications);
+          return;
+        }
+
+        listEl.innerHTML = '';
+        list.forEach(n => {
+          // defensa extra: solo permitir tipos válidos
+          if (!['reporte','solicitud','calificacion'].includes(n.tipo)) return;
+          const item = document.createElement('div');
+          item.className = 'notification-item' + (n.leida == 0 ? ' unread' : '');
+          item.style.display = 'flex';
+          item.style.padding = '10px';
+          item.style.borderBottom = '1px solid #eef2f7';
+          item.style.gap = '10px';
+          item.innerHTML = `
+            <div class="notification-icon" style="font-size:18px;color:#045a4a;"><i class="fas fa-bell"></i></div>
+            <div class="notification-content" style="flex:1;">
+              <div class="notification-title" style="font-weight:600">${escapeHtml(n.mensaje)}</div>
+              <div class="notification-time" style="font-size:12px;color:#6b7280">${new Date(n.fecha).toLocaleString()}</div>
+            </div>
+          `;
+          item.dataset.id = n.idnotificacion;
+          item.dataset.tipo = n.tipo;
+          item.dataset.ref = n.referencia;
+          item.addEventListener('click', async () => {
+            await markAsRead(n.idnotificacion);
+            item.classList.remove('unread');
+            // redirecciones ejemplo (ajustar rutas según tu app)
+            if (n.tipo === 'reporte') window.location.href = '/ProyectoProgramacion/vistas/admin/reports.php';
+            else if (n.tipo === 'solicitud') window.location.href = '/ProyectoProgramacion/vistas/reservas.php';
+            else if (n.tipo === 'calificacion') window.location.href = '/ProyectoProgramacion/vistas/mis-calificaciones.php';
+          });
+          listEl.appendChild(item);
+        });
+      } catch (err) {
+        console.error('loadNotifications', err);
+        if (listEl) listEl.innerHTML = emptyState('Error al cargar', 'No se pudieron cargar las notificaciones. Reintentá.');
+      }
+    }
+
+    function emptyState(title, desc){
+      desc = desc || 'No hay notificaciones por ahora.';
+      return `
+        <div class="notification-empty" style="padding:18px;text-align:center;color:#6b7280;display:flex;flex-direction:column;align-items:center;gap:10px;">
+          <div class="icon" style="width:56px;height:56px;border-radius:12px;background:#f1f5f9;display:flex;align-items:center;justify-content:center;font-size:22px;color:#64748b;box-shadow:0 6px 18px rgba(15,23,42,0.04);">
+            <i class="fas fa-inbox"></i>
+          </div>
+          <div class="title" style="font-weight:700;color:#374151;">${escapeHtml(title)}</div>
+          <div class="desc" style="font-size:0.92rem;max-width:260px;line-height:1.3;color:#6b7280;">${escapeHtml(desc)}</div>
+          <button class="btn-refresh" id="notifRefresh" style="margin-top:8px;background:linear-gradient(135deg,#10b981,#059669);color:#fff;border:none;padding:8px 12px;border-radius:10px;cursor:pointer;font-weight:600;">Actualizar</button>
+        </div>
+      `;
+    }
+
+    async function markAsRead(id) {
+      try {
+        const res = await fetch('../conexion/getNotifications.php?action=mark', {
+          method: 'POST',
+          credentials: 'same-origin',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: 'id=' + encodeURIComponent(id)
+        });
+        const j = await res.json();
+        if (j.success) loadNotifications();
+        return j.success;
+      } catch (e) {
+        console.error('markAsRead', e);
+        return false;
+      }
+    }
+
+    // Toggle modal & listeners
+    if (bell && modal) {
+      bell.addEventListener('click', async (e) => {
+        modal.classList.toggle('active');
+        if (modal.classList.contains('active')) await loadNotifications();
+      });
+    }
+    if (closeBtn && modal) closeBtn.addEventListener('click', () => modal.classList.remove('active'));
+
+    // Close when click outside
+    document.addEventListener('click', (e) => {
+      if (!modal || !bell) return;
+      if (!bell.contains(e.target) && !modal.contains(e.target)) modal.classList.remove('active');
+    });
+
+    // load initial badge and poll
+    loadNotifications();
+    setInterval(loadNotifications, 45000);
+  })();
+</script>
 </body>
 </html>
