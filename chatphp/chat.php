@@ -2,13 +2,6 @@
 session_start();
 include '../conexion/ClaseConexion.php';
 
-echo "<pre>DEBUG CHAT.PHP\n";
-echo "SESSION:\n";
-print_r($_SESSION);
-echo "POST:\n";
-print_r($_POST);
-echo "</pre>";
-
 
 //if (!isset($_SESSION['cedula'])) {
 //    header("Location: login.php");

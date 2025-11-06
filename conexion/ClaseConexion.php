@@ -3,7 +3,9 @@ class ClaseConexion
 {
     private $servidor ="localhost";
     private $usuario = "root";
-    private $contrasena = "tatielijuli00";
+
+    private $contrasena = "";
+
     private $baseDeDatos = "SkillMatch";
     private $conexion;
 

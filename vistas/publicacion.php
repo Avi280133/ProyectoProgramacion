@@ -813,6 +813,17 @@
         }
     }
 
+
+
+    .redonda {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 15px;
+  border: 3px solid #025939;
+}
+
     @media (max-width: 480px) {
         .modal-content-prof { 
             padding: 16px; 
@@ -909,7 +920,8 @@
       <aside class="sidebar-proveedor">
         <div class="card-proveedor">
 
-          <img src="../img/usuario-juan.jpg" alt="Foto de <?php echo htmlspecialchars($usuario['fotoperfil'] ?? 'Proveedor'); ?>" class="foto-proveedor" />
+ <img src="../img/<?php echo htmlspecialchars($usuario['fotoperfil'] ?? '4ae62d57-16c3-4974-b494-e9c26f8036fe.jpg'); ?>" 
+           alt="Foto de perfil" class="redonda" />
           <p class="nombre-proveedor"><?php echo htmlspecialchars($usuario['nombre'] ?? 'Proveedor', ENT_QUOTES); ?></p>
 
           <div class="rating">
