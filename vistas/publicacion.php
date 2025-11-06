@@ -990,7 +990,38 @@
         </div>
     </div>
 </div>
-  
+
+<!-- Botón reportar (colocar junto a los controles de la publicación) -->
+<button id="btnReportar" class="btn-reportar" data-idservicio="<?php echo $idservicio ?? ''; ?>">Reportar</button>
+
+<!-- Modal simple para reportar -->
+<div id="modalReportar" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); align-items:center; justify-content:center;">
+  <div style="background:#fff; padding:20px; border-radius:8px; width:90%; max-width:500px;">
+    <h3>Reportar publicación</h3>
+    <form id="formReportar">
+      <input type="hidden" name="idservicio" value="<?php echo $idservicio ?? ''; ?>">
+      <!-- opcional: si no usas sesión para el idreportador, puedes enviar aquí -->
+      <input type="hidden" name="idreportador" value="<?php echo $_SESSION['cedula'] ?? ''; ?>">
+      <label>Motivo
+        <select name="motivo" required class="form-control">
+          <option value="">Seleccionar...</option>
+          <option value="Contenido engañoso">Contenido engañoso</option>
+          <option value="Spam">Spam</option>
+          <option value="Contenido inapropiado">Contenido inapropiado</option>
+          <option value="Otro">Otro</option>
+        </select>
+      </label>
+      <label>Detalle (opcional)
+        <textarea name="detalle" class="form-control" placeholder="Descripción..."></textarea>
+      </label>
+      <div style="display:flex; gap:8px; margin-top:12px;">
+        <button type="submit" class="btn">Enviar reporte</button>
+        <button type="button" id="cancelReport" class="btn" style="background:#ddd;">Cancelar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
   <footer>
         <div class="footer-content">
             <div class="footer-section">
@@ -1227,6 +1258,45 @@
         closeModalProf();
     });
 })();
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const btn = document.getElementById('btnReportar');
+  const modal = document.getElementById('modalReportar');
+  const form = document.getElementById('formReportar');
+  const cancel = document.getElementById('cancelReport');
+
+  if (btn) {
+    btn.addEventListener('click', () => modal.style.display = 'flex');
+  }
+  if (cancel) {
+    cancel.addEventListener('click', () => modal.style.display = 'none');
+  }
+
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const fd = new FormData(form);
+    fd.append('action', 'reportar');
+
+    fetch('../conexion/controllerReporte.php', {
+      method: 'POST',
+      body: fd
+    })
+    .then(r => r.json())
+    .then(resp => {
+      if (resp.success) {
+        alert('Reporte enviado. Gracias por su colaboración.');
+        modal.style.display = 'none';
+      } else {
+        alert('Error: ' + (resp.error || 'No se pudo enviar el reporte.'));
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      alert('Error de red al enviar el reporte.');
+    });
+  });
+});
 </script>
 </body>
 </html>

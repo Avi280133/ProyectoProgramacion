@@ -1552,67 +1552,26 @@ footer {
     </div>
     <div class="header-actions">
       <div style="position: relative;">
-        <div class="header-icon" id="notificationBell">
+        <div class="header-icon" id="notificationBell" style="position:relative; cursor:pointer;">
           <i class="fas fa-bell"></i>
-          <span style="position: absolute; top: -5px; right: -8px; width: 20px; height: 20px; background: #ff6b6b; color: white; border-radius: 50%; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; font-weight: bold;">3</span>
+          <span id="notifBadge" style="position: absolute; top: -6px; right: -10px; min-width: 20px; height: 20px; background: #ff6b6b; color: white; border-radius: 50%; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; font-weight: bold; padding:0 6px;"></span>
         </div>
 
         <div class="notification-modal" id="notificationModal">
           <div class="notification-header">
             <h3>Notificaciones</h3>
-            <i class="fas fa-times" style="cursor: pointer; color: #7f8c8d;" id="closeNotifications"></i>
+            <i class="fas fa-times" id="closeNotifications" style="cursor:pointer;color:#7f8c8d;"></i>
           </div>
-          <div class="notification-list">
-            <div class="notification-item unread">
-              <div class="notification-icon">
-                <i class="fas fa-check-circle"></i>
-              </div>
-              <div class="notification-content">
-                <div class="notification-title">Trabajo aceptado</div>
-                <div class="notification-text">Tu solicitud de reparación del hogar fue aceptada por Juan M.</div>
-                <div class="notification-time">Hace 2 horas</div>
-              </div>
-            </div>
-
-            <div class="notification-item unread">
-              <div class="notification-icon" style="background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);">
-                <i class="fas fa-star"></i>
-              </div>
-              <div class="notification-content">
-                <div class="notification-title">Nueva reseña</div>
-                <div class="notification-text">Carlos P. dejó una reseña de 5 estrellas para tu servicio</div>
-                <div class="notification-time">Hace 5 horas</div>
-              </div>
-            </div>
-
-            <div class="notification-item">
-              <div class="notification-icon" style="background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);">
-                <i class="fas fa-info-circle"></i>
-              </div>
-              <div class="notification-content">
-                <div class="notification-title">Recordatorio</div>
-                <div class="notification-text">Tu servicio de desarrollo web está próximo a completarse</div>
-                <div class="notification-time">Hace 1 día</div>
-              </div>
-            </div>
-
-            <div class="notification-item">
-              <div class="notification-icon" style="background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);">
-                <i class="fas fa-user-check"></i>
-              </div>
-              <div class="notification-content">
-                <div class="notification-title">Perfil verificado</div>
-                <div class="notification-text">Tu identidad ha sido verificada exitosamente</div>
-                <div class="notification-time">Hace 2 días</div>
-              </div>
-            </div>
-          </div>
+          <div class="notification-list"></div>
         </div>
       </div>
 
-      <a href="perfil.php" class="header-icon" style="text-decoration: none; color: white;">
-        <i class="fas fa-user"></i>
-      </a>
+      <!-- Botón Cerrar sesión -->
+      <form action="../logout.php" method="POST" style="display:inline; margin:0;">
+        <button type="submit" class="header-icon" title="Cerrar sesión" style="background:none; border:none; color:white; cursor:pointer;">
+          <i class="fas fa-sign-out-alt"></i>
+        </button>
+      </form>
     </div>
   </header>
 
@@ -1771,45 +1730,7 @@ if (!empty($chats)) {
 
   </form>
     <!-- Tabs Section -->
-<section class="tabs-section">
-  <div class="tabs-header">
-    <button class="tab-button" data-tab="calendar">
-      <i class="fas fa-calendar-alt"></i> Disponibilidad
-    </button>
-  </div>
 
-
-
-  <!-- Calendar Tab -->
-  <div class="tab-content" id="calendar">
-    <div class="calendar-container">
-      <div class="calendar-header">
-        <h2 class="calendar-month">Octubre 2025</h2>
-        <div class="calendar-nav">
-          <button class="calendar-nav-btn" onclick="previousMonth()"><i class="fas fa-chevron-left"></i></button>
-          <button class="calendar-nav-btn" onclick="nextMonth()"><i class="fas fa-chevron-right"></i></button>
-        </div>
-      </div>
-      <div class="calendar-weekdays">
-        <div class="calendar-weekday">Dom</div>
-        <div class="calendar-weekday">Lun</div>
-        <div class="calendar-weekday">Mar</div>
-        <div class="calendar-weekday">Mié</div>
-        <div class="calendar-weekday">Jue</div>
-        <div class="calendar-weekday">Vie</div>
-        <div class="calendar-weekday">Sáb</div>
-      </div>
-      <div class="calendar-days" id="calendarDays">
-        <!-- Días generados por JS -->
-      </div>
-      <div class="calendar-legend">
-        <div class="calendar-legend-item"><div class="calendar-legend-box legend-available"></div><span>Disponible</span></div>
-        <div class="calendar-legend-item"><div class="calendar-legend-box legend-reserved"></div><span>Reservado</span></div>
-        <div class="calendar-legend-item"><div class="calendar-legend-box legend-disabled"></div><span>No disponible</span></div>
-      </div>
-    </div>
-  </div>
-</section>
 
 <!-- Modal Delete Service -->
 <div class="modal-overlay-delete" id="deleteServiceModal">
@@ -2438,6 +2359,119 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
+<script>
+  (function(){
+    const bell = document.getElementById('notificationBell');
+    const modal = document.getElementById('notificationModal');
+    const closeBtn = document.getElementById('closeNotifications');
+    const listEl = modal ? modal.querySelector('.notification-list') : null;
+    const badge = document.getElementById('notifBadge');
 
+    function escapeHtml(s){ return String(s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+    async function loadNotifications() {
+      if (!listEl) return;
+      try {
+        const res = await fetch('../conexion/getNotifications.php?action=list', { credentials: 'same-origin' });
+        const json = await res.json();
+        if (!json.success) { listEl.innerHTML = emptyState('Error al cargar'); return; }
+        const list = json.notifications || [];
+        const unread = json.unread || 0;
+        badge.textContent = unread > 0 ? unread : '';
+
+        if (list.length === 0) {
+          listEl.innerHTML = emptyState('Buzón vacío', 'No hay notificaciones por ahora. Volvé más tarde o tocá actualizar.');
+          const btn = document.getElementById('notifRefresh');
+          if (btn) btn.addEventListener('click', loadNotifications);
+          return;
+        }
+
+        listEl.innerHTML = '';
+        list.forEach(n => {
+          // defensa extra: solo permitir tipos válidos
+          if (!['reporte','solicitud','calificacion'].includes(n.tipo)) return;
+          const item = document.createElement('div');
+          item.className = 'notification-item' + (n.leida == 0 ? ' unread' : '');
+          item.style.display = 'flex';
+          item.style.padding = '10px';
+          item.style.borderBottom = '1px solid #eef2f7';
+          item.style.gap = '10px';
+          item.innerHTML = `
+            <div class="notification-icon" style="font-size:18px;color:#045a4a;"><i class="fas fa-bell"></i></div>
+            <div class="notification-content" style="flex:1;">
+              <div class="notification-title" style="font-weight:600">${escapeHtml(n.mensaje)}</div>
+              <div class="notification-time" style="font-size:12px;color:#6b7280">${new Date(n.fecha).toLocaleString()}</div>
+            </div>
+          `;
+          item.dataset.id = n.idnotificacion;
+          item.dataset.tipo = n.tipo;
+          item.dataset.ref = n.referencia;
+          item.addEventListener('click', async () => {
+            await markAsRead(n.idnotificacion);
+            item.classList.remove('unread');
+            // redirecciones ejemplo (ajustar rutas según tu app)
+            if (n.tipo === 'reporte') window.location.href = '/ProyectoProgramacion/vistas/admin/reports.php';
+            else if (n.tipo === 'solicitud') window.location.href = '/ProyectoProgramacion/vistas/reservas.php';
+            else if (n.tipo === 'calificacion') window.location.href = '/ProyectoProgramacion/vistas/mis-calificaciones.php';
+          });
+          listEl.appendChild(item);
+        });
+      } catch (err) {
+        console.error('loadNotifications', err);
+        if (listEl) listEl.innerHTML = emptyState('Error al cargar', 'No se pudieron cargar las notificaciones. Reintentá.');
+      }
+    }
+
+    function emptyState(title, desc){
+      desc = desc || 'No hay notificaciones por ahora.';
+      return `
+        <div class="notification-empty" style="padding:18px;text-align:center;color:#6b7280;display:flex;flex-direction:column;align-items:center;gap:10px;">
+          <div class="icon" style="width:56px;height:56px;border-radius:12px;background:#f1f5f9;display:flex;align-items:center;justify-content:center;font-size:22px;color:#64748b;box-shadow:0 6px 18px rgba(15,23,42,0.04);">
+            <i class="fas fa-inbox"></i>
+          </div>
+          <div class="title" style="font-weight:700;color:#374151;">${escapeHtml(title)}</div>
+          <div class="desc" style="font-size:0.92rem;max-width:260px;line-height:1.3;color:#6b7280;">${escapeHtml(desc)}</div>
+          <button class="btn-refresh" id="notifRefresh" style="margin-top:8px;background:linear-gradient(135deg,#10b981,#059669);color:#fff;border:none;padding:8px 12px;border-radius:10px;cursor:pointer;font-weight:600;">Actualizar</button>
+        </div>
+      `;
+    }
+
+    async function markAsRead(id) {
+      try {
+        const res = await fetch('../conexion/getNotifications.php?action=mark', {
+          method: 'POST',
+          credentials: 'same-origin',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: 'id=' + encodeURIComponent(id)
+        });
+        const j = await res.json();
+        if (j.success) loadNotifications();
+        return j.success;
+      } catch (e) {
+        console.error('markAsRead', e);
+        return false;
+      }
+    }
+
+    // Toggle modal & listeners
+    if (bell && modal) {
+      bell.addEventListener('click', async (e) => {
+        modal.classList.toggle('active');
+        if (modal.classList.contains('active')) await loadNotifications();
+      });
+    }
+    if (closeBtn && modal) closeBtn.addEventListener('click', () => modal.classList.remove('active'));
+
+    // Close when click outside
+    document.addEventListener('click', (e) => {
+      if (!modal || !bell) return;
+      if (!bell.contains(e.target) && !modal.contains(e.target)) modal.classList.remove('active');
+    });
+
+    // load initial badge and poll
+    loadNotifications();
+    setInterval(loadNotifications, 45000);
+  })();
+</script>
 </body>
 </html>

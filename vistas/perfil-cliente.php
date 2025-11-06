@@ -954,11 +954,12 @@
                 </div>
             </div>
 
-            <div class="header-icon">
-                <a href="perfil.php" style="color: inherit; text-decoration: none;">
-                    <i class="fas fa-user"></i>
-                </a>
-            </div>
+            <!-- Botón Cerrar sesión -->
+            <form action="../logout.php" method="POST" style="display:inline; margin:0;">
+              <button type="submit" class="header-icon" title="Cerrar sesión" style="background:none; border:none; color:white; cursor:pointer;">
+                <i class="fas fa-sign-out-alt"></i>
+              </button>
+            </form>
         </div>
     </header>
   <!-- PROFILE CONTAINER -->

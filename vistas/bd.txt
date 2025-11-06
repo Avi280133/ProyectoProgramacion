@@ -1,0 +1,200 @@
+create database if not exists SkillMatch;
+use SkillMatch;
+
+create table usuario (
+    cedula char(8) primary key,
+    nombre varchar(50) not null,
+    apellido varchar(50) not null,
+    username varchar(50) unique not null,
+    calle varchar(100),
+    numeropuerta int check (numeropuerta > 0),
+    email varchar(100) unique not null,
+    contrasena varchar(100) not null,
+    fotoperfil blob,
+    edad int check (edad >= 18)
+);
+
+create table administrador (
+    idadministrador char(8) primary key,
+    foreign key (idadministrador) references usuario(cedula)
+        on delete cascade on update cascade
+);
+
+create table cliente (
+    idcliente char(8) primary key,
+    foreign key (idcliente) references usuario(cedula)
+        on delete cascade on update cascade
+);
+
+create table proveedor (
+    idproveedor char(8) primary key,
+    experiencia varchar(500) not null,
+    habilidad varchar(200) not null,
+    foreign key (idproveedor) references usuario(cedula)
+        on delete cascade on update cascade
+);
+
+create table servicio (
+    idservicio int primary key auto_increment,
+    titulo varchar(100) not null,
+    ubicacion varchar(100),
+    precio float check (precio >= 0),
+    descripcion varchar(300) not null
+);
+
+CREATE TABLE Reserva (
+  idreserva INT AUTO_INCREMENT PRIMARY KEY,
+  idservicio INT NOT NULL,
+  idcliente char(8) NOT NULL,
+  fecha DATE NOT NULL,
+  hora TIME NOT NULL,
+  estado ENUM('pendiente', 'confirmada', 'cancelada') NOT NULL,
+  FOREIGN KEY (idservicio) REFERENCES servicio(idservicio) ON DELETE CASCADE,
+foreign key (idcliente) references cliente(idcliente) ON DELETE CASCADE
+);
+
+
+create table ofrece (
+    idservicio int not null,
+    idproveedor char(8) not null,
+    dia date not null,
+    hora time not null,
+    primary key (idproveedor, idservicio, dia, hora),
+    foreign key (idproveedor) references proveedor(idproveedor)
+        on delete cascade on update cascade,
+    foreign key (idservicio) references servicio(idservicio)
+        on delete cascade on update cascade
+);
+
+create table mensaje (
+    idemisor char(8) not null,
+    idreceptor char(8) not null,
+    contenido varchar(200) not null,
+    dia date not null,
+    hora time not null,
+    primary key (idemisor, idreceptor, dia, hora),
+    foreign key (idemisor) references usuario(cedula)
+        on delete cascade on update cascade,
+    foreign key (idreceptor) references usuario(cedula)
+        on delete cascade on update cascade,
+);
+
+
+create table contrata (
+    idcliente char(8) not null,
+    idservicio int not null,
+    dia date not null,
+    hora time not null,
+    puntaje int check (puntaje between 1 and 5),
+    comentario varchar(300),
+    primary key (idcliente, idservicio, dia, hora),
+    foreign key (idcliente) references cliente(idcliente)
+        on delete cascade on update cascade,
+    foreign key (idservicio) references servicio(idservicio)
+        on delete cascade on update cascade
+);
+
+create table comenta (
+    idproveedor char(8) not null,
+    idservicio int not null,
+    idcliente char(8) not null,
+    contenido varchar(200) not null,
+    dia date not null,
+    hora time not null,
+    primary key (idproveedor, idservicio, idcliente),
+    foreign key (idproveedor) references proveedor(idproveedor)
+        on delete cascade on update cascade,
+    foreign key (idservicio) references servicio(idservicio)
+        on delete cascade on update cascade,
+    foreign key (idcliente) references cliente(idcliente)
+        on delete cascade on update cascade
+);
+
+create table gestiona (
+    idadministrador char(8) not null,
+    idproveedor char(8) not null,
+    idservicio int not null,
+    primary key (idadministrador, idproveedor, idservicio),
+    foreign key (idadministrador) references administrador(idadministrador)
+        on delete cascade on update cascade,
+    foreign key (idproveedor) references proveedor(idproveedor)
+        on delete cascade on update cascade,
+    foreign key (idservicio) references servicio(idservicio)
+        on delete cascade on update cascade
+);
+
+create table supervisa (
+    idadministrador char(8) not null,
+    cedula char(8) not null,
+    primary key (idadministrador, cedula),
+    foreign key (idadministrador) references administrador(idadministrador)
+        on delete cascade on update cascade,
+    foreign key (cedula) references usuario(cedula)
+        on delete cascade on update cascade
+);
+
+create table imagen (
+    idimagen int primary key auto_increment,
+    idservicio int not null,
+    imagen blob not null,
+    foreign key (idservicio) references servicio(idservicio)
+        on delete cascade on update cascade
+);
+
+/* =========================
+   OFRECE
+   ========================= */
+
+ALTER TABLE ofrece DROP PRIMARY KEY;
+
+ALTER TABLE ofrece DROP COLUMN hora;
+
+ALTER TABLE ofrece 
+  CHANGE COLUMN dia tiempo DATETIME NOT NULL DEFAULT NOW();
+
+ALTER TABLE ofrece 
+  ADD PRIMARY KEY (idproveedor, idservicio, tiempo);
+
+/* =========================
+   CONTRATA
+   ========================= */
+ALTER TABLE contrata DROP PRIMARY KEY;
+ALTER TABLE contrata DROP COLUMN hora;
+ALTER TABLE contrata 
+  CHANGE COLUMN dia tiempo DATETIME NOT NULL DEFAULT NOW();
+ALTER TABLE contrata 
+  ADD PRIMARY KEY (idcliente, idservicio, tiempo);
+
+/* =========================
+   MENSAJE
+   ========================= */
+ALTER TABLE mensaje DROP PRIMARY KEY;
+ALTER TABLE mensaje DROP COLUMN hora;
+ALTER TABLE mensaje
+  CHANGE COLUMN dia tiempo DATETIME NOT NULL DEFAULT NOW();
+ALTER TABLE mensaje
+  ADD PRIMARY KEY (idemisor, idreceptor, tiempo);
+
+/* =========================
+   PROVEEDOR
+   ========================= */
+ALTER TABLE proveedor
+  MODIFY experiencia VARCHAR(500) NULL,
+  MODIFY habilidad   VARCHAR(200);
+
+/* =========================
+   USUARIO
+   (separado en pasos seguros)
+   ========================= */
+ALTER TABLE usuario MODIFY COLUMN fotoperfil VARCHAR(255);
+ALTER TABLE usuario DROP COLUMN calle;
+ALTER TABLE usuario DROP COLUMN numeropuerta;
+ALTER TABLE usuario ADD COLUMN localidad VARCHAR(100);
+
+/* =========================
+   SERVICIO
+   ========================= */
+ALTER TABLE servicio ADD COLUMN imagen VARCHAR(255);
+
+
+select * from usuario;
