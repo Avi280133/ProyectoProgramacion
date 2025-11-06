@@ -1,5 +1,5 @@
 <?php
-<?php
+
 // Control de sesión y cabeceras anti-cache para evitar navegación "atrás" con páginas cacheadas.
 
 function start_secure_session(): void {
