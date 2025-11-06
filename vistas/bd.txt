@@ -144,14 +144,14 @@ create table imagen (
 /* =========================
    OFRECE
    ========================= */
--- 1) Quitar PK vieja
+
 ALTER TABLE ofrece DROP PRIMARY KEY;
--- 2) Quitar columna 'hora'
+
 ALTER TABLE ofrece DROP COLUMN hora;
--- 3) Renombrar 'dia' -> 'tiempo' y setear default
+
 ALTER TABLE ofrece 
   CHANGE COLUMN dia tiempo DATETIME NOT NULL DEFAULT NOW();
--- 4) Crear nueva PK
+
 ALTER TABLE ofrece 
   ADD PRIMARY KEY (idproveedor, idservicio, tiempo);
 

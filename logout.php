@@ -1,12 +1,11 @@
 <?php
-<?php
-// Destruye la sesión de forma segura y redirige al índice (o login)
+// Reemplaza el contenido por este para destruir la sesión correctamente y evitar redirecciones inesperadas.
 session_start();
 
-// Limpiar todas las variables de sesión
+// Limpiar variables de sesión
 $_SESSION = [];
 
-// Borrar la cookie de sesión
+// Borrar cookie de sesión
 if (ini_get("session.use_cookies")) {
     $params = session_get_cookie_params();
     setcookie(session_name(), '', time() - 42000,
@@ -15,10 +14,10 @@ if (ini_get("session.use_cookies")) {
     );
 }
 
-// Destruir la sesión
+// Destruir
 session_destroy();
 
-// Redirigir al inicio (ajusta si tu página de login/landing es otra)
-header('Location: index.php');
+// Redirigir al inicio (ajusta ruta si corresponde)
+header('Location: ../index.php');
 exit;
 ?>

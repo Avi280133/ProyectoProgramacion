@@ -1,5 +1,4 @@
 <?php
-// Utilidades para notificaciones y conexión DB
 function get_conn() {
     $cx = new mysqli('localhost','root','','SkillMatch');
     if ($cx->connect_errno) throw new Exception('DB: '.$cx->connect_error);
@@ -8,14 +7,14 @@ function get_conn() {
 }
 
 function addNotification(string $idusuario, string $tipo, ?int $referencia, string $mensaje): bool {
+    // solo permitir tipos válidos
     $valid = ['reporte','solicitud','calificacion'];
     if (!in_array($tipo, $valid, true)) return false;
     try {
         $cx = get_conn();
         $stmt = $cx->prepare("INSERT INTO notificacion (idusuario, tipo, referencia, mensaje) VALUES (?,?,?,?)");
         if (!$stmt) throw new Exception($cx->error);
-        // tipos: s (idusuario), s (tipo), i (referencia), s (mensaje)
-        $stmt->bind_param('ssis', $idusuario, $tipo, $referencia, $mensaje);
+        $stmt->bind_param('siss', $idusuario, $tipo, $referencia, $mensaje);
         $ok = $stmt->execute();
         $stmt->close();
         $cx->close();
