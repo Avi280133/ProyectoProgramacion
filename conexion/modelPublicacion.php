@@ -93,6 +93,41 @@ public function crearCategoria() {
 }
 
 
+ public function  publicarServicioPanel(){
+        if (!isset($_SESSION['cedula'])) {
+            echo "Error: no hay administrador logueado.";
+            return 0;
+        }
+        $cx=(new ClaseConexion())->getConexion();
+
+        $sql="INSERT INTO servicio(idproveedor,titulo,ubicacion,precio,descripcion,imagen,categoria)
+              VALUES(?,?,?,?,?,?,?)";
+        $st=$cx->prepare($sql);
+        if(!$st){ $cx->close(); return 0; }
+
+        $precioNum = (float)$this->precio;
+        $st->bind_param("sssdsss",$this->idproveedor,$this->titulo,$this->ubicacion,$precioNum,$this->descripcion, $this->imagen, $this->categoria);
+        $st->execute();
+        $ok = $st->affected_rows > 0;
+        $newId = $cx->insert_id;
+        $st->close();
+
+        if ($ok) {
+            $sql2 = "INSERT INTO ofrece (idservicio, idproveedor) VALUES (?, ?)";
+            if ($st2 = $cx->prepare($sql2)) {
+                $idProveedor = $_SESSION['cedula'];
+                $st2->bind_param("is", $newId, $idProveedor);
+                $st2->execute();
+                $st2->close();
+            }
+        }
+        $cx->close();
+        return $ok ? 1 : 0;
+    }
+
+
+
+
 
     /* =======================================
        LISTAR SERVICIOS DE UN PROVEEDOR (panel)

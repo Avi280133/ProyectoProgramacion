@@ -96,6 +96,51 @@ if (isset($_FILES['imagen']) && is_uploaded_file($_FILES['imagen']['tmp_name']))
     break;
 
 
+case 'publicarPanel':
+  
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+      http_response_code(405);
+      echo "Método no permitido";
+      exit;
+    }
+
+    // Campos obligatorios
+    $required = ['titulo','ubicacion','precio','descripcion','idproveedor'];
+    foreach ($required as $f) {
+      if (!isset($_POST[$f]) || trim($_POST[$f]) === '') {
+        echo "Falta el campo: $f";
+        exit;
+      }
+    }
+
+// Sanitizar
+$titulo      = trim($_POST['titulo']);
+$ubicacion   = trim($_POST['ubicacion']);
+$categoria   = isset($_POST['categoria']) ? trim($_POST['categoria']) : '';
+$precioRaw   = str_replace(['.', ','], ['', '.'], trim($_POST['precio']));
+$precio      = (float)$precioRaw;
+$descripcion = trim($_POST['descripcion']);
+$idproveedor = trim($_POST['idproveedor']);
+// Subir imagen (opcional)
+$imagen = '';
+    // Publicar usando el modelo
+    $servicio   = new Servicio($idproveedor, $titulo, $ubicacion, $precio, $descripcion,'', $categoria);
+    $ok         = $servicio->publicarServicioPanel();
+
+    if ($ok > 0) {
+      // Volver al panel del proveedor con aviso
+     // header('Location: ../vistas/vistas-prov.php?service=published');
+      //include('../vistas/vistas-prov.php');
+      exit;
+    } else {
+      echo "No se pudo publicar el servicio. Intentá nuevamente.";
+      exit;
+    }
+    break;
+
+
+
+
   /* ======================
      ELIMINAR SERVICIO
      ====================== */
@@ -167,4 +212,4 @@ include('../vistas/busqueda.php');
     break;
 //include('../vistas/publicacion.php');
 
-}
+}   

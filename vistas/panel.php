@@ -814,6 +814,17 @@ $categorias = Usuario::cargarPanelCategorias();
             }
         }
 
+        .campo-formulario {
+              width:100%;
+            border:2px solid var(--sm-border);
+            border-radius:12px;
+                padding:12px 14px;
+                font-size:16px;
+                background:#fff;
+                color:var(--sm-text);
+                transition:border-color .2s, box-shadow .2s, transform .04s;
+        }
+
         /* ====== Crear Usuario – Ajustes visuales ====== */
 #createUserModal .modal {
   border-radius: 20px;
@@ -1463,6 +1474,8 @@ function previewEditProv(event){
 </script>
 
 
+   
+
     <!-- este es el modal para crear un nuevo servicio -->
     <div class="modal-overlay" id="createServiceModal">
         <div class="modal">
@@ -1475,32 +1488,42 @@ function previewEditProv(event){
                     <i class="fas fa-times"></i>
                 </button>
             </div>
+             <form id="formServicio" action="../conexion/controllerPublicacion.php" method="POST">
             <div class="modal-body">
                 <div class="form-group">
                     <label class="form-label">Título del Servicio *</label>
-                    <input type="text" class="form-input" id="createServiceTitle" placeholder="Ej: Desarrollo Web Completo" required>
+                    <input type="text" class="form-input" id="createServiceTitle" name="titulo" value="titulo" placeholder="Ej: Desarrollo Web Completo" required>
                 </div>
                 <div class="form-group">
                     <label class="form-label">Proveedor *</label>
-                    <input type="text" class="form-input" id="createServiceProvider" placeholder="Cedula del proveedor" required>
+                    <input type="text" class="form-input" id="createServiceProvider" name="idproveedor" value="idproveedor" placeholder="Cedula del proveedor" required>
                 </div>
                 <div class="form-group">
                     <label class="form-label">Categoría *</label>
-                    <select class="form-select" id="createServiceCategory" required>
-                        <option value="">Seleccionar categoría</option>
-                        <option value="Tecnología">Tecnología</option>
-                        <option value="Hogar">Hogar</option>
-                        <option value="Diseño">Diseño</option>
-                        <option value="Educación">Educación</option>
-                    </select>
+                  <label for="categoria" class="etiqueta-campo"></label>
+                  
+<select id="categoria" name="categoria" class="campo-formulario">
+  <option value="">--Seleccioná--</option>
+  <?php 
+ 
+  foreach ($categorias as $unaCategoria) 
+    {
+    echo "<option value=" . $unaCategoria['nombre'] . " class=campo-formulario> " . $unaCategoria['nombre'] . "</option>" ;
+    }
+    ?>
+</select>
+                <div class="form-group">
+                    <label class="form-label">Ubicacion *</label>
+                    <input type="text" class="form-input" id="createServiceLocation" name="ubicacion" value="ubicacion" placeholder="Ubicación del servicio" required>
                 </div>
+              </div>
                 <div class="form-group">
                     <label class="form-label">Precio (USD) *</label>
-                    <input type="number" class="form-input" id="createServicePrice" min="0" step="0.01" placeholder="0.00" required>
+                    <input type="number" class="form-input" name="precio" value="precio" id="createServicePrice" min="0" step="0.01" placeholder="0.00" required>
                 </div>
                 <div class="form-group">
                     <label class="form-label">Descripción</label>
-                    <textarea class="form-textarea" id="createServiceDescription" placeholder="Describe el servicio en detalle..."></textarea>
+                    <textarea class="form-textarea" id="createServiceDescription" name="descripcion" placeholder="Describe el servicio en detalle...">descripcion</textarea>
                 </div>
             </div>
             <div class="modal-footer">
@@ -1508,62 +1531,18 @@ function previewEditProv(event){
                     <i class="fas fa-times"></i>
                     Cancelar
                 </button>
-                <button class="btn btn-save" onclick="saveService('create')">
+                <button type="submit" name="action" value="publicarPanel" class="btn btn-save">
                     <i class="fas fa-check"></i>
                     Guardar
                 </button>
             </div>
+            </form>
         </div>
     </div>
 
-    <!-- este es el modal para modificar un servicio existente -->
-    <div class="modal-overlay" id="editServiceModal">
-        <div class="modal">
-            <div class="modal-header">
-                <h3>
-                    <i class="fas fa-briefcase"></i>
-                    Editar Servicio
-                </h3>
-                <button class="modal-close" onclick="closeModal('editServiceModal')">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label class="form-label">Título del Servicio *</label>
-                    <input type="text" class="form-input" id="editServiceTitle" placeholder="Ej: Desarrollo Web Completo" required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Categoría *</label>
-                    <select class="form-select" id="editServiceCategory" required>
-                        <option value="">Seleccionar categoría</option>
-                        <option value="Tecnología">Tecnología</option>
-                        <option value="Hogar">Hogar</option>
-                        <option value="Diseño">Diseño</option>
-                        <option value="Educación">Educación</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Precio (USD) *</label>
-                    <input type="number" class="form-input" id="editServicePrice" min="0" step="0.01" placeholder="0.00" required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Descripción</label>
-                    <textarea class="form-textarea" id="editServiceDescription" placeholder="Describe el servicio en detalle..."></textarea>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-cancel" onclick="closeModal('editServiceModal')">
-                    <i class="fas fa-times"></i>
-                    Cancelar
-                </button>
-                <button class="btn btn-save" onclick="saveService('edit')">
-                    <i class="fas fa-check"></i>
-                    Actualizar
-                </button>
-            </div>
-        </div>
-    </div>
+
+
+   
 
     <!-- este es el modal para crear una nueva categoría -->
      
@@ -1603,37 +1582,6 @@ function previewEditProv(event){
     </div>
     </form>
 
-   <!-- este es el modal para crear una nueva categoría -->
-<div class="modal-overlay" id="createCategoryModal">
-  <div class="modal">
-    <div class="modal-header">
-      <h3>
-        <i class="fas fa-tags"></i>
-        Crear Categoría
-      </h3>
-      <button class="modal-close" onclick="closeModal('createCategoryModal')">
-        <i class="fas fa-times"></i>
-      </button>
-    </div>
-
-    <form id="formCategoria" action="../conexion/controllerPublicacion.php" method="POST" class="modal-body">
-      <input type="hidden" name="action" value="crearCategoria">
-      <div class="form-group">
-        <label class="form-label">Nombre de la Categoría *</label>
-        <input type="text" class="form-input" name="nombre" placeholder="Ej: Tecnología, Hogar, Diseño..." required>
-      </div>
-
-      <div class="modal-footer">
-        <button type="button" class="btn btn-cancel" onclick="closeModal('createCategoryModal')">
-          <i class="fas fa-times"></i> Cancelar
-        </button>
-        <button type="submit" class="btn btn-save">
-          <i class="fas fa-check"></i> Guardar
-        </button>
-      </div>
-    </form>
-  </div>
-</div>
 
 
     <!-- este es el modal que pregunta si realmente querés eliminar algo -->
