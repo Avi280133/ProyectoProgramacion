@@ -583,53 +583,6 @@ footer {
     </div>
     <div class="header-actions">
       <div style="position: relative;">
-        <div class="header-icon" id="notificationBell">
-          <i class="fas fa-bell"></i>
-          <span style="position: absolute; top: -5px; right: -8px; width: 20px; height: 20px; background: #ff6b6b; color: white; border-radius: 50%; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; font-weight: bold;">3</span>
-        </div>
-
-        <div class="notification-modal" id="notificationModal">
-          <div class="notification-header">
-            <h3>Notificaciones</h3>
-            <i class="fas fa-times" style="cursor: pointer; color: #7f8c8d;" id="closeNotifications"></i>
-          </div>
-          <div class="notification-list">
-            <div class="notification-item unread">
-              <div class="notification-icon">
-                <i class="fas fa-check-circle"></i>
-              </div>
-              <div class="notification-content">
-                <div class="notification-title">Trabajo aceptado</div>
-                <div class="notification-text">Tu solicitud de reparación del hogar fue aceptada por Juan M.</div>
-                <div class="notification-time">Hace 2 horas</div>
-              </div>
-            </div>
-
-            <div class="notification-item unread">
-              <div class="notification-icon" style="background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);">
-                <i class="fas fa-star"></i>
-              </div>
-              <div class="notification-content">
-                <div class="notification-title">Nueva reseña</div>
-                <div class="notification-text">Carlos P. dejó una reseña de 5 estrellas para tu servicio</div>
-                <div class="notification-time">Hace 5 horas</div>
-              </div>
-            </div>
-
-            <div class="notification-item">
-              <div class="notification-icon" style="background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);">
-                <i class="fas fa-info-circle"></i>
-              </div>
-              <div class="notification-content">
-                <div class="notification-title">Recordatorio</div>
-                <div class="notification-text">Tu servicio de desarrollo web está próximo a completarse</div>
-                <div class="notification-time">Hace 1 día</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
       <a href="perfil-cliente.php" class="header-icon" style="text-decoration: none; color: white;">
         <i class="fas fa-user"></i>
       </a>

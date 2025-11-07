@@ -361,137 +361,128 @@ $misServicios = Servicio::serviciosDeProveedor($idProveedor);
     </div>
   </section>
 
-  <!-- Sección: Calendario -->
-  <section id="calendario-section" style="padding:2rem 1rem;">
-    <div class="calendar-wrap">
-      <div class="left">
-        <div>
-          <h3>Disponibilidad</h3>
-          <p style="opacity:0.9; margin-top:8px;">Seleccioná la fecha disponible para revisar horarios.</p>
-        </div>
-
-        <div class="calendar-container" id="miniCalendar">
-          <div class="calendar-header">
-            <div style="color:#fff; font-weight:700;" id="monthLabel">Mes Año</div>
-            <div class="calendar-nav">
-              <button id="prevMonth" title="Mes anterior">&lt;</button>
-              <button id="nextMonth" title="Mes siguiente">&gt;</button>
-            </div>
-          </div>
-
-          <div class="calendar-weekdays">
-            <div class="weekday">Lun</div><div class="weekday">Mar</div><div class="weekday">Mié</div>
-            <div class="weekday">Jue</div><div class="weekday">Vie</div><div class="weekday">Sáb</div><div class="weekday">Dom</div>
-          </div>
-
-          <div class="calendar-days" id="calendarDays"></div>
-        </div>
+  <section id="calendario-section" style="padding: 4rem 2rem; background: #f8f9fa;">
+  <div style="max-width: 1000px; margin: 0 auto; display: flex; gap: 2rem; align-items: flex-start; flex-wrap: wrap;">
+    
+    <!-- Calendario -->
+    <div id="calendar" style="flex: 1; min-width: 300px; background: white; border-radius: 20px; padding: 1.5rem; box-shadow: 0 8px 25px rgba(0,0,0,0.08);">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <button id="prevMonth" class="btn btn-cancel"><i class="fas fa-chevron-left"></i></button>
+        <h3 id="monthYear" style="color: #2c3e50; text-align: center; flex: 1;">Mes Año</h3>
+        <button id="nextMonth" class="btn btn-cancel"><i class="fas fa-chevron-right"></i></button>
       </div>
-
-      <div class="right">
-        <div class="selected-info">
-          <div class="dot"><i class="fas fa-calendar-day"></i></div>
-          <div>
-            <div class="selected-text" id="selectedDateText">Seleccioná una fecha</div>
-            <div style="color:#6b7280; font-size:0.9rem;" id="selectedDateSub">No hay fecha seleccionada</div>
-          </div>
-        </div>
-
-        <div id="detailArea">
-          <p style="color:#374151;">Aquí podés mostrar disponibilidad, reservas o la información relacionada con la publicación seleccionada.</p>
-        </div>
-      </div>
+      <div id="calendarDays" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: .5rem; margin-top: 1rem; text-align: center;"></div>
     </div>
 
-    <script>
-      document.addEventListener('DOMContentLoaded', function () {
-        try {
-          const daysContainer = document.getElementById('calendarDays');
-          const monthLabel = document.getElementById('monthLabel');
-          const prevBtn = document.getElementById('prevMonth');
-          const nextBtn = document.getElementById('nextMonth');
-          const selectedText = document.getElementById('selectedDateText');
-          const selectedSub = document.getElementById('selectedDateSub');
+    <!-- Panel de reservas -->
+    <div id="reservasInfo" style="flex: 1; min-width: 300px; background: white; border-radius: 20px; padding: 1.5rem; box-shadow: 0 8px 25px rgba(0,0,0,0.08);">
+      <h3 style="color:#0eb27c;">Reservas del día</h3>
+      <div id="listaReservas" style="margin-top: 1rem; color: #2c3e50;">
+        <p>Seleccioná una fecha en el calendario para ver las reservas.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
-          if (!daysContainer || !monthLabel) return console.error('Elementos del calendario no encontrados');
+<script>
+let currentDate = new Date();
+const allowedHours = ["10:00:00", "12:00:00", "15:00:00", "18:00:00"];
+let reservasGlobal = [];
 
-          let viewDate = new Date();
-          viewDate.setDate(1);
-          let selectedDate = null;
+document.addEventListener("DOMContentLoaded", () => {
+  loadReservas();
+  renderCalendar();
+  document.getElementById("prevMonth").onclick = () => changeMonth(-1);
+  document.getElementById("nextMonth").onclick = () => changeMonth(1);
+});
 
-          function render() {
-            daysContainer.innerHTML = '';
-            const year = viewDate.getFullYear();
-            const month = viewDate.getMonth();
-            monthLabel.textContent = viewDate.toLocaleString('es-ES', { month: 'long', year: 'numeric' });
+function changeMonth(delta) {
+  currentDate.setMonth(currentDate.getMonth() + delta);
+  renderCalendar();
+}
 
-            const firstWeekday = (new Date(year, month, 1).getDay() + 6) % 7;
-            const daysInMonth = new Date(year, month + 1, 0).getDate();
-            const prevDays = firstWeekday;
-            const totalCells = Math.ceil((prevDays + daysInMonth) / 7) * 7;
+function loadReservas() {
+  const idProveedor = "<?php echo $idProveedor; ?>";
+  
+  fetch("../conexion/controllerReserva.php", {
+    method: "POST",
+    headers: {"Content-Type": "application/x-www-form-urlencoded"},
+    body: "action=obtener_reservas_proveedor&idproveedor=" + encodeURIComponent(idProveedor)
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.success) {
+      reservasGlobal = data.reservas;
+      renderCalendar();
+    } else {
+      console.error("Error al obtener reservas", data);
+    }
+  })
+  .catch(err => console.error("Error de conexión:", err));
+}
 
-            const prevMonthLastDay = new Date(year, month, 0).getDate();
+function renderCalendar() {
+  const year = currentDate.getFullYear();
+  const month = currentDate.getMonth();
+  const firstDay = new Date(year, month, 1);
+  const lastDay = new Date(year, month + 1, 0);
+  const daysContainer = document.getElementById("calendarDays");
+  const monthYear = document.getElementById("monthYear");
 
-            for (let i = 0; i < totalCells; i++) {
-              const cell = document.createElement('div');
-              cell.className = 'day';
-              let dayNumber, cellDate;
-              if (i < prevDays) {
-                dayNumber = prevMonthLastDay - prevDays + 1 + i;
-                cell.classList.add('other-month');
-                cellDate = new Date(year, month - 1, dayNumber);
-              } else if (i < prevDays + daysInMonth) {
-                dayNumber = i - prevDays + 1;
-                cellDate = new Date(year, month, dayNumber);
-              } else {
-                dayNumber = i - (prevDays + daysInMonth) + 1;
-                cell.classList.add('other-month');
-                cellDate = new Date(year, month + 1, dayNumber);
-              }
+  monthYear.textContent = `${firstDay.toLocaleString("es-ES", {month:"long"})} ${year}`;
+  daysContainer.innerHTML = "";
 
-              cell.textContent = dayNumber;
-              cell.dataset.date = cellDate.toISOString();
+  const start = firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1;
+  for (let i = 0; i < start; i++) {
+    const empty = document.createElement("div");
+    daysContainer.appendChild(empty);
+  }
 
-              // Marcar 3 de diciembre en rojo
-              if (cellDate.getMonth() === 11 && cellDate.getDate() === 3) {
-                cell.classList.add('highlight-red');
-              }
+  function mostrarReservas(fecha) {
+    const reservasDia = reservasGlobal.filter(r => r.fecha === fecha);
+    const contenedor = document.getElementById("listaReservas");
+    // Ajuste manual de zona horaria (corrige el -1 día)
+    const fechaLocal = new Date(fecha + "T00:00:00");
+    fechaLocal.setMinutes(fechaLocal.getMinutes() + fechaLocal.getTimezoneOffset());
+    contenedor.innerHTML = `<h4>${fechaLocal.toLocaleDateString("es-ES")}</h4>`;
 
-              const today = new Date();
-              today.setHours(0,0,0,0);
-              if (cellDate < today) {
-                cell.classList.add('disabled');
-              } else {
-                cell.addEventListener('click', () => {
-                  const prev = daysContainer.querySelector('.day.selected');
-                  if (prev) prev.classList.remove('selected');
-                  cell.classList.add('selected');
-                  selectedDate = cellDate;
-                  selectedText.textContent = selectedDate.toLocaleDateString('es-ES', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
-                  
-                  // Verificar si es 3 de diciembre
-                  if (selectedDate.getMonth() === 11 && selectedDate.getDate() === 3) {
-                    selectedSub.textContent = 'Servicio reservado: 15:00';
-                  } else {
-                    selectedSub.textContent = 'Fecha seleccionada: ' + selectedDate.toLocaleDateString('es-ES');
-                  }
-                });
-              }
 
-              daysContainer.appendChild(cell);
-            }
-          }
-
-          if (prevBtn) prevBtn.addEventListener('click', () => { viewDate.setMonth(viewDate.getMonth() - 1); render(); });
-          if (nextBtn) nextBtn.addEventListener('click', () => { viewDate.setMonth(viewDate.getMonth() + 1); render(); });
-
-          render();
-        } catch (err) {
-          console.error('Error inicializando calendario:', err);
-        }
+    if (reservasDia.length === 0) {
+      contenedor.innerHTML += `<p>No hay reservas para este día.</p>`;
+    } else {
+      reservasDia.forEach(r => {
+        contenedor.innerHTML += `
+          <div style="border:1px solid #ddd; padding:10px; border-radius:10px; margin-bottom:10px;">
+            <strong>${r.titulo || "Servicio #" + r.idservicio}</strong><br>
+            <span>${r.hora.slice(0,5)} hs — ${r.estado}</span>
+          </div>
+        `;
       });
-    </script>
-  </section>
+    }
+  }
+
+  for (let d = 1; d <= lastDay.getDate(); d++) {
+    const date = new Date(year, month, d);
+    const isoDate = date.toLocaleDateString("en-CA");  // ✅ fecha local sin desfase
+    const reservasDia = reservasGlobal.filter(r => r.fecha === isoDate);
+    const hasReserva = reservasDia.length > 0;
+
+    const div = document.createElement("div");
+    div.textContent = d;
+    div.style.padding = "10px";
+    div.style.borderRadius = "10px";
+    div.style.cursor = "pointer";
+    div.style.transition = "0.2s";
+    div.style.background = hasReserva ? "#ef4444" : "#e0e0e0";
+    div.style.color = hasReserva ? "white" : "#2c3e50";
+    div.onclick = () => mostrarReservas(isoDate);
+    daysContainer.appendChild(div);
+  }
+}
+
+
+</script>
+
   
   <!-- Footer -->
   <footer class="footer">

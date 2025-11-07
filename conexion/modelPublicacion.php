@@ -276,24 +276,28 @@ public function crearCategoria() {
         return $result;
     }
 
-    public static function obtenerReservasServicio($idservicio) {
-        $cx = (new ClaseConexion())->getConexion();
-        $sql = "SELECT fecha, hora, estado FROM reserva 
-                WHERE idservicio = ? AND estado != 'cancelada'";
-        
-        $st = $cx->prepare($sql);
-        $st->bind_param("i", $idservicio);
-        $st->execute();
-        $result = $st->get_result();
-        
-        $reservas = [];
-        while ($row = $result->fetch_assoc()) {
-            $reservas[] = $row;
-        }
-        
-        $st->close();
-        $cx->close();
-        return $reservas;
+    public static function obtenerReservasProveedor($idProveedor) {
+    $cx = (new ClaseConexion())->getConexion();
+    $sql = "SELECT r.idservicio, s.titulo, r.fecha, r.hora, r.estado
+            FROM reserva r
+            JOIN servicio s ON r.idservicio = s.idservicio
+            JOIN ofrece o ON o.idservicio = s.idservicio
+            WHERE o.idproveedor = ?
+            AND r.estado != 'cancelada'";
+    
+    $st = $cx->prepare($sql);
+    $st->bind_param("s", $idProveedor);
+    $st->execute();
+    $result = $st->get_result();
+
+    $reservas = [];
+    while ($row = $result->fetch_assoc()) {
+        $reservas[] = $row;
     }
+
+    $st->close();
+    $cx->close();
+    return $reservas;
 }
 
+}
