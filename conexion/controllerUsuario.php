@@ -41,13 +41,9 @@ switch ($action) {
     case 'modificar':
   
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // Recoger y sanear valores enviados por POST
-            if (session_status() === PHP_SESSION_NONE) session_start();
-            $cedula = $_SESSION['cedula'] ?? null;
-            if (!$cedula) {
-                echo "No hay sesión activa (cedula).";
-                break;
-            }
+        if (session_status() === PHP_SESSION_NONE) session_start();
+        $cedula = $_SESSION['cedula'] ?? null;
+        if (!$cedula) { echo "No hay sesión activa (cedula)."; break; }
 
             $username = isset($_POST['username']) ? trim($_POST['username']) : null;
             // Tomar fotoperfil desde POST (hidden) si viene, si no dejar cadena vacía
@@ -73,26 +69,29 @@ switch ($action) {
               //  echo "Error al subir la imagen.";
             }
           //  print_r($_POST);
-       include('../vistas/vistas-prov.php');
+        header('Location: ../vistas/vistas-prov.php');
+        exit;
        //header('Location:'. $_SERVER['PHP_SELF']);
         
         }
         break;
 
     case 'eliminar':
-        // Eliminar Usuario
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-          
-                $cedula = $_SESSION['cedula'];
-                $resultado = Usuario::eliminar($cedula);
-                if ($resultado > 0) {
-                    include('../index.html');
-                } else {
-                    echo "Error al eliminar el usuario.";
-                }
-         
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $cedula = $_SESSION['cedula'] ?? null;
+        if (!$cedula) { header('Location: ../vistas/login.php'); exit; }
+
+        $resultado = Usuario::eliminar($cedula);
+        if ($resultado > 0) {
+            // cerrar sesión y a inicio/login
+            require_once __DIR__ . '/../logout.php';
+            exit;
+        } else {
+            echo "Error al eliminar el usuario.";
         }
-        break;
+    }
+    break;
+
 
     case 'buscar':
         // Buscar Usuario por Cédula (GET o POST)
@@ -130,27 +129,19 @@ switch ($action) {
         if ($usuario) {
             $_SESSION['cedula'] = $usuario['cedula'] ?? null;
 
-
-
-            // detectar rol mediante el modelo
             $role = Usuario::detectarRol($_SESSION['cedula'] ?? '');
             $_SESSION['role'] = $role;
 
-          switch ($role) {
-                case 'cliente':
-                    include('../vistas/vistas-cliente.php');
-                    break;
-                case 'proveedor':
-                    include('../vistas/perfil.php');
-                    break;
-                case 'admin':
-                    include('../vistas/panel.php');
-
-                    break;
-                default:
-                     echo "❌ .";
-           
-                    break;
+            // Importante: redirigir con header + exit
+            if ($role === 'cliente') {
+                header('Location: ../vistas/vistas-cliente.php'); exit;
+            } elseif ($role === 'proveedor') {
+                header('Location: ../vistas/vistas-prov.php'); exit;
+            } elseif ($role === 'admin') {
+                header('Location: ../vistas/panel.php'); exit;
+            } else {
+                // Rol desconocido
+                header('Location: ../vistas/login.php'); exit;
             }
         } else {
             echo "❌ Usuario o contraseña incorrectos.";

@@ -1,3 +1,5 @@
+<?php require_once('../conexion/guards/auth_guard.php'); ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>

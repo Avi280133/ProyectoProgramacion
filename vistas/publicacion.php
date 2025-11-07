@@ -1,3 +1,11 @@
+<?php require_once('../conexion/guards/auth_guard.php'); ?>
+
+<?php
+// === Aseguramos que $idservicio esté disponible ===
+// Si ya tenés $servicio cargado, lo toma de ahí; si no, hace fallback a GET ?id=...
+$idservicio = isset($servicio['idservicio']) ? (int)$servicio['idservicio'] : (int)($_GET['id'] ?? 0);
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -7,7 +15,7 @@
   <link rel="stylesheet" href="../css/styles.css">
   <link rel="stylesheet" href="../css/publi.css">
   <link rel="icon" type="image/png" href="../img/favicon_SkillMatch.png">
-    <link rel="conexion" href="../conexion/controllerPublicacion.php">
+  <link rel="conexion" href="../conexion/controllerPublicacion.php">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
@@ -832,6 +840,184 @@
             font-size: 22px; 
         }
     }
+
+    /* ==== Modal de notificaciones (proveedor/cliente) layout base que ya usás en otras vistas ==== */
+    .notification-modal{
+      position: absolute;
+      right: 0;
+      top: 40px;
+      width: 360px;
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      box-shadow: 0 12px 30px rgba(0,0,0,.12);
+      display: none;
+      z-index: 10000;
+    }
+    .notification-modal.active{ display:block; }
+    .notification-list{ max-height: 420px; overflow: auto; }
+    .notification-item.unread{ background: #f9fafb; }
+    .notification-icon{
+      width: 40px; height: 40px; border-radius: 10px; display:flex;align-items:center;justify-content:center; color:#fff;
+    }
+
+    /* === MODAL REPORTAR (match SkillMatch) === */
+#modalReportar{
+  display: none;                 /* se controla por JS */
+  position: fixed !important;
+  inset: 0 !important;
+  background: rgba(0,0,0,.55) !important;
+  backdrop-filter: blur(4px);
+  z-index: 3000;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  animation: sm-fade-in .2s ease-out;
+}
+
+/* Contenedor tarjeta */
+#modalReportar > div{
+  width: 100% !important;
+  max-width: 520px !important;
+  background: #fff !important;
+  border-radius: 16px !important;
+  box-shadow: 0 18px 60px rgba(2, 89, 57, .18);
+  border: 1px solid rgba(2, 89, 57, .08);
+  padding: 22px 22px !important;
+  transform: translateY(8px);
+  animation: sm-pop .25s ease-out forwards;
+  font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial;
+}
+
+/* Encabezado */
+#modalReportar h3{
+  margin: 0 0 10px 0;
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #025939;
+  letter-spacing: .2px;
+}
+
+/* Form */
+#modalReportar form{
+  display: grid;
+  gap: 12px;
+}
+
+/* Labels */
+#modalReportar label{
+  display: grid;
+  gap: 8px;
+  font-size: .92rem;
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+/* Inputs, selects, textarea */
+#modalReportar .form-control,
+#modalReportar select,
+#modalReportar textarea,
+#modalReportar input[type="text"],
+#modalReportar input[type="email"],
+#modalReportar input[type="number"]{
+  width: 100%;
+  background: #f7faf9;
+  border: 2px solid #e6efec;
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: .95rem;
+  color: #0f172a;
+  outline: none;
+  transition: border .18s ease, background .18s ease, box-shadow .18s ease;
+}
+
+#modalReportar .form-control:hover,
+#modalReportar select:hover,
+#modalReportar textarea:hover{
+  background: #ffffff;
+  border-color: #d8eae4;
+}
+
+#modalReportar .form-control:focus,
+#modalReportar select:focus,
+#modalReportar textarea:focus{
+  background: #fff;
+  border-color: #0eb27c;
+  box-shadow: 0 0 0 4px rgba(14, 178, 124, .12);
+}
+
+/* Textarea */
+#modalReportar textarea{
+  min-height: 110px;
+  resize: vertical;
+}
+
+/* Actions */
+#modalReportar .btn{
+  appearance: none;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform .12s ease, box-shadow .18s ease, filter .18s ease, background .18s ease, color .18s ease;
+}
+
+/* Botón primario (Enviar) — mismo espíritu que .btn-solicitar */
+#modalReportar button[type="submit"].btn{
+  background: linear-gradient(135deg, #0eb27c 0%, #025939 100%);
+  color: #fff;
+  box-shadow: 0 8px 22px rgba(14, 178, 124, .28);
+}
+#modalReportar button[type="submit"].btn:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 10px 26px rgba(14, 178, 124, .36);
+}
+
+/* Botón secundario (Cancelar) — borde gris, hover suave */
+#modalReportar #cancelReport.btn{
+  background: #f1f5f9;
+  color: #475569;
+  border: 2px solid #e2e8f0;
+}
+#modalReportar #cancelReport.btn:hover{
+  background: #e9eef5;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(15, 23, 42, .08);
+}
+
+/* Línea separadora sutil (si la quisieras usar dentro del modal) */
+#modalReportar .sep{
+  height: 1px;
+  background: linear-gradient(90deg, rgba(2, 89, 57,.12), rgba(2, 89, 57,.04));
+  margin: 6px 0 2px;
+  border-radius: 1px;
+}
+
+/* Micro tip de validación opcional */
+#modalReportar .hint{
+  font-size: .8rem;
+  color: #64748b;
+}
+
+/* Animaciones */
+@keyframes sm-fade-in{
+  from{ opacity: 0; } to{ opacity: 1; }
+}
+@keyframes sm-pop{
+  from{ opacity: 0; transform: translateY(12px) scale(.98); }
+  to{ opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Responsive */
+@media (max-width: 560px){
+  #modalReportar > div{
+    padding: 18px 16px !important;
+    border-radius: 14px !important;
+  }
+  #modalReportar h3{ font-size: 1.05rem; }
+}
+
   </style>
 </head>
 <body>
@@ -920,7 +1106,7 @@
       <aside class="sidebar-proveedor">
         <div class="card-proveedor">
 
- <img src="../img/<?php echo htmlspecialchars($usuario['fotoperfil'] ?? '4ae62d57-16c3-4974-b494-e9c26f8036fe.jpg'); ?>" 
+          <img src="../img/<?php echo htmlspecialchars($usuario['fotoperfil'] ?? '4ae62d57-16c3-4974-b494-e9c26f8036fe.jpg'); ?>" 
            alt="Foto de perfil" class="redonda" />
           <p class="nombre-proveedor"><?php echo htmlspecialchars($usuario['nombre'] ?? 'Proveedor', ENT_QUOTES); ?></p>
 
@@ -945,7 +1131,7 @@
             <a href="../vistas/solicitud.php"><button class="btn btn-solicitar">Solicitar Servicio</button></a>
  
             <!-- Botón específico para abrir modal de calificar -->
-          <!--  <button class="btn btn-calificar" id="openModal-prof" type="button">Calificar</button>-->
+            <button class="btn btn-calificar" id="openModal-prof" type="button">Calificar</button>
             
 
             <form action="../chatphp/chat.php" method="post">
@@ -953,7 +1139,8 @@
               <button type="submit" class="btn btn-mensaje">Enviar Mensaje</button>
             </form>
             
-            <button class="btn btn-reportar">Reportar Usuario</button>
+            <!-- ÚNICO botón Reportar (unificado) -->
+            <button id="btnReportar" class="btn btn-reportar" data-idservicio="<?php echo (int)$idservicio; ?>">Reportar</button>
           </div>
         </div>
       </aside>
@@ -989,38 +1176,34 @@
             <button class="modal-btn-prof modal-btn-primary-prof" id="submitRating-prof">Enviar Calificación</button>
         </div>
     </div>
-</div>
-
-<!-- Botón reportar (colocar junto a los controles de la publicación) -->
-<button id="btnReportar" class="btn-reportar" data-idservicio="<?php echo $idservicio ?? ''; ?>">Reportar</button>
-
-<!-- Modal simple para reportar -->
-<div id="modalReportar" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); align-items:center; justify-content:center;">
-  <div style="background:#fff; padding:20px; border-radius:8px; width:90%; max-width:500px;">
-    <h3>Reportar publicación</h3>
-    <form id="formReportar">
-      <input type="hidden" name="idservicio" value="<?php echo $idservicio ?? ''; ?>">
-      <!-- opcional: si no usas sesión para el idreportador, puedes enviar aquí -->
-      <input type="hidden" name="idreportador" value="<?php echo $_SESSION['cedula'] ?? ''; ?>">
-      <label>Motivo
-        <select name="motivo" required class="form-control">
-          <option value="">Seleccionar...</option>
-          <option value="Contenido engañoso">Contenido engañoso</option>
-          <option value="Spam">Spam</option>
-          <option value="Contenido inapropiado">Contenido inapropiado</option>
-          <option value="Otro">Otro</option>
-        </select>
-      </label>
-      <label>Detalle (opcional)
-        <textarea name="detalle" class="form-control" placeholder="Descripción..."></textarea>
-      </label>
-      <div style="display:flex; gap:8px; margin-top:12px;">
-        <button type="submit" class="btn">Enviar reporte</button>
-        <button type="button" id="cancelReport" class="btn" style="background:#ddd;">Cancelar</button>
-      </div>
-    </form>
   </div>
-</div>
+
+  <!-- Modal simple para reportar (permanece, ahora con idservicio correcto) -->
+  <div id="modalReportar" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); align-items:center; justify-content:center;">
+    <div style="background:#fff; padding:20px; border-radius:8px; width:90%; max-width:500px;">
+      <h3>Reportar publicación</h3>
+      <form id="formReportar">
+        <input type="hidden" name="idservicio" id="rep_idservicio" value="<?php echo (int)$idservicio; ?>">
+        <!-- opcional: estos campos no se guardan en BD con tu esquema actual (porque quitaste motivo/detalle) -->
+        <label>Motivo
+          <select name="motivo" class="form-control">
+            <option value="">Seleccionar...</option>
+            <option value="Contenido engañoso">Contenido engañoso</option>
+            <option value="Spam">Spam</option>
+            <option value="Contenido inapropiado">Contenido inapropiado</option>
+            <option value="Otro">Otro</option>
+          </select>
+        </label>
+        <label>Detalle (opcional)
+          <textarea name="detalle" class="form-control" placeholder="Descripción..."></textarea>
+        </label>
+        <div style="display:flex; gap:8px; margin-top:12px;">
+          <button type="submit" class="btn">Enviar reporte</button>
+          <button type="button" id="cancelReport" class="btn" style="background:#ddd;">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <footer>
         <div class="footer-content">
@@ -1086,8 +1269,6 @@
   <script>
   let chatModalLoaded = false;
 
-
-
   document.addEventListener('DOMContentLoaded', function() {
     // Captura botones y enlaces que abren el modal y previene navegación
     document.querySelectorAll('a, button').forEach(el => {
@@ -1121,9 +1302,6 @@
     function markAsRead(item) {
         if (!item.classList.contains('unread')) return;
         item.classList.remove('unread');
-        // opcional: enviar al servidor que la notificación fue leída
-        // const id = item.dataset.notificationId;
-        // fetch('/conexion/notifications.php', { method: 'POST', body: new URLSearchParams({ action: 'mark_read', id }) });
         updateBadge();
     }
 
@@ -1150,28 +1328,22 @@
     list.addEventListener('click', (e) => {
         const item = e.target.closest('.notification-item');
         if (!item) return;
-        // prevenir que el click cierre el modal
         e.stopPropagation();
         markAsRead(item);
 
-        // acción asociada (si tiene link o detalle)
         const actionUrl = item.dataset.href;
         if (actionUrl) {
-            // abrir en misma pestaña; usar target _blank si querés nueva pestaña
             window.location.href = actionUrl;
         }
     });
 
-    // Inicializar estado del badge al cargar
     document.addEventListener('DOMContentLoaded', updateBadge);
     updateBadge();
 
-    // Exponer funciones para uso manual (opcional)
     window.notifications = {
         updateBadge,
         markAsReadAll: () => {
             list.querySelectorAll('.notification-item.unread').forEach(item => markAsRead(item));
-            // opcional: notificar servidor
         }
     };
 })();
@@ -1190,8 +1362,6 @@
     const commentProfEl = document.getElementById('comment-prof');
     let selectedRatingProf = 0;
 
-    // abrir modal si se dispara el botón (si existe un botón específico)
-    // Aquí en publicacion.php no había un "Calificar" público, así que si querés abrir desde un elemento concreto agrega id="openModal-prof" a ese botón.
     if (openModalBtnProf) {
         openModalBtnProf.addEventListener('click', (e) => {
             e.preventDefault();
@@ -1243,59 +1413,60 @@
             return;
         }
         const commentProf = commentProfEl ? commentProfEl.value.trim() : '';
-        // Aquí envía por fetch/XHR al servidor si necesitas persistir la calificación
-        // Ejemplo (ajusta URL y payload según tu backend):
-        /*
-        fetch('/conexion/ratings.php', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ providerId: 'juan-id', rating: selectedRatingProf, comment: commentProf })
-        }).then(res => res.json()).then(resp => {
-            // manejar respuesta
-        }).catch(err => console.error(err));
-        */
         alert(`¡Gracias! Calificación enviada: ${selectedRatingProf} estrella${selectedRatingProf>1?'s':''}`);
         closeModalProf();
     });
 })();
 </script>
+
 <script>
+/* ====== Reportar: abrir/cerrar modal + enviar ====== */
 document.addEventListener('DOMContentLoaded', function() {
-  const btn = document.getElementById('btnReportar');
-  const modal = document.getElementById('modalReportar');
-  const form = document.getElementById('formReportar');
+  const btn    = document.getElementById('btnReportar');
+  const modal  = document.getElementById('modalReportar');
+  const form   = document.getElementById('formReportar');
   const cancel = document.getElementById('cancelReport');
+  const hidSvc = document.getElementById('rep_idservicio');
 
   if (btn) {
-    btn.addEventListener('click', () => modal.style.display = 'flex');
+    btn.addEventListener('click', () => {
+      // Asegurar idservicio actualizado desde data-attr
+      const svcId = btn.getAttribute('data-idservicio') || '<?php echo (int)$idservicio; ?>';
+      if (hidSvc) hidSvc.value = svcId;
+      modal.style.display = 'flex';
+    });
   }
   if (cancel) {
     cancel.addEventListener('click', () => modal.style.display = 'none');
   }
 
-  form.addEventListener('submit', function(e) {
-    e.preventDefault();
-    const fd = new FormData(form);
-    fd.append('action', 'reportar');
+  if (form) {
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const fd = new FormData(form);
+      fd.append('action', 'reportar');
 
-    fetch('../conexion/controllerReporte.php', {
-      method: 'POST',
-      body: fd
-    })
-    .then(r => r.json())
-    .then(resp => {
-      if (resp.success) {
-        alert('Reporte enviado. Gracias por su colaboración.');
-        modal.style.display = 'none';
-      } else {
-        alert('Error: ' + (resp.error || 'No se pudo enviar el reporte.'));
-      }
-    })
-    .catch(err => {
-      console.error(err);
-      alert('Error de red al enviar el reporte.');
+      fetch('../conexion/controllerReporte.php', {
+        method: 'POST',
+        body: fd,
+        credentials: 'same-origin'
+      })
+      .then(r => r.json())
+      .then(resp => {
+        if (resp.success) {
+          alert('Reporte enviado. Gracias por tu colaboración.');
+          modal.style.display = 'none';
+          form.reset();
+        } else {
+          alert('Error: ' + (resp.error || 'No se pudo enviar el reporte.'));
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        alert('Error de red al enviar el reporte.');
+      });
     });
-  });
+  }
 });
 </script>
 </body>

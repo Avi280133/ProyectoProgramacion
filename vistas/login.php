@@ -28,6 +28,8 @@
 </body>
 </html> -->
 
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -263,7 +265,7 @@ a {
                 <button type="submit" name="action" value="login">Iniciar Sesión</button>
             </form>
             <div class="form-footer">
-                <a href="#">¿Olvidaste tu contraseña?</a>
+                <p style="display: inline; font-size: 0.9rem; color: #6c757d;">¿No tienes una cuenta?</p> <a href="../vistas/registro.php">Crea una gratis.</a>
             </div>
         </div>
     </div>

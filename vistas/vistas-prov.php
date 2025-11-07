@@ -1,4 +1,5 @@
 <?php
+require_once('../conexion/guards/auth_guard.php');
 if (session_status() === PHP_SESSION_NONE) session_start();
 if (!isset($_SESSION['cedula'])) {
   header('Location: ../index.html');
@@ -202,6 +203,28 @@ $misServicios = Servicio::serviciosDeProveedor($idProveedor);
       cursor: pointer;
       font-weight: 600;
     }
+
+    .notification-modal{
+      position: absolute;
+      right: 0;
+      top: 40px;
+      width: 360px;
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      box-shadow: 0 12px 30px rgba(0,0,0,.12);
+      display: none;         /* oculto por defecto */
+      z-index: 10000;
+    }
+    .notification-modal.active{
+      display: block;        /* se muestra al activar */
+    }
+    .notification-list{ max-height: 420px; overflow: auto; }
+    .notification-item.unread{ background: #f9fafb; }
+    .notification-icon{
+      width: 40px; height: 40px; border-radius: 10px; display:flex;align-items:center;justify-content:center; color:#fff;
+    }
+
   </style>
 </head>
 <body>
@@ -521,28 +544,55 @@ $misServicios = Servicio::serviciosDeProveedor($idProveedor);
     });
   })();
 
-  // Notificaciones
+  // notis
   (function(){
-    const bell = document.getElementById('notificationBell');
+    const bell  = document.getElementById('notificationBell');
     const modal = document.getElementById('notificationModal');
     const closeBtn = document.getElementById('closeNotifications');
     const listEl = modal ? modal.querySelector('.notification-list') : null;
-    const badge = document.getElementById('notifBadge');
+    const badge  = document.getElementById('notifBadge');
 
     function escapeHtml(s){ return String(s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+    // Ícono + color por tipo
+    function iconFor(type){
+      if (type === 'reporte')      return { icon: 'fa-flag',            grad: '#ef4444, #b91c1c' };
+      if (type === 'solicitud')    return { icon: 'fa-file-signature',  grad: '#0ea5e9, #0369a1' };
+      if (type === 'calificacion') return { icon: 'fa-star',            grad: '#f59e0b, #b45309' };
+      return { icon: 'fa-bell', grad: '#10b981, #059669' };
+    }
+
+    function emptyState(title, desc){
+      desc = desc || 'No hay notificaciones por ahora.';
+      return `
+        <div class="notification-empty">
+          <div class="icon"><i class="fas fa-inbox"></i></div>
+          <div class="title">${escapeHtml(title)}</div>
+          <div class="desc">${escapeHtml(desc)}</div>
+          <button class="btn-refresh" id="notifRefresh">Actualizar</button>
+        </div>
+      `;
+    }
 
     async function loadNotifications() {
       if (!listEl) return;
       try {
         const res = await fetch('../conexion/getNotifications.php?action=list', { credentials: 'same-origin' });
         const json = await res.json();
-        if (!json.success) { listEl.innerHTML = emptyState('Error al cargar'); return; }
-        const list = json.notifications || [];
+
+        if (!json.success) {
+          listEl.innerHTML = emptyState('Error al cargar', 'Reintentá en unos segundos.');
+          const btn = document.getElementById('notifRefresh');
+          if (btn) btn.addEventListener('click', loadNotifications);
+          return;
+        }
+
+        const list   = json.notifications || [];
         const unread = json.unread || 0;
         badge.textContent = unread > 0 ? unread : '';
 
         if (list.length === 0) {
-          listEl.innerHTML = emptyState('Buzón vacío', 'No hay notificaciones por ahora. Volvé más tarde o tocá actualizar.');
+          listEl.innerHTML = emptyState('Buzón vacío', 'No hay notificaciones nuevas.');
           const btn = document.getElementById('notifRefresh');
           if (btn) btn.addEventListener('click', loadNotifications);
           return;
@@ -550,50 +600,43 @@ $misServicios = Servicio::serviciosDeProveedor($idProveedor);
 
         listEl.innerHTML = '';
         list.forEach(n => {
+          // Tipos visibles
           if (!['reporte','solicitud','calificacion'].includes(n.tipo)) return;
+
+          const {icon, grad} = iconFor(n.tipo);
           const item = document.createElement('div');
-          item.className = 'notification-item' + (n.leida == 0 ? ' unread' : '');
+          item.className = 'notification-item' + (Number(n.leida) === 0 ? ' unread' : '');
           item.style.display = 'flex';
           item.style.padding = '10px';
           item.style.borderBottom = '1px solid #eef2f7';
           item.style.gap = '10px';
+
           item.innerHTML = `
-            <div class="notification-icon" style="font-size:18px;color:#045a4a;"><i class="fas fa-bell"></i></div>
+            <div class="notification-icon" style="background: linear-gradient(135deg, ${grad});">
+              <i class="fas ${icon}"></i>
+            </div>
             <div class="notification-content" style="flex:1;">
               <div class="notification-title" style="font-weight:600">${escapeHtml(n.mensaje)}</div>
               <div class="notification-time" style="font-size:12px;color:#6b7280">${new Date(n.fecha).toLocaleString()}</div>
             </div>
           `;
-          item.dataset.id = n.idnotificacion;
-          item.dataset.tipo = n.tipo;
-          item.dataset.ref = n.referencia;
+
+          // Click: solo marcar como leída (sin navegar)
           item.addEventListener('click', async () => {
-            await markAsRead(n.idnotificacion);
-            item.classList.remove('unread');
-            if (n.tipo === 'reporte') window.location.href = 'admin/reports.php';
-            else if (n.tipo === 'solicitud') window.location.href = 'reservas.php';
-            else if (n.tipo === 'calificacion') window.location.href = 'mis-calificaciones.php';
+            if (item.classList.contains('unread')) {
+              const ok = await markAsRead(n.idnotificacion);
+              if (ok) item.classList.remove('unread');
+            }
           });
+
           listEl.appendChild(item);
         });
       } catch (err) {
         console.error('loadNotifications', err);
-        if (listEl) listEl.innerHTML = emptyState('Error al cargar', 'No se pudieron cargar las notificaciones. Reintentá.');
+        listEl.innerHTML = emptyState('Error al cargar', 'No se pudieron cargar las notificaciones.');
+        const btn = document.getElementById('notifRefresh');
+        if (btn) btn.addEventListener('click', loadNotifications);
       }
-    }
-
-    function emptyState(title, desc){
-      desc = desc || 'No hay notificaciones por ahora.';
-      return `
-        <div class="notification-empty" style="padding:18px;text-align:center;color:#6b7280;display:flex;flex-direction:column;align-items:center;gap:10px;">
-          <div class="icon" style="width:56px;height:56px;border-radius:12px;background:#f1f5f9;display:flex;align-items:center;justify-content:center;font-size:22px;color:#64748b;box-shadow:0 6px 18px rgba(15,23,42,0.04);">
-            <i class="fas fa-inbox"></i>
-          </div>
-          <div class="title" style="font-weight:700;color:#374151;">${escapeHtml(title)}</div>
-          <div class="desc" style="font-size:0.92rem;max-width:260px;line-height:1.3;color:#6b7280;">${escapeHtml(desc)}</div>
-          <button class="btn-refresh" id="notifRefresh" style="margin-top:8px;background:linear-gradient(135deg,#10b981,#059669);color:#fff;border:none;padding:8px 12px;border-radius:10px;cursor:pointer;font-weight:600;">Actualizar</button>
-        </div>
-      `;
     }
 
     async function markAsRead(id) {
@@ -605,7 +648,15 @@ $misServicios = Servicio::serviciosDeProveedor($idProveedor);
           body: 'id=' + encodeURIComponent(id)
         });
         const j = await res.json();
-        if (j.success) loadNotifications();
+        if (j.success) {
+          // refrescar badge
+          const resList = await fetch('../conexion/getNotifications.php?action=list', { credentials: 'same-origin' });
+          const json = await resList.json();
+          if (json.success) {
+            const unread = json.unread || 0;
+            badge.textContent = unread > 0 ? unread : '';
+          }
+        }
         return j.success;
       } catch (e) {
         console.error('markAsRead', e);
@@ -613,19 +664,22 @@ $misServicios = Servicio::serviciosDeProveedor($idProveedor);
       }
     }
 
+    // Toggle modal y carga
     if (bell && modal) {
-      bell.addEventListener('click', async (e) => {
+      bell.addEventListener('click', async () => {
         modal.classList.toggle('active');
         if (modal.classList.contains('active')) await loadNotifications();
       });
     }
     if (closeBtn && modal) closeBtn.addEventListener('click', () => modal.classList.remove('active'));
 
+    // Cerrar al hacer click fuera
     document.addEventListener('click', (e) => {
       if (!modal || !bell) return;
       if (!bell.contains(e.target) && !modal.contains(e.target)) modal.classList.remove('active');
     });
 
+    // Carga inicial y polling
     loadNotifications();
     setInterval(loadNotifications, 45000);
   })();
