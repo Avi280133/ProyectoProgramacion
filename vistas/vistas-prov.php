@@ -675,6 +675,159 @@ function renderCalendar() {
     setInterval(loadNotifications, 45000);
   })();
 </script>
+<script>
+const monthYear = document.getElementById('monthYear');
+const calendarDays = document.getElementById('calendarDays');
+const prevMonthBtn = document.getElementById('prevMonth');
+const nextMonthBtn = document.getElementById('nextMonth');
+const selectedDateText = document.getElementById('selectedDateText');
+const fechaSeleccionadaInput = document.getElementById('fechaSeleccionada');
+
+let currentDate = new Date();
+let selectedDate = null;
+let reservasExistentes = [];
+const monthNames = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+
+// Obtener idservicio desde la URL
+const idservicio = <?php echo $_GET['idservicio'] ?? 'null'; ?>;
+
+// === Cargar reservas existentes ===
+function cargarReservasExistentes() {
+  if (!idservicio) return;
+  fetch('../conexion/controllerReserva.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: `action=obtener_reservas&idservicio=${idservicio}`
+  })
+  .then(r => r.json())
+  .then(data => {
+    if (data.success && Array.isArray(data.reservas)) {
+      reservasExistentes = data.reservas;
+    }
+    renderCalendar();
+  })
+  .catch(err => console.error("Error cargando reservas:", err));
+}
+
+// === Renderizar calendario ===
+function renderCalendar() {
+  const year = currentDate.getFullYear();
+  const month = currentDate.getMonth();
+
+  monthYear.textContent = `${monthNames[month]} ${year}`;
+  calendarDays.innerHTML = '';
+
+  const firstDay = new Date(year, month, 1);
+  const lastDay = new Date(year, month + 1, 0);
+  const startDay = firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1;
+
+  // Días vacíos del mes anterior
+  for (let i = 0; i < startDay; i++) {
+    const dayBtn = document.createElement('button');
+    dayBtn.className = 'calendar-day other-month';
+    dayBtn.textContent = '';
+    calendarDays.appendChild(dayBtn);
+  }
+
+  const today = new Date();
+  today.setHours(0,0,0,0);
+
+  // Días del mes actual
+  for (let d = 1; d <= lastDay.getDate(); d++) {
+    const date = new Date(year, month, d);
+    const isoDate = date.toLocaleDateString('en-CA'); // YYYY-MM-DD local
+    const dayBtn = document.createElement('button');
+    dayBtn.className = 'calendar-day';
+    dayBtn.textContent = d;
+    dayBtn.type = 'button';
+
+    // Marcar días pasados
+    if (date < today) {
+      dayBtn.classList.add('disabled');
+      dayBtn.disabled = true;
+    }
+
+    // Marcar fechas reservadas
+    const reservada = reservasExistentes.some(r => r.fecha === isoDate);
+    if (reservada) {
+      dayBtn.style.background = '#ef4444';
+      dayBtn.style.color = 'white';
+      dayBtn.title = 'Fecha ya reservada';
+      dayBtn.disabled = true;
+    }
+
+    // Marcar fecha seleccionada
+    if (selectedDate && date.getTime() === selectedDate.getTime()) {
+      dayBtn.classList.add('selected');
+    }
+
+    // Click
+    if (!reservada && date >= today) {
+      dayBtn.onclick = () => selectDate(date);
+    }
+
+    calendarDays.appendChild(dayBtn);
+  }
+}
+
+// === Seleccionar fecha ===
+function selectDate(date) {
+  selectedDate = date;
+  const isoDate = date.toLocaleDateString('en-CA');
+  const formatted = date.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
+
+  selectedDateText.textContent = formatted;
+  fechaSeleccionadaInput.value = isoDate;
+
+  renderCalendar();
+}
+
+// === Navegación ===
+prevMonthBtn.onclick = () => {
+  currentDate.setMonth(currentDate.getMonth() - 1);
+  renderCalendar();
+};
+nextMonthBtn.onclick = () => {
+  currentDate.setMonth(currentDate.getMonth() + 1);
+  renderCalendar();
+};
+
+// === Enviar formulario ===
+document.getElementById('formReserva').onsubmit = function(e) {
+  e.preventDefault();
+  const horaSeleccionada = document.querySelector('input[name="hora"]:checked');
+  if (!selectedDate || !horaSeleccionada) {
+    alert('Seleccioná una fecha y una hora disponible.');
+    return;
+  }
+
+  fetch('../conexion/controllerReserva.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({
+      'action': 'crear_reserva',
+      'idservicio': idservicio,
+      'fecha': fechaSeleccionadaInput.value,
+      'hora': horaSeleccionada.value
+    })
+  })
+  .then(r => r.json())
+  .then(data => {
+    if (data.success) {
+      alert('✅ Reserva creada exitosamente');
+      window.location.href = 'perfil-cliente.php';
+    } else {
+      alert('❌ Error: ' + (data.error || 'Error desconocido'));
+    }
+  })
+  .catch(err => alert('Error de conexión con el servidor'));
+};
+
+// === Inicialización ===
+document.addEventListener('DOMContentLoaded', () => {
+  cargarReservasExistentes();
+});
+</script>
 
 </body>
 </html>

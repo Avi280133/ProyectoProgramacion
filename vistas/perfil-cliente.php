@@ -962,10 +962,13 @@ $usuario = Usuario::buscarPorCedula($_SESSION['cedula']);
         <i class="fas fa-edit"></i> Editar Perfil
       </button>
 
-      <button class="sign-out-btn"
-              style="margin-top: 1rem; background:#ff4d4d; color:white; border:none; padding:0.9rem; border-radius:15px; font-weight:700; font-size:1rem; cursor:pointer;">
-        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
-      </button>
+      <form id="deleteForm" action="../conexion/controllerUsuario.php" method="POST" style="width:100%; margin-top:1rem;">
+        <input type="hidden" name="action" value="eliminar">
+        <button type="button" class="sign-out-btn" id="deleteBtn">
+          <i class="fas fa-user-times"></i> Eliminar Usuario
+        </button>
+      </form>
+
     </div>
 
     <!-- MAIN CONTENT -->
@@ -1182,5 +1185,14 @@ function previewPhoto(e){
       }
     });
   </script>
+  <script>
+    // Confirmación antes de eliminar el usuario (cliente)
+    document.getElementById('deleteBtn')?.addEventListener('click', function () {
+      if (confirm('⚠️ ¿Seguro que querés eliminar tu cuenta? Esta acción es irreversible.')) {
+        document.getElementById('deleteForm').submit();
+      }
+    });
+  </script>
+
 </body>
 </html>

@@ -632,60 +632,34 @@ footer {
           <p>Completá tu información para confirmar la reserva</p>
         </div>
 
-        <form class="form-grid" action="procesar_reserva.php" method="POST">
-          <input type="hidden" id="fechaSeleccionada" name="fecha" required>
+        <form class="form-grid" id="formReserva">
+  <input type="hidden" id="fechaSeleccionada" name="fecha" required>
 
-          <div class="form-group">
-            <label for="nombre">
-              <i class="fas fa-user"></i>
-              Nombre completo
-            </label>
-            <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Juan Pérez" required>
-          </div>
+  <div class="form-group">
+    <label for="nombre"><i class="fas fa-user"></i> Nombre completo</label>
+    <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Juan Pérez" required>
+  </div>
 
-          <div class="form-group">
-            <label for="email">
-              <i class="fas fa-envelope"></i>
-              Correo electrónico
-            </label>
-            <input type="email" id="email" name="email" class="form-control" placeholder="juan@ejemplo.com" required>
-          </div>
+  <div class="form-group">
+    <label for="email"><i class="fas fa-envelope"></i> Correo electrónico</label>
+    <input type="email" id="email" name="email" class="form-control" placeholder="juan@ejemplo.com" required>
+  </div>
 
-          <div class="terms-checkbox">
-                    <label for="terminos">
-                        <input type="checkbox" id="terminos">
-                        <span>10:00</a></span>
-                    </label>
-                </div>
+  <div class="form-group">
+    <label><i class="fas fa-clock"></i> Seleccioná horario disponible</label>
+    <div style="display:flex; flex-wrap:wrap; gap:10px;">
+      <label><input type="radio" name="hora" value="10:00:00" required> 10:00</label>
+      <label><input type="radio" name="hora" value="12:00:00"> 12:00</label>
+      <label><input type="radio" name="hora" value="15:00:00"> 15:00</label>
+      <label><input type="radio" name="hora" value="18:00:00"> 18:00</label>
+    </div>
+  </div>
 
-                <div class="terms-checkbox">
-                    <label for="terminos">
-                        <input type="checkbox" id="terminos">
-                        <span>12:00</a></span>
-                    </label>
-                </div>
+  <button type="submit" class="submit-btn">
+    <i class="fas fa-check-circle"></i> Confirmar Reserva
+  </button>
+</form>
 
-                <div class="terms-checkbox">
-                    <label for="terminos">
-                        <input type="checkbox" id="terminos">
-                        <span>15:00</a></span>
-                    </label>
-                </div>
-
-                <div class="terms-checkbox">
-                    <label for="terminos">
-                        <input type="checkbox" id="terminos">
-                        <span>18:00</a></span>
-                    </label>
-                </div>
-
-                <button type="submit" class="submit-btn">
-                    <a href="vistas-cliente.php" style="text-decoration: none;">
-                    <i class="fas fa-check-circle"></i>
-                    Confirmar Reserva
-                  </a>
-                  </button>
-        </form>
       </div>
     </div>
   </div>
@@ -880,36 +854,37 @@ footer {
       renderCalendar();
     };
 
-    document.querySelector('form').onsubmit = function(e) {
+    document.getElementById('formReserva').onsubmit = function(e) {
       e.preventDefault();
-      
-      if (!selectedDate || !idservicio) {
-        alert('Por favor, selecciona una fecha y asegúrate de que el servicio sea válido');
+
+      const horaSeleccionada = document.querySelector('input[name="hora"]:checked');
+      if (!selectedDate || !horaSeleccionada || !idservicio) {
+        alert('Seleccioná una fecha, una hora y asegurate de que el servicio sea válido.');
         return;
       }
 
-      const formData = new FormData(this);
-      const hora = document.querySelector('select[name="hora"]').value;
-      
       fetch('../conexion/controllerReserva.php', {
         method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
         body: new URLSearchParams({
-            'action': 'crear_reserva',
-            'idservicio': idservicio,
-            'fecha': fechaSeleccionadaInput.value,
-            'hora': hora
+          'action': 'crear_reserva',
+          'idservicio': idservicio,
+          'fecha': fechaSeleccionadaInput.value,
+          'hora': horaSeleccionada.value
         })
-    })
-    .then(response => response.json())
-    .then(data => {
+      })
+      .then(res => res.json())
+      .then(data => {
         if (data.success) {
-            alert('Reserva creada exitosamente');
-            window.location.href = 'perfil-cliente.php';
+          alert('✅ Reserva creada exitosamente');
+          window.location.href = 'perfil-cliente.php';
         } else {
-            alert('Error al crear la reserva: ' + (data.error || 'Error desconocido'));
+          alert('❌ Error al crear la reserva: ' + (data.error || 'Error desconocido'));
         }
-    });
+      })
+      .catch(err => alert('Error de conexión con el servidor'));
     };
+
 
     // Cargar reservas al iniciar
     document.addEventListener('DOMContentLoaded', function() {
