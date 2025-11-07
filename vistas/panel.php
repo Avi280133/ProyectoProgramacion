@@ -1361,7 +1361,7 @@ function previewEditCliente(event){
 
 
     <!-- este es el modal para modificar un proveedor existente -->
-    <!-- MODAL EDITAR PROVEEDOR -->
+   
 <div class="modal-overlay" id="editProviderModal">
   <div class="modal" style="max-width:800px;">
     <div class="modal-header" style="border-bottom:2px solid #f0f0f0;">
@@ -1681,67 +1681,41 @@ function previewEditProv(event){
     let selectedItemName = '';
 
     function showSection(section, el) {
-        currentSection = section;
-        selectedItem = null;
+    currentSection = section;
+    selectedItem = null;
 
-        // 1) quitar "active" de todas las cards
-        document.querySelectorAll('.stat-card').forEach(card => {
-            card.classList.remove('active');
-        });
+    document.querySelectorAll('.stat-card').forEach(card => card.classList.remove('active'));
+    if (el) el.classList.add('active');
 
-        // 2) marcar la que se clickeó
-        if (el) {
-            el.classList.add('active');
-        }
+    const titles = {
+        users: 'Gestión de Usuarios',
+        providers: 'Gestión de Proveedores',
+        services: 'Gestión de Servicios',
+        categories: 'Gestión de Categorías'
+    };
+    document.getElementById('sectionTitle').textContent = titles[section];
 
-        // 3) cambiar título
-        const titles = {
-            users: 'Gestión de Usuarios',
-            providers: 'Gestión de Proveedores',
-            services: 'Gestión de Servicios',
-            categories: 'Gestión de Categorías'
-        };
-        document.getElementById('sectionTitle').textContent = titles[section];
+    document.getElementById('usersContainer').style.display = 'none';
+    document.getElementById('providersContainer').style.display = 'none';
+    const serv = document.getElementById('servicesContainer');
+    if (serv) serv.style.display = 'none';
+    document.getElementById('categoriesContainer').style.display = 'none';
 
-        // 4) ocultar todos los contenedores
-        document.getElementById('usersContainer').style.display = 'none';
-        document.getElementById('providersContainer').style.display = 'none';
+    const toShow = document.getElementById(section + 'Container');
+    if (toShow) toShow.style.display = 'flex';
 
-        const serv = document.getElementById('servicesContainer');
-        if (serv) serv.style.display = 'none';
+    document.getElementById('editBtn').disabled = true;
+    document.getElementById('deleteBtn').disabled = true;
 
-        document.getElementById('categoriesContainer').style.display = 'none';
-
-        // 5) mostrar el contenedor de la sección actual
-        const toShow = document.getElementById(section + 'Container');
-        if (toShow) {
-            // tus listas usan flex
-            toShow.style.display = 'flex';
-        }
-
-        // 6) deshabilitar botones hasta que elijan una card
-        document.getElementById('editBtn').disabled = true;
-        document.getElementById('deleteBtn').disabled = true;
+    // 🔽 NUEVO: Oculta el botón "Modificar" solo si estás en Categorías
+    const editBtn = document.getElementById('editBtn');
+    if (section === 'categories') {
+        editBtn.style.display = 'none';
+    } else {
+        editBtn.style.display = 'flex';
     }
-        // esta función selecciona una tarjeta cuando hacés click en ella
-        function selectCard(card, section) {
-            // quitamos la selección de todas las tarjetas en esta sección
-            const container = document.getElementById(section + 'Container');
-            container.querySelectorAll('.item-card').forEach(c => {
-                c.classList.remove('selected');
-            });
-            
-            // agregamos la clase selected a la tarjeta clickeada
-            card.classList.add('selected');
-            
-            // guardamos el id y nombre del elemento seleccionado
-            selectedItem = card.dataset.id;
-            selectedItemName = card.querySelector('.card-title').textContent;
-            
-            // ahora sí habilitamos los botones de editar y eliminar
-            document.getElementById('editBtn').disabled = false;
-            document.getElementById('deleteBtn').disabled = false;
-        }
+}
+
 
         // esta función abre el modal correspondiente para crear algo nuevo
         function createItem() {
@@ -1916,6 +1890,25 @@ function previewEditProv(event){
                 }
             });
         });
+        function selectCard(card, section) {
+            // quitar selección anterior
+            document.querySelectorAll('.item-card').forEach(c => c.classList.remove('selected'));
+            
+            // marcar la nueva tarjeta seleccionada
+            card.classList.add('selected');
+            
+            // guardar info del item seleccionado
+            selectedItem = card.dataset.id;
+            selectedItemName = card.querySelector('.card-title') 
+                                ? card.querySelector('.card-title').textContent.trim() 
+                                : 'Elemento';
+            
+            // habilitar botones de acción
+            document.getElementById('editBtn').disabled = false;
+            document.getElementById('deleteBtn').disabled = false;
+        }
+
+
     </script>
 </body>
 </html>
