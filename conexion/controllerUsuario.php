@@ -8,7 +8,7 @@ require_once('ClaseConexion.php'); // Incluir la clase de conexión
 $action = null;
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     $action = $_POST['action'];
-
+}
 
 switch ($action) {
     case 'registrar':
@@ -73,10 +73,29 @@ switch ($action) {
               //  echo "Error al subir la imagen.";
             }
           //  print_r($_POST);
-       include('../vistas/vistas-prov.php');
-       //header('Location:'. $_SERVER['PHP_SELF']);
-        
+
+            $role = Usuario::detectarRol($_SESSION['cedula'] ?? '');
+            $_SESSION['role'] = $role;
+
+          switch ($role) {
+                case 'cliente':
+                    include('../vistas/vistas-cliente.php');
+                    break;
+                case 'proveedor':
+                    include('../vistas/vistas-prov.php');
+                    break;
+            
+                default:
+                     echo "❌ .";
+           
+                    break;
+            }
+        } else {
+            echo "❌ Usuario o contraseña incorrectos.";
         }
+    
+    
+    
         break;
 
     case 'eliminar':
@@ -212,5 +231,5 @@ switch ($action) {
     default:
         echo "No se especificó una acción válida. Use el parámetro 'action' (registrar, modificar, eliminar, buscar, login).";
 }
-}
+
 ?>
