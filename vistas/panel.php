@@ -1206,110 +1206,262 @@ if (!empty($servicios)) {
 </script>
 
 
-    <!-- este es el modal para modificar un usuario existente -->
-    <div class="modal-overlay" id="editUserModal">
-        <div class="modal">
-            <div class="modal-header">
-                <h3>
-                    <i class="fas fa-user-edit"></i>
-                    Editar Usuario
-                </h3>
-                <button class="modal-close" onclick="closeModal('editUserModal')">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label class="form-label">Nombre Completo *</label>
-                    <input type="text" class="form-input" id="editUserName" placeholder="Ej: María González" required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Email *</label>
-                    <input type="email" class="form-input" id="editUserEmail" placeholder="usuario@email.com" required>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-cancel" onclick="closeModal('editUserModal')">
-                    <i class="fas fa-times"></i>
-                    Cancelar
-                </button>
-                <button class="btn btn-save" onclick="saveUser('edit')">
-                    <i class="fas fa-check"></i>
-                    Actualizar
-                </button>
-            </div>
-        </div>
+    <!-- MODAL EDITAR CLIENTE (basado en perfil-cliente.php) -->
+<div class="modal-overlay" id="editUserModal">
+  <div class="modal">
+    <div class="modal-header" style="border-bottom: 2px solid #f0f0f0;">
+      <h3 style="display:flex;align-items:center;gap:0.5rem;">
+        <i class="fas fa-user-edit" style="color:#0eb27c;"></i>
+        Editar Cliente
+      </h3>
+      <button class="modal-close" onclick="closeModal('editUserModal')">
+        <i class="fas fa-times"></i>
+      </button>
     </div>
 
-    <!-- este es el modal para crear un nuevo proveedor -->
-    <div class="modal-overlay" id="createProviderModal">
-        <div class="modal">
-            <div class="modal-header">
-                <h3>
-                    <i class="fas fa-user-tie"></i>
-                    Crear Proveedor
-                </h3>
-                <button class="modal-close" onclick="closeModal('createProviderModal')">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label class="form-label">Nombre Completo *</label>
-                    <input type="text" class="form-input" id="createProviderName" placeholder="Ej: Juan Pérez" required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Email *</label>
-                    <input type="email" class="form-input" id="createProviderEmail" placeholder="Ej: juan.perez@email.com" required>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-cancel" onclick="closeModal('createProviderModal')">
-                    <i class="fas fa-times"></i>
-                    Cancelar
-                </button>
-                <button class="btn btn-save" onclick="saveProvider('create')">
-                    <i class="fas fa-check"></i>
-                    Guardar
-                </button>
-            </div>
-        </div>
+    <form action="../conexion/controllerUsuario.php" method="POST" enctype="multipart/form-data" class="modal-body">
+      <!-- UPLOAD PHOTO -->
+      <div style="display:flex;flex-direction:column;align-items:center;margin-bottom:2rem;padding-bottom:1rem;border-bottom:2px solid #f0f0f0;">
+        <label for="editClienteFoto" style="position:relative;width:140px;height:140px;border-radius:50%;overflow:hidden;cursor:pointer;border:4px solid #0eb27c;">
+          <img src="../img/4ae62d57-16c3-4974-b494-e9c26f8036fe.jpg" alt="Foto actual" id="previewEditCliente" style="width:100%;height:100%;object-fit:cover;">
+          <div style="position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(14,178,124,0.8);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.3s ease;" id="overlayEditCliente">
+            <i class="fas fa-camera" style="font-size:1.8rem;color:white;"></i>
+          </div>
+        </label>
+        <input type="file" name="foto" id="editClienteFoto" accept="image/*" style="display:none;" onchange="previewEditCliente(event)">
+        <label for="editClienteFoto" class="btn btn-save" style="margin-top:1rem;padding:0.6rem 1.2rem;border-radius:10px;font-size:0.9rem;">
+          <i class="fas fa-upload"></i> Cambiar Foto
+        </label>
+        <input type="hidden" name="fotoperfil" value="4ae62d57-16c3-4974-b494-e9c26f8036fe.jpg">
+      </div>
+
+      <!-- CAMPOS DEL FORMULARIO -->
+      <div class="form-group">
+        <label class="form-label">Nombre Completo</label>
+        <input type="text" class="form-input" name="nombreCompleto" placeholder="Ej: María González" disabled>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Usuario</label>
+        <input type="text" class="form-input" name="username" placeholder="@usuario123">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Localidad</label>
+        <select class="form-select" name="localidad">
+          <option value="">Seleccionar...</option>
+          <option value="Montevideo">Montevideo</option>
+          <option value="Salto">Salto</option>
+          <option value="Paysandú">Paysandú</option>
+          <option value="Maldonado">Maldonado</option>
+          <option value="Canelones">Canelones</option>
+          <option value="Colonia">Colonia</option>
+          <option value="Rivera">Rivera</option>
+          <option value="Rocha">Rocha</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Edad</label>
+        <input type="number" class="form-input" name="edad" min="18" max="120" placeholder="Ej: 25">
+      </div>
+
+      <div class="modal-footer" style="border-top:2px solid #f0f0f0;">
+        <button type="button" class="btn btn-cancel" onclick="closeModal('editUserModal')">
+          <i class="fas fa-times"></i> Cancelar
+        </button>
+        <button type="submit" name="action" value="modificar" class="btn btn-save">
+          <i class="fas fa-check"></i> Guardar Cambios
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+function previewEditCliente(event){
+  const file = event.target.files[0];
+  if(file){
+    const reader = new FileReader();
+    reader.onload = function(e){
+      document.getElementById('previewEditCliente').src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+}
+ </script>
+
+    <!-- MODAL CREAR PROVEEDOR -->
+<div class="modal-overlay" id="createProviderModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>
+        <i class="fas fa-user-tie"></i>
+        Crear Proveedor
+      </h3>
+      <button class="modal-close" onclick="closeModal('createProviderModal')">
+        <i class="fas fa-times"></i>
+      </button>
     </div>
+
+    <form id="formCrearProveedor"
+          class="modal-body"
+          action="../conexion/controllerUsuario.php"
+          method="POST" enctype="multipart/form-data" novalidate>
+      <input type="hidden" name="action" value="registrarProveedor">
+
+      <div class="cu-grid">
+        <div class="form-group">
+          <label class="form-label">Cédula *</label>
+          <input type="text" class="form-input" name="cedula" placeholder="Ej: 4.123.456-7" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Edad *</label>
+          <input type="number" class="form-input" name="edad" min="18" max="120" placeholder="Ej: 28" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Nombre *</label>
+          <input type="text" class="form-input" name="nombre" placeholder="Ej: Juan" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Apellido *</label>
+          <input type="text" class="form-input" name="apellido" placeholder="Ej: Pérez" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Usuario *</label>
+          <input type="text" class="form-input" name="username" placeholder="Ej: jperez" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Email *</label>
+          <input type="email" class="form-input" name="email" placeholder="proveedor@email.com" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Contraseña *</label>
+          <input type="password" class="form-input" name="contrasena" placeholder="Mínimo 8 caracteres" minlength="8" required>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-cancel" onclick="closeModal('createProviderModal')">
+          <i class="fas fa-times"></i> Cancelar
+        </button>
+        <button type="submit" class="btn btn-save">
+          <i class="fas fa-check"></i> Guardar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
 
     <!-- este es el modal para modificar un proveedor existente -->
-    <div class="modal-overlay" id="editProviderModal">
-        <div class="modal">
-            <div class="modal-header">
-                <h3>
-                    <i class="fas fa-user-tie"></i>
-                    Editar Proveedor
-                </h3>
-                <button class="modal-close" onclick="closeModal('editProviderModal')">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label class="form-label">Nombre Completo *</label>
-                    <input type="text" class="form-input" id="editProviderName" placeholder="Ej: Juan Pérez" required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Email *</label>
-                    <input type="email" class="form-input" id="editProviderEmail" placeholder="Ej: juan.perez@email.com" required>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-cancel" onclick="closeModal('editProviderModal')">
-                    <i class="fas fa-times"></i>
-                    Cancelar
-                </button>
-                <button class="btn btn-save" onclick="saveProvider('edit')">
-                    <i class="fas fa-check"></i>
-                    Actualizar
-                </button>
-            </div>
-        </div>
+    <!-- MODAL EDITAR PROVEEDOR -->
+<div class="modal-overlay" id="editProviderModal">
+  <div class="modal" style="max-width:800px;">
+    <div class="modal-header" style="border-bottom:2px solid #f0f0f0;">
+      <h3 style="display:flex;align-items:center;gap:0.5rem;">
+        <i class="fas fa-user-tie" style="color:#0eb27c;"></i>
+        Editar Proveedor
+      </h3>
+      <button class="modal-close" onclick="closeModal('editProviderModal')">
+        <i class="fas fa-times"></i>
+      </button>
     </div>
+
+    <form action="../conexion/controllerUsuario.php" method="POST" enctype="multipart/form-data" class="modal-body">
+      <input type="hidden" name="action" value="modificarProveedor">
+
+      <div style="display:grid;grid-template-columns:1fr 250px;gap:2rem;align-items:start;">
+        <!-- Formulario izquierdo -->
+        <div class="form-section-edit" style="display:flex;flex-direction:column;gap:1.2rem;">
+          <div class="form-group">
+            <label class="form-label">Localidad</label>
+            <select class="form-select" name="localidad">
+              <option value="">Seleccionar...</option>
+              <option>Montevideo</option>
+              <option>Salto</option>
+              <option>Paysandú</option>
+              <option>Las Piedras</option>
+              <option>Rivera</option>
+              <option>Maldonado</option>
+              <option>Tacuarembó</option>
+              <option>Melo</option>
+              <option>Mercedes</option>
+              <option>Artigas</option>
+              <option>Minas</option>
+              <option>San José de Mayo</option>
+              <option>Durazno</option>
+              <option>Florida</option>
+              <option>Treinta y Tres</option>
+              <option>Rocha</option>
+              <option>Colonia del Sacramento</option>
+              <option>Fray Bentos</option>
+              <option>Canelones</option>
+              <option>Young</option>
+              <option>Carmelo</option>
+              <option>Trinidad</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Habilidades</label>
+            <textarea class="form-textarea" name="habilidad" placeholder="Describe tus principales habilidades y competencias..."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Experiencia</label>
+            <textarea class="form-textarea" name="experiencia" placeholder="Cuéntanos sobre tu experiencia profesional..."></textarea>
+          </div>
+        </div>
+
+        <!-- Sección de foto y datos -->
+        <div style="display:flex;flex-direction:column;align-items:center;gap:1rem;">
+          <label for="editProvFoto" style="position:relative;width:160px;height:160px;border-radius:50%;overflow:hidden;cursor:pointer;border:4px solid #0eb27c;">
+            <img src="../img/4ae62d57-16c3-4974-b494-e9c26f8036fe.jpg" alt="Foto actual" id="previewEditProv" style="width:100%;height:100%;object-fit:cover;">
+            <div style="position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(14,178,124,0.8);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.3s ease;">
+              <i class="fas fa-camera" style="font-size:1.8rem;color:white;"></i>
+            </div>
+          </label>
+          <input type="file" name="foto" id="editProvFoto" accept="image/*" style="display:none;" onchange="previewEditProv(event)">
+          <input type="hidden" name="fotoperfil" value="4ae62d57-16c3-4974-b494-e9c26f8036fe.jpg">
+
+          <input type="text" class="form-input" name="nombreCompleto" placeholder="Nombre Apellido" disabled>
+          <input type="text" class="form-input" name="username" placeholder="Nombre de usuario">
+          <input type="number" class="form-input" name="edad" min="18" max="120" placeholder="Edad">
+        </div>
+      </div>
+
+      <div class="modal-footer" style="border-top:2px solid #f0f0f0;">
+        <button type="button" class="btn btn-cancel" onclick="closeModal('editProviderModal')">
+          <i class="fas fa-times"></i> Cancelar
+        </button>
+        <button type="submit" class="btn btn-save">
+          <i class="fas fa-check"></i> Guardar Cambios
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+function previewEditProv(event){
+  const file = event.target.files[0];
+  if(file){
+    const reader = new FileReader();
+    reader.onload = function(e){
+      document.getElementById('previewEditProv').src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+}
+</script>
+
 
     <!-- este es el modal para crear un nuevo servicio -->
     <div class="modal-overlay" id="createServiceModal">
@@ -1330,7 +1482,7 @@ if (!empty($servicios)) {
                 </div>
                 <div class="form-group">
                     <label class="form-label">Proveedor *</label>
-                    <input type="text" class="form-input" id="createServiceProvider" placeholder="Nombre del proveedor" required>
+                    <input type="text" class="form-input" id="createServiceProvider" placeholder="Cedula del proveedor" required>
                 </div>
                 <div class="form-group">
                     <label class="form-label">Categoría *</label>

@@ -1,203 +1,68 @@
-create database if not exists SkillMatch;
-use SkillMatch;
-
-create table usuario (
-    cedula char(8) primary key,
-    nombre varchar(50) not null,
-    apellido varchar(50) not null,
-    username varchar(50) unique not null,
-    calle varchar(100),
-    numeropuerta int check (numeropuerta > 0),
-    email varchar(100) unique not null,
-    contrasena varchar(100) not null,
-    fotoperfil blob,
-    edad int check (edad >= 18)
+create table reserva (
+idreserva int auto_increment primary key,
+idservicio int not null,
+idcliente char(8) not null,
+fecha date not null,
+hora time not null,
+estado enum('pendiente', 'confirmada', 'cancelada') not null,
+foreign key (idservicio) references servicio(idservicio) on delete cascade,
+foreign key (idcliente) references cliente(idcliente) on delete cascade
 );
 
-create table administrador (
-    idadministrador char(8) primary key,
-    foreign key (idadministrador) references usuario(cedula)
-        on delete cascade on update cascade
-);
 
-create table cliente (
-    idcliente char(8) primary key,
-    foreign key (idcliente) references usuario(cedula)
-        on delete cascade on update cascade
-);
-
-create table proveedor (
-    idproveedor char(8) primary key,
-    experiencia varchar(500) not null,
-    habilidad varchar(200) not null,
-    foreign key (idproveedor) references usuario(cedula)
-        on delete cascade on update cascade
-);
-
-create table servicio (
-    idservicio int primary key auto_increment,
-    titulo varchar(100) not null,
-    ubicacion varchar(100),
-    precio float check (precio >= 0),
-    descripcion varchar(300) not null
-);
-
-CREATE TABLE Reserva (
-  idreserva INT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE IF NOT EXISTS reporte (
+  idreporte INT AUTO_INCREMENT PRIMARY KEY,
   idservicio INT NOT NULL,
-  idcliente char(8) NOT NULL,
-  fecha DATE NOT NULL,
-  hora TIME NOT NULL,
-  estado ENUM('pendiente', 'confirmada', 'cancelada') NOT NULL,
+  idreportador CHAR(8) NOT NULL,
+  motivo VARCHAR(150) NOT NULL,
+  detalle VARCHAR(500) DEFAULT NULL,
+  dia DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (idservicio) REFERENCES servicio(idservicio) ON DELETE CASCADE,
-foreign key (idcliente) references cliente(idcliente) ON DELETE CASCADE
+  FOREIGN KEY (idreportador) REFERENCES usuario(cedula) ON DELETE CASCADE
 );
 
-
-create table ofrece (
-    idservicio int not null,
-    idproveedor char(8) not null,
-    dia date not null,
-    hora time not null,
-    primary key (idproveedor, idservicio, dia, hora),
-    foreign key (idproveedor) references proveedor(idproveedor)
-        on delete cascade on update cascade,
-    foreign key (idservicio) references servicio(idservicio)
-        on delete cascade on update cascade
-);
-
-create table mensaje (
-    idemisor char(8) not null,
-    idreceptor char(8) not null,
-    contenido varchar(200) not null,
-    dia date not null,
-    hora time not null,
-    primary key (idemisor, idreceptor, dia, hora),
-    foreign key (idemisor) references usuario(cedula)
-        on delete cascade on update cascade,
-    foreign key (idreceptor) references usuario(cedula)
-        on delete cascade on update cascade,
-);
+INSERT INTO servicio (titulo, ubicacion, precio, descripcion, imagen, categoria)
+VALUES
+('Diseño de páginas web', 'Montevideo', 25000, 'Creación de sitios web modernos y responsivos para negocios o emprendimientos.', 'imagenes/webdesign.jpg', 'Tecnología');
 
 
-create table contrata (
-    idcliente char(8) not null,
-    idservicio int not null,
-    dia date not null,
-    hora time not null,
-    puntaje int check (puntaje between 1 and 5),
-    comentario varchar(300),
-    primary key (idcliente, idservicio, dia, hora),
-    foreign key (idcliente) references cliente(idcliente)
-        on delete cascade on update cascade,
-    foreign key (idservicio) references servicio(idservicio)
-        on delete cascade on update cascade
-);
 
-create table comenta (
-    idproveedor char(8) not null,
-    idservicio int not null,
-    idcliente char(8) not null,
-    contenido varchar(200) not null,
-    dia date not null,
-    hora time not null,
-    primary key (idproveedor, idservicio, idcliente),
-    foreign key (idproveedor) references proveedor(idproveedor)
-        on delete cascade on update cascade,
-    foreign key (idservicio) references servicio(idservicio)
-        on delete cascade on update cascade,
-    foreign key (idcliente) references cliente(idcliente)
-        on delete cascade on update cascade
-);
+ALTER TABLE reporte DROP COLUMN motivo;
+ALTER TABLE reporte DROP COLUMN detalle;
 
-create table gestiona (
-    idadministrador char(8) not null,
-    idproveedor char(8) not null,
-    idservicio int not null,
-    primary key (idadministrador, idproveedor, idservicio),
-    foreign key (idadministrador) references administrador(idadministrador)
-        on delete cascade on update cascade,
-    foreign key (idproveedor) references proveedor(idproveedor)
-        on delete cascade on update cascade,
-    foreign key (idservicio) references servicio(idservicio)
-        on delete cascade on update cascade
-);
+ALTER TABLE ofrece
+CHANGE COLUMN dia tiempo DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+DROP COLUMN hora,
+DROP PRIMARY KEY,
+ADD PRIMARY KEY (idproveedor, idservicio, tiempo);
 
-create table supervisa (
-    idadministrador char(8) not null,
-    cedula char(8) not null,
-    primary key (idadministrador, cedula),
-    foreign key (idadministrador) references administrador(idadministrador)
-        on delete cascade on update cascade,
-    foreign key (cedula) references usuario(cedula)
-        on delete cascade on update cascade
-);
-
-create table imagen (
-    idimagen int primary key auto_increment,
-    idservicio int not null,
-    imagen blob not null,
-    foreign key (idservicio) references servicio(idservicio)
-        on delete cascade on update cascade
-);
-
-/* =========================
-   OFRECE
-   ========================= */
-
-ALTER TABLE ofrece DROP PRIMARY KEY;
-
-ALTER TABLE ofrece DROP COLUMN hora;
-
-ALTER TABLE ofrece 
-  CHANGE COLUMN dia tiempo DATETIME NOT NULL DEFAULT NOW();
-
-ALTER TABLE ofrece 
-  ADD PRIMARY KEY (idproveedor, idservicio, tiempo);
-
-/* =========================
-   CONTRATA
-   ========================= */
-ALTER TABLE contrata DROP PRIMARY KEY;
-ALTER TABLE contrata DROP COLUMN hora;
-ALTER TABLE contrata 
-  CHANGE COLUMN dia tiempo DATETIME NOT NULL DEFAULT NOW();
-ALTER TABLE contrata 
-  ADD PRIMARY KEY (idcliente, idservicio, tiempo);
-
-/* =========================
-   MENSAJE
-   ========================= */
-ALTER TABLE mensaje DROP PRIMARY KEY;
-ALTER TABLE mensaje DROP COLUMN hora;
-ALTER TABLE mensaje
-  CHANGE COLUMN dia tiempo DATETIME NOT NULL DEFAULT NOW();
-ALTER TABLE mensaje
-  ADD PRIMARY KEY (idemisor, idreceptor, tiempo);
-
-/* =========================
-   PROVEEDOR
-   ========================= */
 ALTER TABLE proveedor
-  MODIFY experiencia VARCHAR(500) NULL,
-  MODIFY habilidad   VARCHAR(200);
+MODIFY experiencia varchar(500) NULL, MODIFY habilidad varchar(200) NULL;
 
-/* =========================
-   USUARIO
-   (separado en pasos seguros)
-   ========================= */
-ALTER TABLE usuario MODIFY COLUMN fotoperfil VARCHAR(255);
-ALTER TABLE usuario DROP COLUMN calle;
-ALTER TABLE usuario DROP COLUMN numeropuerta;
-ALTER TABLE usuario ADD COLUMN localidad VARCHAR(100);
+ALTER TABLE usuario
+MODIFY COLUMN fotoperfil VARCHAR(255);
 
-/* =========================
-   SERVICIO
-   ========================= */
-ALTER TABLE servicio ADD COLUMN imagen VARCHAR(255);
+ALTER TABLE usuario
+DROP COLUMN calle,
+DROP COLUMN numeropuerta,
+ADD COLUMN localidad VARCHAR(100);
 
 
-select * from usuario;
+select * from servicio;
+
+CREATE TABLE IF NOT EXISTS notificacion (
+  idnotificacion INT AUTO_INCREMENT PRIMARY KEY,
+  idusuario CHAR(8) NOT NULL,                       -- receptor (proveedor, cliente o admin)
+  tipo ENUM('reporte','solicitud','calificacion') NOT NULL,
+  referencia INT DEFAULT NULL,                       -- id relacionado (idservicio, idreserva, idcalificacion...)
+  mensaje VARCHAR(255) NOT NULL,
+  leida TINYINT(1) NOT NULL DEFAULT 0,
+  fecha DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (idusuario) REFERENCES usuario(cedula) ON DELETE CASCADE,
+  INDEX (idusuario),
+  INDEX (leida),
+  INDEX (tipo)
+);
 
 CREATE TABLE IF NOT EXISTS calificacion (
   idcalificacion INT AUTO_INCREMENT PRIMARY KEY,
@@ -228,6 +93,9 @@ CREATE TABLE notificacion (
   INDEX (tipo),
   INDEX (fecha)
 );
+
+
+DELIMITER $$
 
 DELIMITER //
 
@@ -262,8 +130,6 @@ END //
 DELIMITER ;
 
 
-
-
 DELIMITER //
 
 DROP TRIGGER IF EXISTS trg_reporte_after_insert //
@@ -293,6 +159,8 @@ BEGIN
 END //
 
 DELIMITER ;
+
+
 
 
 DELIMITER //
@@ -328,3 +196,73 @@ BEGIN
 END //
 
 DELIMITER ;
+
+
+
+
+INSERT INTO servicio (titulo, ubicacion, precio, descripcion, imagen, categoria)
+VALUES ('Servicio de Prueba para Notificaciones', 'Montevideo', 1234.00,
+        'Servicio creado para probar triggers de notificaciones.',
+        'serv_demo.jpg', 'Tecnología');
+
+SET @svc_id = LAST_INSERT_ID();
+
+-- Vincular servicio con el proveedor en OFRECE
+-- (usa columna 'tiempo' DATETIME según tu esquema final)
+INSERT INTO ofrece (idservicio, idproveedor, tiempo)
+VALUES (@svc_id, '12345679', NOW());
+
+INSERT INTO usuario (cedula, nombre, apellido, username, email, contrasena, fotoperfil, edad, localidad)
+VALUES ('11111111', 'Cliente', 'Demo', 'cli_demo', 'cli@example.com', 'x', 'cli.jpg', 28, 'Montevideo')
+ON DUPLICATE KEY UPDATE
+  username = VALUES(username),
+  email    = VALUES(email),
+  edad     = VALUES(edad),
+  localidad= VALUES(localidad);
+
+INSERT INTO cliente (idcliente)
+VALUES ('11111111')
+ON DUPLICATE KEY UPDATE idcliente = VALUES(idcliente);
+
+
+
+INSERT INTO servicio (titulo, ubicacion, precio, descripcion, imagen, categoria)
+VALUES ('Servicio de Prueba para Notificaciones', 'Montevideo', 1234.00,
+        'Servicio creado para probar triggers de notificaciones.',
+        'serv_demo.jpg', 'Tecnología');
+
+SET @svc_id = LAST_INSERT_ID();
+
+-- Vincular servicio con el proveedor en OFRECE
+-- (usa columna 'tiempo' DATETIME según tu esquema final)
+INSERT INTO ofrece (idservicio, idproveedor, tiempo)
+VALUES (@svc_id, '12345679', NOW());
+
+
+
+-- 3.1) SOLICITUD (reserva) -> debe crear notificación tipo 'solicitud' al proveedor 12345679
+INSERT INTO reserva (idservicio, idcliente, fecha, hora, estado)
+VALUES (@svc_id, '11111111', CURDATE() + INTERVAL 2 DAY, '15:00:00', 'pendiente');
+
+-- 3.2) REPORTE -> debe crear notificación tipo 'reporte' al proveedor 12345679
+-- (tu versión final de 'reporte' no tiene motivo/detalle)
+INSERT INTO reporte (idservicio, idreportador)
+VALUES (@svc_id, '11111111');
+
+-- 3.3) CALIFICACION -> debe crear notificación tipo 'calificacion' al proveedor 12345679
+INSERT INTO calificacion (idservicio, idcliente, puntaje, comentario)
+VALUES (@svc_id, '11111111', 5, 'Excelente servicio, súper recomendable.');
+
+
+SELECT idnotificacion, tipo, referencia, actor, mensaje, url, leida, fecha
+FROM notificacion
+WHERE idusuario_receptor = '12345679'
+ORDER BY fecha DESC;
+
+-- Para confirmar los IDs de los eventos fuente:
+SELECT * FROM reserva     WHERE idservicio = @svc_id ORDER BY idreserva DESC LIMIT 3;
+SELECT * FROM reporte     WHERE idservicio = @svc_id ORDER BY idreporte DESC LIMIT 3;
+SELECT * FROM calificacion WHERE idservicio = @svc_id ORDER BY idcalificacion DESC LIMIT 3;
+
+select * from usuario;
+

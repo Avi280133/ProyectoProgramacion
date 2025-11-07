@@ -10,7 +10,6 @@ if (session_status() === PHP_SESSION_NONE) {
 
 /**
  * Detectar acción preferentemente desde POST, si no, desde GET.
- * (tu código tenía un if sin cerrar antes del switch; acá queda prolijo)
  */
 $action = $_POST['action'] ?? $_GET['action'] ?? null;
 
@@ -22,7 +21,10 @@ switch ($action) {
             $required = ['cedula','nombre','apellido','username','email','contrasena','edad','tipo'];
             $ok = true;
             foreach ($required as $f) {
-                if (!isset($_POST[$f]) || trim($_POST[$f]) === '') { $ok = false; break; }
+                if (!isset($_POST[$f]) || trim($_POST[$f]) === '') { 
+                    $ok = false; 
+                    break; 
+                }
             }
             if ($ok) {
                 $cedula     = trim($_POST['cedula']);
@@ -45,7 +47,10 @@ switch ($action) {
 
     case 'modificar':
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            if (!isset($_SESSION['cedula'])) { echo "No hay sesión activa (cedula)."; break; }
+            if (!isset($_SESSION['cedula'])) { 
+                echo "No hay sesión activa (cedula)."; 
+                break; 
+            }
 
             $cedula      = $_SESSION['cedula'];
             $username    = isset($_POST['username']) ? trim($_POST['username']) : null;
@@ -58,7 +63,6 @@ switch ($action) {
             if (isset($_FILES['foto']) && is_array($_FILES['foto']) && ($_FILES['foto']['error'] ?? UPLOAD_ERR_NO_FILE) === UPLOAD_ERR_OK) {
                 $fotoNombre = basename($_FILES['foto']['name']);
             } else {
-                // Si mandaste un hidden con fotoperfil actual, respetarlo
                 $fotoNombre = isset($_POST['fotoperfil']) ? trim($_POST['fotoperfil']) : '';
             }
 
@@ -75,56 +79,56 @@ switch ($action) {
                 @move_uploaded_file($_FILES['foto']['tmp_name'], '../img/' . $fotoNombre);
             }
 
-            header('Location: ../vistas/vistas-prov.php');
-            exit;
-        }
-    break;
+            // Redirigir según el rol
+            $role = Usuario::detectarRol($_SESSION['cedula'] ?? '');
+            $_SESSION['role'] = $role;
 
-    /**
-     * Eliminar usuario (acepta tanto action=eliminar como action=eliminar_usuario)
-     * - Borra el usuario con el método existente Usuario::eliminar($cedula)
-     * - Cierra sesión con tu logout.php
-     */
-    //case 'eliminar_usuario':
+            switch ($role) {
+                case 'cliente':
+                    include('../vistas/vistas-cliente.php');
+                    break;
+                case 'proveedor':
+                    include('../vistas/vistas-prov.php');
+                    break;
+                default:
+                    echo "❌ Rol no reconocido.";
+                    break;
+            }
+        }
+    break;  // ← faltaba este cierre del case 'modificar'
+
     case 'eliminar':
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        if (session_status() === PHP_SESSION_NONE) session_start();
-        $cedula = $_SESSION['cedula'] ?? null;
-        if (!$cedula) { header('Location: ../vistas/login.php'); exit; }
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if (session_status() === PHP_SESSION_NONE) session_start();
+            $cedula = $_SESSION['cedula'] ?? null;
+            if (!$cedula) { header('Location: ../vistas/login.php'); exit; }
 
-        $ok = Usuario::eliminar($cedula) > 0;
+            $ok = Usuario::eliminar($cedula) > 0;
 
-        if ($ok) {
-            // SIN destruir la sesión (tu pedido)
-            header('Location: ../index.php');
-            exit;
-        } else {
-            // mostrale algo útil para depurar
-            header('Location: ../vistas/login.php?err=no_delete_fk');
-            exit;
+            if ($ok) {
+                header('Location: ../index.php');
+                exit;
+            } else {
+                header('Location: ../vistas/login.php?err=no_delete_fk');
+                exit;
+            }
         }
-    }
     break;
-
-
 
     case 'buscar':
-        // Buscar Usuario por Cédula (GET o POST)
-        $cedula = null;
-        if (isset($_GET['cedula']) && trim($_GET['cedula']) !== '') $cedula = trim($_GET['cedula']);
-        if (isset($_POST['cedula']) && trim($_POST['cedula']) !== '') $cedula = trim($_POST['cedula']);
+        $cedula = $_POST['cedula'] ?? $_GET['cedula'] ?? null;
         if ($cedula) {
             $usuario = Usuario::buscarPorCedula($cedula);
             if ($usuario) {
-                echo "Usuario encontrado: <br>";
-                echo "Cédula: " . $usuario['cedula'] . "<br>";
-                echo "Nombre: " . $usuario['nombre'] . "<br>";
-                echo "Apellido: " . $usuario['apellido'] . "<br>";
-                echo "Username: " . $usuario['username'] . "<br>";
-                echo "Calle: " . $usuario['calle'] . "<br>";
-                echo "Número Puerta: " . $usuario['numeropuerta'] . "<br>";
-                echo "Email: " . $usuario['email'] . "<br>";
-                echo "Edad: " . $usuario['edad'] . "<br>";
+                echo "Usuario encontrado:<br>";
+                echo "Cédula: {$usuario['cedula']}<br>";
+                echo "Nombre: {$usuario['nombre']}<br>";
+                echo "Apellido: {$usuario['apellido']}<br>";
+                echo "Username: {$usuario['username']}<br>";
+                echo "Calle: {$usuario['calle']}<br>";
+                echo "Número Puerta: {$usuario['numeropuerta']}<br>";
+                echo "Email: {$usuario['email']}<br>";
+                echo "Edad: {$usuario['edad']}<br>";
             } else {
                 echo "Usuario no encontrado.";
             }
@@ -158,9 +162,7 @@ switch ($action) {
     break;
 
     case 'mensaje':
-        // Tu método directo
         $usuario = Usuario::mensaje();
-        // Podés imprimir/loggear si querés depurar
     break;
 
     case 'cancelReservation':
@@ -189,8 +191,5 @@ switch ($action) {
         echo json_encode(['success' => false]);
         exit;
     break;
-
-    default:
-        echo "No se especificó una acción válida. Use 'action' (registrar, modificar, eliminar, buscar, login, mensaje, cancelReservation).";
-    break;
 }
+?>
