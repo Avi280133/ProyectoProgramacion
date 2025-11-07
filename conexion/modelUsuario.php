@@ -1,6 +1,6 @@
 <?php
 require_once('ClaseConexion.php');
-//session_start();
+if (session_status() === PHP_SESSION_NONE) { session_start(); }
 //Comentario agregado
 class Usuario {
     private $cedula,$nombre,$apellido,$username,$email,$contrasena,$fotoperfil,$edad,$localidad,$tipo;
@@ -53,7 +53,7 @@ class Usuario {
     $st2->bind_param("s", $this->cedula);
     $st2->execute();
 
-    // Redirigir, no incluir
+    // Redirigir a la vista del cliente
     header('Location: ../vistas/vistas-cliente.php');
     exit;
 } elseif ($this->tipo === 'proveedor') {

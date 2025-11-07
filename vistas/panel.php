@@ -813,6 +813,58 @@ $categorias = Usuario::cargarPanelCategorias();
                 max-width: none;
             }
         }
+
+        /* ====== Crear Usuario – Ajustes visuales ====== */
+#createUserModal .modal {
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+#createUserModal .modal-header {
+  background: linear-gradient(135deg, #0eb27c 0%, #047857 100%);
+  color: #fff;
+}
+
+#createUserModal .modal-header h3 i {
+  color: #fff;
+}
+
+#createUserModal .modal-body {
+  background: #ffffff;
+}
+
+#createUserModal .form-input,
+#createUserModal .form-select {
+  border: 2px solid #e0e0e0;
+  background: #fff;
+}
+
+#createUserModal .form-input:focus,
+#createUserModal .form-select:focus {
+  border-color: #0eb27c;
+  box-shadow: 0 0 0 3px rgba(14,178,124,0.12);
+}
+
+/* Marcado de error suave */
+#createUserModal .cu-error {
+  border-color: #e74c3c !important;
+  box-shadow: 0 0 0 3px rgba(231,76,60,0.12) !important;
+}
+
+/* Grid 2 columnas en desktop */
+#createUserModal .cu-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(220px, 1fr));
+  gap: 1rem 1.25rem;
+}
+
+/* Responsive */
+@media (max-width: 720px) {
+  #createUserModal .cu-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
     </style>
 </head>
 <body>
@@ -1027,46 +1079,132 @@ if (!empty($servicios)) {
         </div>  
     
 
-    <!-- este es el modal para crear un nuevo usuario -->
-    <div class="modal-overlay" id="createUserModal">
-        <div class="modal">
-            <div class="modal-header">
-                <h3>
-                    <i class="fas fa-user-plus"></i>
-                    Crear Usuario
-                </h3>
-                <button class="modal-close" onclick="closeModal('createUserModal')">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label class="form-label">Nombre Completo *</label>
-                    <input type="text" class="form-input" id="createUserName" placeholder="Ej: María González" required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Email *</label>
-                    <input type="email" class="form-input" id="createUserEmail" placeholder="usuario@email.com" required>
-                </div>
-                <div class="form-group">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Contraseña *</label>
-                    <input type="password" class="form-input" id="createUserPassword" placeholder="Mínimo 8 caracteres" required>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-cancel" onclick="closeModal('createUserModal')">
-                    <i class="fas fa-times"></i>
-                    Cancelar
-                </button>
-                <button class="btn btn-save" onclick="saveUser('create')">
-                    <i class="fas fa-check"></i>
-                    Guardar
-                </button>
-            </div>
-        </div>
+    <!-- crear usuario-->
+<div class="modal-overlay" id="createUserModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>
+        <i class="fas fa-user-plus"></i>
+        Crear Usuario
+      </h3>
+      <button class="modal-close" onclick="closeModal('createUserModal')">
+        <i class="fas fa-times"></i>
+      </button>
     </div>
+
+    <form id="formCrearUsuario"
+          class="modal-body"
+          action="../conexion/controllerUsuario.php"
+          method="POST" novalidate>
+      <input type="hidden" name="action" value="registrar">
+
+      <!-- Grid 2 columnas en desktop -->
+      <div class="cu-grid">
+        <div class="form-group">
+          <label class="form-label" for="cedula">Cédula *</label>
+          <input type="text" class="form-input" id="cedula" name="cedula"
+                 placeholder="Ej: 4.123.456-7" required>
+          <div class="form-hint">Sin puntos ni guiones también funciona.</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="edad">Edad *</label>
+          <input type="number" class="form-input" id="edad" name="edad"
+                 min="18" max="120" placeholder="Ej: 28" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="nombre">Nombre *</label>
+          <input type="text" class="form-input" id="nombre" name="nombre"
+                 placeholder="Ej: María" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="apellido">Apellido *</label>
+          <input type="text" class="form-input" id="apellido" name="apellido"
+                 placeholder="Ej: González" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="username">Usuario *</label>
+          <input type="text" class="form-input" id="username" name="username"
+                 placeholder="Ej: mgonzalez" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="email">Email *</label>
+          <input type="email" class="form-input" id="email" name="email"
+                 placeholder="usuario@email.com" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="contrasena">Contraseña *</label>
+          <input type="password" class="form-input" id="contrasena" name="contrasena"
+                 placeholder="Mínimo 8 caracteres" minlength="8" required>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-cancel" onclick="closeModal('createUserModal')">
+          <i class="fas fa-times"></i> Cancelar
+        </button>
+        <button type="submit" class="btn btn-save">
+          <i class="fas fa-check"></i> Guardar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- JS: validación simple y feedback -->
+<script>
+  (function(){
+    const f = document.getElementById('formCrearUsuario');
+    if (!f) return;
+
+    function showToastOk() {
+      // Re-usa tu toast ya definido
+      if (typeof showNotification === 'function') {
+        showNotification('success', 'Usuario creado', 'El usuario fue creado correctamente');
+      }
+    }
+
+    f.addEventListener('submit', function(e){
+      // validación mínima en cliente
+      const required = ['cedula','nombre','apellido','username','email','contrasena','edad','tipo'];
+      let ok = true;
+      required.forEach(id => {
+        const el = f.querySelector(`[name="${id}"]`);
+        if (!el) return;
+        const v = (el.value || '').trim();
+        if (!v) {
+          ok = false;
+          el.classList.add('cu-error');
+        } else {
+          el.classList.remove('cu-error');
+        }
+      });
+
+      const pass = f.querySelector('#contrasena');
+      if (pass && pass.value.length < 8) { ok = false; pass.classList.add('cu-error'); }
+
+      if (!ok) {
+        e.preventDefault();
+        if (typeof showNotification === 'function') {
+          showNotification('error', 'Campos faltantes', 'Completá los campos obligatorios.');
+        } else {
+          alert('Completá los campos obligatorios.');
+        }
+        return;
+      }
+
+      // Si querés feedback antes de enviar (opcional)
+      // showToastOk();
+      // Se envía al controller con action=registrar
+    });
+  })();
+</script>
+
 
     <!-- este es el modal para modificar un usuario existente -->
     <div class="modal-overlay" id="editUserModal">

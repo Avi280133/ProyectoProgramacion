@@ -1,75 +1,76 @@
 <?php
-// Guardar reportes enviados desde publicacion.php
+declare(strict_types=1);
 header('Content-Type: application/json; charset=utf-8');
-session_start();
-require_once __DIR__ . '/notificaciones.php';
+ini_set('display_errors', '0');
+error_reporting(E_ALL & ~E_NOTICE);
 
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    echo json_encode(['success' => false, 'error' => 'Método no soportado']);
-    exit;
+if (session_status() === PHP_SESSION_NONE) session_start();
+if (!isset($_SESSION['cedula']) || empty($_SESSION['cedula'])) {
+  http_response_code(401);
+  echo json_encode(['success' => false, 'error' => 'UNAUTHORIZED', 'message' => 'Sesión no iniciada']);
+  exit;
 }
+
+require_once(__DIR__ . '/ClaseConexion.php');
 
 $action = $_POST['action'] ?? '';
 if ($action !== 'reportar') {
-    echo json_encode(['success' => false, 'error' => 'Acción inválida']);
-    exit;
+  echo json_encode(['success' => false, 'error' => 'UNKNOWN_ACTION']);
+  exit;
 }
 
-$idservicio = isset($_POST['idservicio']) ? (int)$_POST['idservicio'] : null;
-$idreportador = $_SESSION['cedula'] ?? ($_POST['idreportador'] ?? null);
+$idreportador = $_SESSION['cedula'];
+$idservicio   = isset($_POST['idservicio']) ? (int)$_POST['idservicio'] : 0;
 
-if (!$idservicio || !$idreportador) {
-    echo json_encode(['success' => false, 'error' => 'Faltan datos obligatorios']);
-    exit;
+// (Opcional) vienen del formulario, pero tu tabla reporte YA NO tiene estas columnas
+$motivo  = trim($_POST['motivo']  ?? '');
+$detalle = trim($_POST['detalle'] ?? '');
+
+if ($idservicio <= 0) {
+  echo json_encode(['success' => false, 'error' => 'INVALID_SERVICE', 'message' => 'Falta idservicio']);
+  exit;
 }
 
 try {
-    $cx = get_conn();
+  $cx = (new ClaseConexion())->getConexion();
 
-    // Insertar reporte (ajusta columnas si tu tabla difiere)
-    $stmt = $cx->prepare("INSERT INTO reporte (idservicio, idreportador) VALUES (?, ?)");
-    if (!$stmt) throw new Exception("Prepare fallo: " . $cx->error);
-    $stmt->bind_param('is', $idservicio, $idreportador);
-    if (!$stmt->execute()) throw new Exception("Execute fallo: " . $stmt->error);
-    $insertId = $stmt->insert_id;
-    $stmt->close();
+  // Verificar que el servicio exista
+  $q = $cx->prepare("SELECT idservicio FROM servicio WHERE idservicio=?");
+  if (!$q) throw new Exception("Prepare failed: ".$cx->error);
+  $q->bind_param("i", $idservicio);
+  $q->execute();
+  $exists = $q->get_result()->fetch_column();
+  $q->close();
 
-    // Buscar proveedor relacionado con ese servicio (tabla 'ofrece' que relacione idservicio -> idproveedor)
-    $prov = null;
-    $stmt = $cx->prepare("SELECT idproveedor FROM ofrece WHERE idservicio = ? LIMIT 1");
-    if ($stmt) {
-        $stmt->bind_param('i', $idservicio);
-        $stmt->execute();
-        $r = $stmt->get_result()->fetch_assoc();
-        if ($r && !empty($r['idproveedor'])) $prov = $r['idproveedor'];
-        $stmt->close();
-    }
+  if (!$exists) {
+    echo json_encode(['success' => false, 'error' => 'NOT_FOUND', 'message' => 'Servicio inexistente']);
+    exit;
+  }
 
-    // Crear mensaje compacto
-    $mensajeProv = "Tu publicación (ID {$idservicio}) ha sido reportada.";
-    $mensajeAdmin = "Se recibió un reporte sobre publicación ID {$idservicio}.";
+  // Insertar reporte (solo columnas vigentes)
+  $st = $cx->prepare("INSERT INTO reporte (idservicio, idreportador) VALUES (?, ?)");
+  if (!$st) throw new Exception("Prepare failed: ".$cx->error);
+  $st->bind_param("is", $idservicio, $idreportador);
+  $ok = $st->execute();
+  $idreporte = $ok ? $cx->insert_id : null;
+  $st->close();
 
-    // Notificar proveedor
-    if ($prov) {
-        addNotification($prov, 'reporte', $insertId, $mensajeProv);
-    }
+  if (!$ok) {
+    echo json_encode(['success' => false, 'error' => 'INSERT_FAIL']);
+    exit;
+  }
 
-    // Notificar administradores
-    $stmt = $cx->prepare("SELECT idadministrador FROM administrador");
-    if ($stmt) {
-        $stmt->execute();
-        $res = $stmt->get_result();
-        while ($row = $res->fetch_assoc()) {
-            addNotification($row['idadministrador'], 'reporte', $insertId, $mensajeAdmin);
-        }
-        $stmt->close();
-    }
+  // Importante:
+  // El trigger trg_reporte_after_insert ya creará la notificación al proveedor.
+  // (mensaje: "Tu servicio #X fue reportado.")
+  // Si quisieras incluir motivo/detalle en la notificación, habría que:
+  //   a) re-agregar esas columnas a reporte, o
+  //   b) insertar la notificación acá manualmente con ese texto.
+  // Por ahora respetamos tu esquema (sin motivo/detalle) y dejamos que el trigger notifique.
 
-    $cx->close();
-
-    echo json_encode(['success' => true, 'idreporte' => $insertId]);
-} catch (Exception $e) {
-    error_log("controllerReporte error: " . $e->getMessage());
-    echo json_encode(['success' => false, 'error' => $e->getMessage()]);
+  echo json_encode(['success' => true, 'idreporte' => (int)$idreporte]);
+} catch (Throwable $e) {
+  http_response_code(500);
+  echo json_encode(['success' => false, 'error' => 'SERVER_ERROR', 'message' => $e->getMessage()]);
 }
 ?>

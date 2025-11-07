@@ -1,3 +1,4 @@
+<?php require_once('../conexion/guards/auth_guard.php'); ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -61,101 +62,58 @@
             filter: brightness(1.2);
         }
 
-        /* Notification Modal */
-        .notification-modal {
-            position: absolute;
-            top: 100%;
-            right: -1rem;
-            background: white;
-            border-radius: 20px;
-            width: 350px;
-            max-height: 500px;
-            overflow-y: auto;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
-            margin-top: 1rem;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(-20px) scale(0.9);
-            transition: all 0.3s ease;
-            z-index: 2000;
-        }
+        /* ===== MODAL NOTIFICATION (éxito / error) ===== */
+.modal-overlay-notification {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.6);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 4000;
+}
+.modal-overlay-notification.active { display: flex; }
 
-        .notification-modal.active {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0) scale(1);
-        }
+.modal-notification {
+  background: #fff;
+  border-radius: 25px;
+  padding: 40px;
+  width: 90%;
+  max-width: 450px;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0,0,0,.3);
+  animation: notifScaleIn .25s ease;
+}
 
-        .notification-header {
-            padding: 1.5rem;
-            border-bottom: 2px solid #f0f0f0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+@keyframes notifScaleIn {
+  from { transform: scale(.94); opacity:.6; }
+  to   { transform: scale(1);   opacity:1; }
+}
 
-        .notification-header h3 {
-            color: #2c3e50;
-            font-size: 1.2rem;
-        }
+.modal-notification-icon {
+  width: 90px; height: 90px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 25px; color: #fff; font-size: 45px;
+}
+.modal-notification-icon.success { background: linear-gradient(135deg,#0eb27c,#047857); }
+.modal-notification-icon.error   { background: linear-gradient(135deg,#ef4444,#b91c1c); }
 
-        .notification-list {
-            padding: 0;
-        }
+.modal-notification-title { font-size: 28px; font-weight: 700; color: #2c3e50; margin-bottom: 12px; }
+.modal-notification-text  { font-size: 16px; color: #7f8c8d; line-height: 1.6; margin-bottom: 24px; }
 
-        .notification-item {
-            padding: 1.2rem 1.5rem;
-            border-bottom: 1px solid #f0f0f0;
-            display: flex;
-            gap: 1rem;
-            transition: all 0.2s ease;
-            cursor: pointer;
-        }
+.btn-notification-ok {
+  padding: 12px 34px; border-radius: 12px; border: none; font-size: 16px; font-weight: 700;
+  cursor: pointer; transition: transform .15s ease, box-shadow .15s ease;
+  background: linear-gradient(135deg,#0eb27c,#047857); color: #fff;
+}
+.btn-notification-ok:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(14,178,124,.35); }
 
-        .notification-item:hover {
-            background: #f8f9fa;
-            padding-left: 2rem;
-        }
+@media (max-width: 600px) {
+  .modal-notification { padding: 28px 22px; width: 95%; }
+  .modal-notification-icon { width: 80px; height: 80px; font-size: 40px; }
+  .modal-notification-title { font-size: 24px; }
+}
 
-        .notification-item.unread {
-            background: linear-gradient(135deg, #e8f5f1 0%, #d1f0e5 100%);
-        }
-
-        .notification-icon {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #0eb27c 0%, #047857 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            flex-shrink: 0;
-            font-size: 1.2rem;
-        }
-
-        .notification-content {
-            flex: 1;
-        }
-
-        .notification-title {
-            font-weight: 600;
-            color: #2c3e50;
-            margin-bottom: 0.3rem;
-            font-size: 0.95rem;
-        }
-
-        .notification-text {
-            color: #7f8c8d;
-            font-size: 0.85rem;
-            line-height: 1.4;
-        }
-
-        .notification-time {
-            color: #95a5a6;
-            font-size: 0.75rem;
-            margin-top: 0.5rem;
-        }
 
 .header-logo {
     cursor: pointer;
@@ -382,5 +340,65 @@
     setInterval(loadNotifications, 45000);
   })();
 </script>
+
+<!-- Modal de Notificación (éxito / error) -->
+<div class="modal-overlay-notification" id="notificationOverlay">
+  <div class="modal-notification" role="dialog" aria-modal="true" aria-labelledby="notifTitle" aria-describedby="notifText">
+    <div class="modal-notification-icon success" id="notifIcon">
+      <i class="fas fa-check-circle"></i>
+    </div>
+    <h2 class="modal-notification-title" id="notifTitle">¡Éxito!</h2>
+    <p class="modal-notification-text" id="notifText">La operación se completó correctamente.</p>
+    <button class="btn-notification-ok" id="notifOkBtn">Aceptar</button>
+  </div>
+</div>
+
+<script>
+  // API simple para abrir/cerrar el modal
+  function showNotificationModal(title, message, type = 'success') {
+    const overlay = document.getElementById('notificationOverlay');
+    const iconBox = document.getElementById('notifIcon');
+    const titleEl = document.getElementById('notifTitle');
+    const textEl  = document.getElementById('notifText');
+
+    // Tipo: success | error
+    iconBox.classList.remove('success','error');
+    iconBox.classList.add(type === 'error' ? 'error' : 'success');
+    iconBox.innerHTML = type === 'error'
+      ? '<i class="fas fa-times-circle"></i>'
+      : '<i class="fas fa-check-circle"></i>';
+
+    titleEl.textContent = title || (type === 'error' ? 'Ocurrió un error' : '¡Éxito!');
+    textEl.textContent  = message || (type === 'error'
+      ? 'No se pudo completar la operación.'
+      : 'La operación se completó correctamente.');
+
+    overlay.classList.add('active');
+  }
+
+  function closeNotificationModal() {
+    document.getElementById('notificationOverlay').classList.remove('active');
+  }
+
+  // Cierre por botón y por click fuera
+  document.getElementById('notifOkBtn').addEventListener('click', closeNotificationModal);
+  document.getElementById('notificationOverlay').addEventListener('click', (e) => {
+    if (e.target.id === 'notificationOverlay') closeNotificationModal();
+  });
+
+  // Auto-abrir si venís del controlador con ?ok=1&msg=... o ?error=1&msg=...
+  (function autoOpenFromQuery(){
+    try {
+      const q = new URLSearchParams(window.location.search);
+      const msg = q.get('msg');
+      if (q.has('ok')) {
+        showNotificationModal('¡Publicación creada!', msg || 'Tu servicio fue publicado correctamente.', 'success');
+      } else if (q.has('error')) {
+        showNotificationModal('No se pudo publicar', msg || 'Intentalo nuevamente.', 'error');
+      }
+    } catch (_) {}
+  })();
+</script>
+
 </body>
 </html>

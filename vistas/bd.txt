@@ -198,3 +198,133 @@ ALTER TABLE servicio ADD COLUMN imagen VARCHAR(255);
 
 
 select * from usuario;
+
+CREATE TABLE IF NOT EXISTS calificacion (
+  idcalificacion INT AUTO_INCREMENT PRIMARY KEY,
+  idservicio INT NOT NULL,
+  idcliente  CHAR(8) NOT NULL,
+  puntaje    TINYINT NOT NULL CHECK (puntaje BETWEEN 1 AND 5),
+  comentario VARCHAR(300) DEFAULT NULL,
+  fecha DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (idservicio) REFERENCES servicio(idservicio) ON DELETE CASCADE,
+  FOREIGN KEY (idcliente)  REFERENCES cliente(idcliente)   ON DELETE CASCADE
+);
+
+DROP TABLE IF EXISTS notificacion;
+
+CREATE TABLE notificacion (
+  idnotificacion INT AUTO_INCREMENT PRIMARY KEY,
+  idusuario_receptor CHAR(8) NOT NULL,                    -- quién recibe (cliente, proveedor o admin)
+  tipo ENUM('reporte','solicitud','calificacion') NOT NULL,
+  referencia INT DEFAULT NULL,                            -- id del evento fuente (idreporte, idreserva, idcalificacion)
+  actor CHAR(8) DEFAULT NULL,                             -- emisor (quién generó el evento)
+  mensaje VARCHAR(255) NOT NULL,
+  url VARCHAR(255) DEFAULT NULL,                          -- hacia dónde navegar en tu frontend
+  leida TINYINT(1) NOT NULL DEFAULT 0,
+  fecha DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (idusuario_receptor) REFERENCES usuario(cedula) ON DELETE CASCADE,
+  INDEX (idusuario_receptor),
+  INDEX (leida),
+  INDEX (tipo),
+  INDEX (fecha)
+);
+
+DELIMITER //
+
+DROP TRIGGER IF EXISTS trg_reserva_after_insert //
+CREATE TRIGGER trg_reserva_after_insert
+AFTER INSERT ON reserva
+FOR EACH ROW
+BEGIN
+  DECLARE v_proveedor CHAR(8);
+
+  SELECT o.idproveedor
+    INTO v_proveedor
+  FROM ofrece o
+  WHERE o.idservicio = NEW.idservicio
+  LIMIT 1;
+
+  IF v_proveedor IS NOT NULL THEN
+    INSERT INTO notificacion
+      (idusuario_receptor, tipo, referencia, actor, mensaje, url)
+    VALUES
+      (v_proveedor,
+       'solicitud',
+       NEW.idreserva,
+       NEW.idcliente,
+       CONCAT('Nueva solicitud para el servicio #', NEW.idservicio,
+              ' el ', DATE_FORMAT(NEW.fecha, '%d/%m/%Y'), ' a las ',
+              DATE_FORMAT(NEW.hora, '%H:%i')),
+       NULL);
+  END IF;
+END //
+
+DELIMITER ;
+
+
+
+
+DELIMITER //
+
+DROP TRIGGER IF EXISTS trg_reporte_after_insert //
+CREATE TRIGGER trg_reporte_after_insert
+AFTER INSERT ON reporte
+FOR EACH ROW
+BEGIN
+  DECLARE v_proveedor CHAR(8);
+
+  SELECT o.idproveedor
+    INTO v_proveedor
+  FROM ofrece o
+  WHERE o.idservicio = NEW.idservicio
+  LIMIT 1;
+
+  IF v_proveedor IS NOT NULL THEN
+    INSERT INTO notificacion
+      (idusuario_receptor, tipo, referencia, actor, mensaje, url)
+    VALUES
+      (v_proveedor,
+       'reporte',
+       NEW.idreporte,
+       NEW.idreportador,
+       CONCAT('Tu servicio #', NEW.idservicio, ' fue reportado.'),
+       NULL);
+  END IF;
+END //
+
+DELIMITER ;
+
+
+DELIMITER //
+
+DROP TRIGGER IF EXISTS trg_calificacion_after_insert //
+CREATE TRIGGER trg_calificacion_after_insert
+AFTER INSERT ON calificacion
+FOR EACH ROW
+BEGIN
+  DECLARE v_proveedor CHAR(8);
+
+  /* Dueño del servicio calificado */
+  SELECT o.idproveedor
+    INTO v_proveedor
+  FROM ofrece o
+  WHERE o.idservicio = NEW.idservicio
+  LIMIT 1;
+
+  IF v_proveedor IS NOT NULL THEN
+    INSERT INTO notificacion
+      (idusuario_receptor, tipo, referencia, actor, mensaje, url)
+    VALUES
+      (
+        v_proveedor,
+        'calificacion',
+        NEW.idcalificacion,
+        NEW.idcliente,
+        CONCAT('Nuevo puntaje ', NEW.puntaje, '/5 en tu servicio #', NEW.idservicio,
+               IF(NEW.comentario IS NULL OR NEW.comentario = '', '', CONCAT(': "', LEFT(NEW.comentario, 120), '"'))),
+        'vistas-prov.php'
+      );
+  END IF;
+END //
+
+DELIMITER ;
