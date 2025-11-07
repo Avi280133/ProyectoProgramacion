@@ -36,32 +36,30 @@ switch ($action) {
       }
     }
 
-    // Sanitizar
-    $titulo     = trim($_POST['titulo']);
-    $ubicacion  = trim($_POST['ubicacion']);
-    $imagen   = $_POST['imagen'] ?? '';
-    $categoria   = $_POST['categoria'] ?? '';
-    // Normalizar precio (aceptar 1.234,56 o 1234.56)
-    $precioRaw  = str_replace(['.', ','], ['', '.'], trim($_POST['precio']));
-    $precio     = (float)$precioRaw;
-    $descripcion= trim($_POST['descripcion']);
+// Sanitizar
+$titulo      = trim($_POST['titulo']);
+$ubicacion   = trim($_POST['ubicacion']);
+$categoria   = isset($_POST['categoria']) ? trim($_POST['categoria']) : '';
+$precioRaw   = str_replace(['.', ','], ['', '.'], trim($_POST['precio']));
+$precio      = (float)$precioRaw;
+$descripcion = trim($_POST['descripcion']);
 
-    // (Opcional) categoría — por ahora no la guardamos en DB porque la tabla servicio no la tiene.
-    $categoria  = isset($_POST['categoria']) ? trim($_POST['categoria']) : '';
-
-    // (Opcional) subir imagen — guardamos archivo pero no lo persistimos en DB (la columna podría no existir)
-    if (isset($_FILES['imagen']) && is_uploaded_file($_FILES['imagen']['tmp_name'])) {
-      $dir = realpath(__DIR__ . '/../img');
-      if ($dir !== false) {
-        $destDir = $dir . DIRECTORY_SEPARATOR . 'servicios';
-        if (!is_dir($destDir)) @mkdir($destDir, 0775, true);
-
-        $ext = pathinfo($_FILES['imagen']['name'], PATHINFO_EXTENSION);
-        $safe = 'svc_' . date('Ymd_His') . '_' . bin2hex(random_bytes(4)) . ($ext ? ('.' . strtolower($ext)) : '');
-        @move_uploaded_file($_FILES['imagen']['tmp_name'], $destDir . DIRECTORY_SEPARATOR . $safe);
-        // Si en el futuro agregás columna imagen_url en servicio, podés pasar $safe al modelo.
-      }
+// Subir imagen (opcional)
+$imagen = '';
+if (isset($_FILES['imagen']) && is_uploaded_file($_FILES['imagen']['tmp_name'])) {
+    $base = realpath(__DIR__ . '/../img/servicios');
+    if ($base === false) {
+        $base = __DIR__ . '/../img/servicios';
+        @mkdir($base, 0775, true);
     }
+
+    $ext = strtolower(pathinfo($_FILES['imagen']['name'], PATHINFO_EXTENSION));
+    $safe = 'svc_' . date('Ymd_His') . '_' . bin2hex(random_bytes(4)) . ($ext ? ".{$ext}" : '');
+    @move_uploaded_file($_FILES['imagen']['tmp_name'], rtrim($base, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $safe);
+
+    $imagen = $safe;
+}
+
 
     // Publicar usando el modelo
     $servicio   = new Servicio('', $titulo, $ubicacion, $precio, $descripcion,$imagen, $categoria);
