@@ -172,6 +172,30 @@
     <div class="contenedor-formulario">
       <h2 class="titulo-formulario">Publicá tu Servicio</h2>
 
+
+      <?php
+require_once('../conexion/ClaseConexion.php');
+function h($s){ return htmlspecialchars((string)$s, ENT_QUOTES, 'UTF-8'); }
+
+$categorias = [];
+$cx = (new ClaseConexion())->getConexion(); // mysqli
+$cx->set_charset('utf8mb4');
+$sql = "SELECT nombre FROM categoria ORDER BY nombre";
+if ($st = $cx->prepare($sql)) {
+  $st->execute();
+  if ($res = $st->get_result()) {
+    while ($row = $res->fetch_assoc()) { $categorias[] = $row['nombre']; }
+    $res->free();
+  }
+  $st->close();
+}
+$cx->close();
+
+// si volvés de un POST o estás editando
+$categoriaSeleccionada = $_POST['categoria'] ?? '';
+?>
+
+
       <!-- IMPORTANTE: enctype para subir archivos y action oculto -->
       <form action="../conexion/controllerPublicacion.php" method="POST" class="formulario-servicio" enctype="multipart/form-data">
         <input type="hidden" name="action" value="publicar">
@@ -182,16 +206,16 @@
         <label for="ubicacion" class="etiqueta-campo">Ubicación:</label>
         <input type="text" id="ubicacion" name="ubicacion" placeholder="Ej: Pocitos, Montevideo" class="campo-formulario" required>
 
-        <label for="categoria" class="etiqueta-campo">Categoría (opcional):</label>
-        <select id="categoria" name="categoria" class="campo-formulario">
-          <option value="">--Seleccioná--</option>
-          <option value="Soporte Técnico">Soporte Técnico</option>
-          <option value="Mantenimiento">Mantenimiento</option>
-          <option value="Consultoría">Consultoría</option>
-          <option value="Limpieza">Limpieza</option>
-          <option value="Construcción">Construcción</option>
-          <option value="Otro">Otro</option>
-        </select>
+      <label for="categoria" class="etiqueta-campo">Categoría (opcional):</label>
+<select id="categoria" name="categoria" class="campo-formulario">
+  <option value="">--Seleccioná--</option>
+  <?php foreach ($categorias as $nombre): 
+        $sel = ($categoriaSeleccionada === $nombre) ? 'selected' : ''; ?>
+    <option value="<?php echo h($nombre); ?>" <?php echo $sel; ?>>
+      <?php echo h($nombre); ?>
+    </option>
+  <?php endforeach; ?>
+</select>
 
         <label class="etiqueta-campo">Imagen (opcional):</label>
         <div class="imagen-equipo">
