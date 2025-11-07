@@ -1149,7 +1149,7 @@ $idservicio = isset($servicio['idservicio']) ? (int)$servicio['idservicio'] : (i
 
   <div id="chatModalContainer"></div>
 
-  <!-- Modal de calificar (copiado de perfil-externo) -->
+  <!-- Modal de calificar -->
   <div id="ratingModal-prof" class="modal-prof" aria-hidden="true">
     <div class="modal-content-prof" role="dialog" aria-modal="true" aria-labelledby="ratingTitle-prof">
         <span class="close-prof" aria-label="Cerrar">&times;</span>
@@ -1157,6 +1157,9 @@ $idservicio = isset($servicio['idservicio']) ? (int)$servicio['idservicio'] : (i
             <h2 id="ratingTitle-prof" class="modal-title-prof">Calificar a Juan Martínez</h2>
             <p class="modal-subtitle-prof">Tu opinión nos ayuda a mejorar la comunidad</p>
         </div>
+
+        <!-- idservicio para el envío -->
+        <input type="hidden" id="cal_idservicio" value="<?php echo (int)$idservicio; ?>">
 
         <div class="star-rating-prof" aria-label="Seleccionar calificación">
             <span class="star-prof" data-rating="1">★</span>
@@ -1178,7 +1181,7 @@ $idservicio = isset($servicio['idservicio']) ? (int)$servicio['idservicio'] : (i
     </div>
   </div>
 
-  <!-- Modal simple para reportar (permanece, ahora con idservicio correcto) -->
+  <!-- Modal simple para reportar -->
   <div id="modalReportar" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); align-items:center; justify-content:center;">
     <div style="background:#fff; padding:20px; border-radius:8px; width:90%; max-width:500px;">
       <h3>Reportar publicación</h3>
@@ -1272,16 +1275,18 @@ $idservicio = isset($servicio['idservicio']) ? (int)$servicio['idservicio'] : (i
   document.addEventListener('DOMContentLoaded', function() {
     // Captura botones y enlaces que abren el modal y previene navegación
     document.querySelectorAll('a, button').forEach(el => {
-      // Si el elemento o su hijo tiene la clase .btn-mensaje lo enlazamos
-      if (el.matches('.btn-mensaje') || el.querySelector?.('.btn-mensaje')) {
+      if (el.matches('.btn-mensaje') || (el.querySelector && el.querySelector('.btn-mensaje'))) {
         el.addEventListener('click', function(e) {
           e.preventDefault();
           e.stopPropagation();
-          loadChatModal();
+          // loadChatModal();  // si tenés esta función definida en otro archivo
+          window.location.href = '../chatphp/chat.php'; // fallback simple
         });
       }
     });
+  });
   </script>
+
    <script>
       (function initNotificationBox() {
     const bell = document.getElementById('notificationBell');
@@ -1348,26 +1353,22 @@ $idservicio = isset($servicio['idservicio']) ? (int)$servicio['idservicio'] : (i
     };
 })();
     </script>
+
 <script>
+/* ====== Calificación: abrir/cerrar modal + enviar ====== */
 (function() {
     const modalProf = document.getElementById('ratingModal-prof');
     if (!modalProf) return;
 
-    // Selección explícita: solo el botón de calificar abre el modal
     const openModalBtnProf = document.querySelector('.btn-calificar') || document.getElementById('openModal-prof');
     const closeModalBtnProf = modalProf.querySelector('.close-prof');
     const cancelBtnProf = document.getElementById('cancelBtn-prof');
     const submitBtnProf = document.getElementById('submitRating-prof');
     const starsProf = modalProf.querySelectorAll('.star-prof');
     const commentProfEl = document.getElementById('comment-prof');
-    let selectedRatingProf = 0;
+    const idServEl = document.getElementById('cal_idservicio');
 
-    if (openModalBtnProf) {
-        openModalBtnProf.addEventListener('click', (e) => {
-            e.preventDefault();
-            showModalProf();
-        });
-    }
+    let selectedRatingProf = 0;
 
     function showModalProf() {
         modalProf.style.display = 'flex';
@@ -1379,12 +1380,16 @@ $idservicio = isset($servicio['idservicio']) ? (int)$servicio['idservicio'] : (i
         resetModalProf();
     }
 
-    closeModalBtnProf.addEventListener('click', closeModalProf);
-    cancelBtnProf.addEventListener('click', closeModalProf);
+    if (openModalBtnProf) {
+        openModalBtnProf.addEventListener('click', (e) => {
+            e.preventDefault();
+            showModalProf();
+        });
+    }
+    if (closeModalBtnProf) closeModalBtnProf.addEventListener('click', closeModalProf);
+    if (cancelBtnProf) cancelBtnProf.addEventListener('click', closeModalProf);
 
-    window.addEventListener('click', (event) => {
-        if (event.target === modalProf) closeModalProf();
-    });
+    window.addEventListener('click', (event) => { if (event.target === modalProf) closeModalProf(); });
 
     starsProf.forEach((starProf, indexProf) => {
         starProf.addEventListener('mouseenter', () => highlightStarsProf(indexProf + 1));
@@ -1407,15 +1412,55 @@ $idservicio = isset($servicio['idservicio']) ? (int)$servicio['idservicio'] : (i
         if (commentProfEl) commentProfEl.value = '';
     }
 
-    submitBtnProf.addEventListener('click', () => {
+    if (submitBtnProf) {
+      submitBtnProf.addEventListener('click', () => {
         if (selectedRatingProf === 0) {
             alert('Por favor, selecciona una calificación');
             return;
         }
         const commentProf = commentProfEl ? commentProfEl.value.trim() : '';
-        alert(`¡Gracias! Calificación enviada: ${selectedRatingProf} estrella${selectedRatingProf>1?'s':''}`);
-        closeModalProf();
-    });
+        const idservicio = idServEl ? parseInt(idServEl.value, 10) : 0;
+
+        if (!idservicio || idservicio <= 0) {
+          alert('No se pudo identificar el servicio a calificar.');
+          return;
+        }
+
+        const fd = new FormData();
+        fd.append('action', 'calificar');
+        fd.append('idservicio', String(idservicio));
+        fd.append('puntaje', String(selectedRatingProf));
+        fd.append('comentario', commentProf);
+
+        fetch('../conexion/controllerCalificacion.php', {
+          method: 'POST',
+          body: fd,
+          credentials: 'same-origin'
+        })
+        .then(r => r.json())
+        .then(resp => {
+          if (resp.success) {
+            alert(`¡Gracias! Calificación enviada: ${selectedRatingProf} estrella${selectedRatingProf>1?'s':''}`);
+
+            // (Opcional) actualizar visualmente estrellas promedio si el backend lo devuelve
+            if (typeof resp.promedio !== 'undefined' && resp.promedio !== null) {
+              const ratingBox = document.querySelector('.rating');
+              if (ratingBox) {
+                const full = Math.floor(Number(resp.promedio));
+                ratingBox.innerHTML = Array.from({length:5}).map((_,i)=> i<full ? '★' : '☆').join('');
+              }
+            }
+            closeModalProf();
+          } else {
+            alert('Error al calificar: ' + (resp.error || 'intente nuevamente'));
+          }
+        })
+        .catch(err => {
+          console.error(err);
+          alert('Error de red al enviar la calificación.');
+        });
+      });
+    }
 })();
 </script>
 
@@ -1430,7 +1475,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
   if (btn) {
     btn.addEventListener('click', () => {
-      // Asegurar idservicio actualizado desde data-attr
       const svcId = btn.getAttribute('data-idservicio') || '<?php echo (int)$idservicio; ?>';
       if (hidSvc) hidSvc.value = svcId;
       modal.style.display = 'flex';
