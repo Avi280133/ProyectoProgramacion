@@ -2,9 +2,9 @@
 class ClaseConexion
 {
     private $servidor ="localhost";
-    private $usuario = "root";
+    private $usuario = "jlopez";
 
-    private $contrasena = "tatielijuli00";
+    private $contrasena = "Noes3139";
 
     private $baseDeDatos = "SkillMatch";
     private $conexion;

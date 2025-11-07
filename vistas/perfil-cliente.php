@@ -980,133 +980,177 @@ $usuario = Usuario::buscarPorCedula($_SESSION['cedula']);
             </form>
         </div>
     </header>
-  <!-- PROFILE CONTAINER -->
-  <div class="profile-container">
-    <div class="profile-card">
-      <!-- SIDEBAR -->
-      <div class="profile-sidebar">
-        <div class="profile-photo-wrapper">
-          <img src="../img/4ae62d57-16c3-4974-b494-e9c26f8036fe.jpg" alt="Foto de perfil" class="profile-photo">
-        </div>
-        <h2 class="profile-name">María González</h2>
-        <p class="profile-username">@maria.gonzalez</p>
-        <p class="profile-age">28 años</p>
+ <!-- PROFILE CONTAINER -->
+<div class="profile-container">
+  <div class="profile-card">
 
-        <div class="profile-stats">
-          <div class="stat-item">
-            <span class="stat-label">Ubicación</span>
-            <span class="stat-value">Uruguay</span>
-          </div>
-        </div>
-
-        <button class="edit-profile-btn" onclick="openEditModal()">
-          <i class="fas fa-edit"></i> Editar Perfil
-        </button>
-        <button class="sign-out-btn" style="margin-top: 1rem; background: #ff4d4d; color: white; border: none; padding: 0.9rem; border-radius: 15px; font-weight: 700; font-size: 1rem; cursor: pointer; transition: all 0.3s ease;">
-          <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
-        </button>
+    <!-- SIDEBAR -->
+    <div class="profile-sidebar">
+      <div class="profile-photo-wrapper">
+        <img
+          src="../img/<?php echo htmlspecialchars($usuario['fotoperfil'] ?? '4ae62d57-16c3-4974-b494-e9c26f8036fe.jpg'); ?>"
+          alt="Foto de perfil"
+          class="profile-photo"
+        >
       </div>
 
-      <!-- MAIN CONTENT -->
-      <div class="profile-main">
-        <div class="profile-section">
-          <h3 class="section-title">
-            <i class="fas fa-info-circle"></i>
-            Información Personal
-          </h3>
-          <div class="info-grid">
-            <div class="info-item">
-              <div class="info-label">Nombre Completo</div>
-              <div class="info-value">María González</div>
-            </div>
-            <div class="info-item">
-              <div class="info-label">Username</div>
-              <div class="info-value">@maria.gonzalez</div>
-            </div>
-            <div class="info-item">
-              <div class="info-label">Localidad</div>
-              <div class="info-value"><i class="fas fa-map-marker-alt" style="color: #0eb27c;"></i> Montevideo</div>
-            </div>
-            <div class="info-item">
-              <div class="info-label">Edad</div>
-              <div class="info-value">28 años</div>
-            </div>
-          </div>
-        </div>
+      <h2 class="profile-name">
+        <?php echo htmlspecialchars(($usuario['nombre'] ?? '') . ' ' . ($usuario['apellido'] ?? '')); ?>
+      </h2>
 
-        <!-- descripcion section -->
-        <div class="profile-section">
-          <h3 class="section-title">
-            <i class="fas fa-user"></i>
-            Sobre Mí
-          </h3>
-          <div class="description-box">
-            Soy una profesional apasionada por la tecnología y el diseño. Me encanta descubrir nuevos servicios y trabajar con profesionales talentosos. Busco siempre calidad y compromiso en cada proyecto. Disfruto conectar con personas creativas y aprender de sus experiencias.
+      <p class="profile-username">
+        @<?php echo htmlspecialchars($usuario['username'] ?? ''); ?>
+      </p>
+
+      <p class="profile-age">
+        <?php echo htmlspecialchars($usuario['edad'] ?? ''); ?> años
+      </p>
+
+      <div class="profile-stats">
+        <div class="stat-item">
+          <span class="stat-label">Ubicación</span>
+          <span class="stat-value">
+            <?php echo htmlspecialchars($usuario['ubicacion'] ?? ''); ?>
+          </span>
+        </div>
+      </div>
+
+      <button class="edit-profile-btn" onclick="openEditModal()">
+        <i class="fas fa-edit"></i> Editar Perfil
+      </button>
+
+      <button class="sign-out-btn"
+              style="margin-top: 1rem; background:#ff4d4d; color:white; border:none; padding:0.9rem; border-radius:15px; font-weight:700; font-size:1rem; cursor:pointer;">
+        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+      </button>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="profile-main">
+      <div class="profile-section">
+        <h3 class="section-title">
+          <i class="fas fa-info-circle"></i>
+          Información Personal
+        </h3>
+
+        <div class="info-grid">
+
+          <div class="info-item">
+            <div class="info-label">Nombre Completo</div>
+            <div class="info-value">
+              <?php echo htmlspecialchars(($usuario['nombre'] ?? '') . ' ' . ($usuario['apellido'] ?? '')); ?>
+            </div>
           </div>
+
+          <div class="info-item">
+            <div class="info-label">Username</div>
+            <div class="info-value">
+              @<?php echo htmlspecialchars($usuario['username'] ?? ''); ?>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <div class="info-label">Localidad</div>
+            <div class="info-value">
+              <i class="fas fa-map-marker-alt" style="color:#0eb27c;"></i>
+              <?php echo htmlspecialchars($usuario['localidad'] ?? ''); ?>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <div class="info-label">Edad</div>
+            <div class="info-value">
+              <?php echo htmlspecialchars($usuario['edad'] ?? ''); ?> años
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- MODAL EDITAR PERFIL -->
-  <div class="modal-overlay" id="editModal">
-    <div class="modal">
-      <div class="modal-header">
-        <h2 class="modal-title">Editar Mi Perfil</h2>
-        <button class="close-btn" onclick="closeEditModal()">×</button>
+  </div>
+</div>
+
+
+
+<?php
+$fotoActual  = htmlspecialchars($usuario['fotoperfil'] ?? '4ae62d57-16c3-4974-b494-e9c26f8036fe.jpg');
+$nombre      = htmlspecialchars(($usuario['nombre'] ?? '').' '.($usuario['apellido'] ?? ''));
+$username    = htmlspecialchars($usuario['username'] ?? '');
+$localidad   = htmlspecialchars($usuario['localidad'] ?? '');
+?>
+<!-- MODAL EDITAR PERFIL -->
+<div class="modal-overlay" id="editModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 class="modal-title">Editar Mi Perfil</h2>
+      <button class="close-btn" onclick="closeEditModal()">×</button>
+    </div>
+
+    <form action="../conexion/controllerUsuario.php" method="POST" enctype="multipart/form-data">
+      <!-- UPLOAD PHOTO -->
+      <div class="photo-upload-section">
+        <label for="photoInput" class="photo-preview">
+          <img src="../img/<?php echo $fotoActual; ?>" alt="Preview" id="photoPreview">
+          <div class="photo-overlay">
+            <i class="fas fa-camera"></i>
+          </div>
+        </label>
+
+        <input type="file" id="photoInput" class="photo-input" name="foto" accept="image/*" onchange="previewPhoto(event)">
+        <label for="photoInput" class="upload-btn">
+          <i class="fas fa-upload"></i> Cambiar Foto
+        </label>
+
+        <!-- Mantener la foto actual si no se sube una nueva -->
+        <input type="hidden" name="fotoperfil" value="<?php echo $fotoActual; ?>">
       </div>
 
-      <form>
-        <!-- UPLOAD PHOTO -->
-        <div class="photo-upload-section">
-          <label for="photoInput" class="photo-preview">
-            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop" alt="Preview" id="photoPreview">
-            <div class="photo-overlay">
-              <i class="fas fa-camera"></i>
-            </div>
-          </label>
-          <input type="file" id="photoInput" class="photo-input" accept="image/*" onchange="previewPhoto(event)">
-          <label for="photoInput" class="upload-btn">
-            <i class="fas fa-upload"></i> Cambiar Foto
-          </label>
-        </div>
+      <!-- FORM FIELDS -->
+      <div class="form-group">
+        <label class="form-label">Nombre Completo</label>
+        <input type="text" class="form-input" value="<?php echo $nombre; ?>" disabled>
+      </div>
 
-        <!-- FORM FIELDS -->
-        <div class="form-group">
-          <label class="form-label">Nombre Completo</label>
-          <input type="text" class="form-input" value="María González" disabled>
-        </div>
+      <div class="form-group">
+        <label class="form-label">Username</label>
+        <input type="text" class="form-input" name="username" value="<?php echo $username; ?>" placeholder="@tu_username">
+      </div>
 
-        <div class="form-group">
-          <label class="form-label">Username</label>
-          <input type="text" class="form-input" value="@maria.gonzalez" placeholder="@tu_username">
-        </div>
+      <div class="form-group">
+        <label class="form-label">Localidad</label>
+        <select class="form-select" name="localidad">
+          <?php
+          $opciones = [
+            "Montevideo","Salto","Paysandú","Maldonado","Canelones",
+            "Colonia","Rivera","Rocha"
+          ];
+          foreach ($opciones as $opc) {
+            $sel = ($localidad === $opc) ? 'selected' : '';
+            $safe = htmlspecialchars($opc);
+            echo "<option value=\"$safe\" $sel>$safe</option>";
+          }
+          ?>
+        </select>
+      </div>
 
-        <div class="form-group">
-          <label class="form-label">Localidad</label>
-          <select class="form-select">
-            <option>Montevideo</option>
-            <option>Salto</option>
-            <option>Paysandú</option>
-            <option>Maldonado</option>
-            <option>Canelones</option>
-            <option>Colonia</option>
-            <option>Rivera</option>
-            <option>Rocha</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Descripción Personal</label>
-          <textarea class="form-textarea" placeholder="Cuéntanos sobre ti...">Soy una profesional apasionada por la tecnología y el diseño. Me encanta descubrir nuevos servicios y trabajar con profesionales talentosos. Busco siempre calidad y compromiso en cada proyecto. Disfruto conectar con personas creativas y aprender de sus experiencias.</textarea>
-        </div>
-
-        <button type="submit" class="save-btn" onclick="saveProfile(event)">
-          <i class="fas fa-save"></i> Guardar Cambios
-        </button>
-      </form>
-    </div>
+      <button type="submit" class="save-btn" name="action" value="modificar">
+        <i class="fas fa-save"></i> Guardar Cambios
+      </button>
+    </form>
   </div>
+</div>
+
+<script>
+function previewPhoto(e){
+  const f = e.target.files?.[0];
+  if(!f) return;
+  const url = URL.createObjectURL(f);
+  const img = document.getElementById('photoPreview');
+  if(img) img.src = url;
+}
+</script>
+
 
   <!-- FOOTER -->
   <footer class="footer">
