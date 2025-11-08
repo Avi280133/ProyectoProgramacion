@@ -266,3 +266,12 @@ SELECT * FROM calificacion WHERE idservicio = @svc_id ORDER BY idcalificacion DE
 
 select * from usuario;
 
+
+
+
+AVRIL MODIFY
+
+alter table ofrece drop foreign key ofrece_ibfk_1;
+
+alter table ofrece add constraint fk_ofrece_usuario 
+foreign key (idproveedor) references usuario(cedula) on delete cascade on update cascade;

@@ -48,6 +48,7 @@ $clientes = Usuario::cargarPanelClientes();
 $proveedores = Usuario::cargarPanelProveedores();
 $servicios = Usuario::cargarPanelServicios();
 $categorias = Usuario::cargarPanelCategorias();
+//$modCliente = Usuario::cargarUsuarioPanel();
 
 ?>
 
@@ -1049,7 +1050,7 @@ if (!empty($categorias)) {
         echo '  <div class="card-icon-container"><i class="fas fa-user"></i></div>';
         echo '  <div class="card-main-content">';
 
-     echo '<div class="card-title">' . htmlspecialchars($p['nombre']) . '</div>';
+     echo '<div class="card-title">' . htmlspecialchars($c['nombre']) . '</div>';
 
         echo '      <div class="card-title">' . htmlspecialchars($c['nombre']) . '</div>';
         echo '      <div class="card-info">'; 
@@ -1107,59 +1108,52 @@ if (!empty($servicios)) {
           class="modal-body"
           action="../conexion/controllerUsuario.php"
           method="POST" novalidate>
-      <input type="hidden" name="action" value="registrar">
+      <input type="hidden" id="admin" name="tipo" value="admin" >
 
       <!-- Grid 2 columnas en desktop -->
-      <div class="cu-grid">
+    <div class="cu-grid">
         <div class="form-group">
-          <label class="form-label" for="cedula">Cédula *</label>
-          <input type="text" class="form-input" id="cedula" name="cedula"
-                 placeholder="Ej: 4.123.456-7" required>
-          <div class="form-hint">Sin puntos ni guiones también funciona.</div>
+          <label class="form-label">Cédula *</label>
+          <input type="text" class="form-input" name="cedula" value="cedula" placeholder="Ej: 4.123.456-7" required>
         </div>
 
         <div class="form-group">
-          <label class="form-label" for="edad">Edad *</label>
-          <input type="number" class="form-input" id="edad" name="edad"
-                 min="18" max="120" placeholder="Ej: 28" required>
+          <label class="form-label">Edad *</label>
+          <input type="number" class="form-input" name="edad" value="edad" min="18" max="120" placeholder="Ej: 28" required>
         </div>
 
         <div class="form-group">
-          <label class="form-label" for="nombre">Nombre *</label>
-          <input type="text" class="form-input" id="nombre" name="nombre"
-                 placeholder="Ej: María" required>
+          <label class="form-label">Nombre *</label>
+          <input type="text" class="form-input" name="nombre" value="nombre" placeholder="Ej: Juan" required>
         </div>
 
         <div class="form-group">
-          <label class="form-label" for="apellido">Apellido *</label>
-          <input type="text" class="form-input" id="apellido" name="apellido"
-                 placeholder="Ej: González" required>
+          <label class="form-label">Apellido *</label>
+          <input type="text" class="form-input" name="apellido" value="apellido" placeholder="Ej: Pérez" required>
         </div>
 
         <div class="form-group">
-          <label class="form-label" for="username">Usuario *</label>
-          <input type="text" class="form-input" id="username" name="username"
-                 placeholder="Ej: mgonzalez" required>
+          <label class="form-label">Usuario *</label>
+          <input type="text" class="form-input" name="username" value="username" placeholder="Ej: jperez" required>
         </div>
 
         <div class="form-group">
-          <label class="form-label" for="email">Email *</label>
-          <input type="email" class="form-input" id="email" name="email"
-                 placeholder="usuario@email.com" required>
+          <label class="form-label">Email *</label>
+          <input type="email" class="form-input" name="email" value="email" placeholder="proveedor@email.com" required>
         </div>
 
         <div class="form-group">
-          <label class="form-label" for="contrasena">Contraseña *</label>
-          <input type="password" class="form-input" id="contrasena" name="contrasena"
-                 placeholder="Mínimo 8 caracteres" minlength="8" required>
+          <label class="form-label">Contraseña *</label>
+          <input type="password" class="form-input" name="contrasena" value="contrasena" placeholder="Mínimo 8 caracteres" minlength="8" required>
         </div>
       </div>
+
 
       <div class="modal-footer">
         <button type="button" class="btn btn-cancel" onclick="closeModal('createUserModal')">
           <i class="fas fa-times"></i> Cancelar
         </button>
-        <button type="submit" class="btn btn-save">
+        <button type="submit" name="action" value="registrar" class="btn btn-save">
           <i class="fas fa-check"></i> Guardar
         </button>
       </div>
@@ -1234,7 +1228,7 @@ if (!empty($servicios)) {
       <!-- UPLOAD PHOTO -->
       <div style="display:flex;flex-direction:column;align-items:center;margin-bottom:2rem;padding-bottom:1rem;border-bottom:2px solid #f0f0f0;">
         <label for="editClienteFoto" style="position:relative;width:140px;height:140px;border-radius:50%;overflow:hidden;cursor:pointer;border:4px solid #0eb27c;">
-          <img src="../img/4ae62d57-16c3-4974-b494-e9c26f8036fe.jpg" alt="Foto actual" id="previewEditCliente" style="width:100%;height:100%;object-fit:cover;">
+           <img src="../img/<?php echo htmlspecialchars($usuario['fotoperfil'] ?? '4ae62d57-16c3-4974-b494-e9c26f8036fe.jpg'); ?>" alt="Foto de perfil" class="redonda" />
           <div style="position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(14,178,124,0.8);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.3s ease;" id="overlayEditCliente">
             <i class="fas fa-camera" style="font-size:1.8rem;color:white;"></i>
           </div>
@@ -1249,12 +1243,12 @@ if (!empty($servicios)) {
       <!-- CAMPOS DEL FORMULARIO -->
       <div class="form-group">
         <label class="form-label">Nombre Completo</label>
-        <input type="text" class="form-input" name="nombreCompleto" placeholder="Ej: María González" disabled>
+        <input type="text" class="form-input" name="nombre" value="<?php echo htmlspecialchars($usuario['nombre'] . ' ' . $usuario['apellido']); ?>" disabled>
       </div>
 
       <div class="form-group">
         <label class="form-label">Usuario</label>
-        <input type="text" class="form-input" name="username" placeholder="@usuario123">
+        <input type="text" class="form-input" name="username" value="<?php echo htmlspecialchars($usuario['username']); ?> ">
       </div>
 
       <div class="form-group">
@@ -1272,10 +1266,7 @@ if (!empty($servicios)) {
         </select>
       </div>
 
-      <div class="form-group">
-        <label class="form-label">Edad</label>
-        <input type="number" class="form-input" name="edad" min="18" max="120" placeholder="Ej: 25">
-      </div>
+     
 
       <div class="modal-footer" style="border-top:2px solid #f0f0f0;">
         <button type="button" class="btn btn-cancel" onclick="closeModal('editUserModal')">
@@ -1319,42 +1310,42 @@ function previewEditCliente(event){
           class="modal-body"
           action="../conexion/controllerUsuario.php"
           method="POST" enctype="multipart/form-data" novalidate>
-      <input type="hidden" name="action" value="registrarProveedor">
+      <input type="hidden" id="admin" name="tipo" value="admin" >
 
       <div class="cu-grid">
         <div class="form-group">
           <label class="form-label">Cédula *</label>
-          <input type="text" class="form-input" name="cedula" placeholder="Ej: 4.123.456-7" required>
+          <input type="text" class="form-input" name="cedula" value="cedula" placeholder="Ej: 4.123.456-7" required>
         </div>
 
         <div class="form-group">
           <label class="form-label">Edad *</label>
-          <input type="number" class="form-input" name="edad" min="18" max="120" placeholder="Ej: 28" required>
+          <input type="number" class="form-input" name="edad" value="edad" min="18" max="120" placeholder="Ej: 28" required>
         </div>
 
         <div class="form-group">
           <label class="form-label">Nombre *</label>
-          <input type="text" class="form-input" name="nombre" placeholder="Ej: Juan" required>
+          <input type="text" class="form-input" name="nombre" value="nombre" placeholder="Ej: Juan" required>
         </div>
 
         <div class="form-group">
           <label class="form-label">Apellido *</label>
-          <input type="text" class="form-input" name="apellido" placeholder="Ej: Pérez" required>
+          <input type="text" class="form-input" name="apellido" value="apellido" placeholder="Ej: Pérez" required>
         </div>
 
         <div class="form-group">
           <label class="form-label">Usuario *</label>
-          <input type="text" class="form-input" name="username" placeholder="Ej: jperez" required>
+          <input type="text" class="form-input" name="username" value="username" placeholder="Ej: jperez" required>
         </div>
 
         <div class="form-group">
           <label class="form-label">Email *</label>
-          <input type="email" class="form-input" name="email" placeholder="proveedor@email.com" required>
+          <input type="email" class="form-input" name="email" value="email" placeholder="proveedor@email.com" required>
         </div>
 
         <div class="form-group">
           <label class="form-label">Contraseña *</label>
-          <input type="password" class="form-input" name="contrasena" placeholder="Mínimo 8 caracteres" minlength="8" required>
+          <input type="password" class="form-input" name="contrasena" value="contrasena" placeholder="Mínimo 8 caracteres" minlength="8" required>
         </div>
       </div>
 
@@ -1362,7 +1353,7 @@ function previewEditCliente(event){
         <button type="button" class="btn btn-cancel" onclick="closeModal('createProviderModal')">
           <i class="fas fa-times"></i> Cancelar
         </button>
-        <button type="submit" class="btn btn-save">
+        <button type="submit" name="action" value="registrar" class="btn btn-save">
           <i class="fas fa-check"></i> Guardar
         </button>
       </div>
@@ -1494,10 +1485,7 @@ function previewEditProv(event){
                     <label class="form-label">Título del Servicio *</label>
                     <input type="text" class="form-input" id="createServiceTitle" name="titulo" value="titulo" placeholder="Ej: Desarrollo Web Completo" required>
                 </div>
-                <div class="form-group">
-                    <label class="form-label">Proveedor *</label>
-                    <input type="text" class="form-input" id="createServiceProvider" name="idproveedor" value="idproveedor" placeholder="Cedula del proveedor" required>
-                </div>
+               
                 <div class="form-group">
                     <label class="form-label">Categoría *</label>
                   <label for="categoria" class="etiqueta-campo"></label>
@@ -1531,7 +1519,7 @@ function previewEditProv(event){
                     <i class="fas fa-times"></i>
                     Cancelar
                 </button>
-                <button type="submit" name="action" value="publicarPanel" class="btn btn-save">
+                <button type="submit" name="action" value="publicar" class="btn btn-save">
                     <i class="fas fa-check"></i>
                     Guardar
                 </button>
@@ -1839,7 +1827,7 @@ function previewEditProv(event){
             });
         });
         function selectCard(card, section) {
-            // quitar selección anterior
+            // quitar selección anterior   
             document.querySelectorAll('.item-card').forEach(c => c.classList.remove('selected'));
             
             // marcar la nueva tarjeta seleccionada
@@ -1847,6 +1835,7 @@ function previewEditProv(event){
             
             // guardar info del item seleccionado
             selectedItem = card.dataset.id;
+            //$modCliente = Usuario::cargarUsuarioPanel(selectedItem);
             selectedItemName = card.querySelector('.card-title') 
                                 ? card.querySelector('.card-title').textContent.trim() 
                                 : 'Elemento';
