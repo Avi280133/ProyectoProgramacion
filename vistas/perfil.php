@@ -123,7 +123,7 @@ $usuario = Usuario::buscarPorCedula($_SESSION['cedula']);
     .btneditar, .btncerrar {
       padding: 10px 18px; border: none; border-radius: 15px; font-weight: bold; cursor: pointer; transition: background-color 0.3s ease;
     }
-    .btneditar { background-color: #11be7f; color: #fcfdfb; }
+    .btneditar { background-color: #11be7f; color: #fcfdfb; margin: 10px; text-decoration: none; display: inline-block; }
     .btneditar:hover { background-color: #025939; }
     .btncerrar { background-color: #c6c9b9; color: #333; text-decoration: none; display: inline-block; }
     .btncerrar:hover { background-color: #999; color: #c6c9b9; }
@@ -263,7 +263,6 @@ $usuario = Usuario::buscarPorCedula($_SESSION['cedula']);
 
       <div class="botones">
         <button class="btneditar">Editar perfil</button>
-        <a href="registro.html" class="btncerrar">Cerrar Sesion</a>
       </div>
     </div>
   </div>

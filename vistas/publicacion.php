@@ -1075,9 +1075,7 @@ $idservicio = isset($servicio['idservicio']) ? (int)$servicio['idservicio'] : (i
           </div>
           <!-- class="btn btn-mensaje" -->
           <div class="botones-accion">
-
-            <a href="../vistas/solicitud.php"><button class="btn btn-solicitar">Solicitar Servicio</button></a>
- 
+            <a href="../vistas/solicitud.php?idservicio=<?php echo $servicio['idservicio']; ?>" class>Solicitar Servicio</a>
             <!-- Botón específico para abrir modal de calificar -->
             <button class="btn btn-calificar" id="openModal-prof" type="button">Calificar</button>
             

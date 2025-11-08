@@ -726,192 +726,116 @@ footer {
     </footer>
 
   <script>
-    const monthYear = document.getElementById('monthYear');
-    const calendarDays = document.getElementById('calendarDays');
-    const prevMonthBtn = document.getElementById('prevMonth');
-    const nextMonthBtn = document.getElementById('nextMonth');
-    const selectedDateText = document.getElementById('selectedDateText');
-    const fechaSeleccionadaInput = document.getElementById('fechaSeleccionada');
+  const monthYear = document.getElementById('monthYear');
+  const calendarDays = document.getElementById('calendarDays');
+  const prevMonthBtn = document.getElementById('prevMonth');
+  const nextMonthBtn = document.getElementById('nextMonth');
+  const selectedDateText = document.getElementById('selectedDateText');
+  const fechaSeleccionadaInput = document.getElementById('fechaSeleccionada');
+  const formReserva = document.getElementById('formReserva');
 
-    let currentDate = new Date();
-    let selectedDate = null;
+  let currentDate = new Date();
+  let selectedDate = null;
+  let reservasExistentes = [];
+  let idservicio = <?php echo $_GET['idservicio'] ?? 'null'; ?>;
 
-    const monthNames = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
-                        'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+  const monthNames = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 
-    function renderCalendar() {
+  function renderCalendar() {
       const year = currentDate.getFullYear();
       const month = currentDate.getMonth();
-      
-      monthYear.textContent = monthNames[month] + ' ' + year;
-      
+      monthYear.textContent = `${monthNames[month]} ${year}`;
       const firstDay = new Date(year, month, 1).getDay();
       const daysInMonth = new Date(year, month + 1, 0).getDate();
       const daysInPrevMonth = new Date(year, month, 0).getDate();
-      
       calendarDays.innerHTML = '';
-      
+
       for (let i = firstDay - 1; i >= 0; i--) {
-        const dayBtn = document.createElement('button');
-        dayBtn.className = 'calendar-day other-month';
-        dayBtn.textContent = daysInPrevMonth - i;
-        dayBtn.type = 'button';
-        calendarDays.appendChild(dayBtn);
+          const d = document.createElement('button');
+          d.className = 'calendar-day other-month';
+          d.textContent = daysInPrevMonth - i;
+          calendarDays.appendChild(d);
       }
-      
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      
+
+      const today = new Date(); today.setHours(0,0,0,0);
+
       for (let day = 1; day <= daysInMonth; day++) {
-        const dayBtn = document.createElement('button');
-        dayBtn.className = 'calendar-day';
-        dayBtn.textContent = day;
-        dayBtn.type = 'button';
-        
-        const currentDateCheck = new Date(year, month, day);
-        currentDateCheck.setHours(0, 0, 0, 0);
-        
-        if (currentDateCheck < today) {
-          dayBtn.classList.add('disabled');
-        } else {
-          dayBtn.onclick = function() {
-            selectDate(year, month, day);
-          };
-        }
-        
-        if (selectedDate && 
-            selectedDate.getDate() === day && 
-            selectedDate.getMonth() === month && 
-            selectedDate.getFullYear() === year) {
-          dayBtn.classList.add('selected');
-        }
-        
-        calendarDays.appendChild(dayBtn);
+          const d = document.createElement('button');
+          d.className = 'calendar-day';
+          d.textContent = day;
+          const current = new Date(year, month, day);
+          current.setHours(0,0,0,0);
+          const dateString = `${year}-${String(month+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+
+          const reservada = reservasExistentes.some(r => r.fecha === dateString);
+          if (current < today || reservada) {
+              d.classList.add('disabled');
+          } else {
+              d.onclick = () => selectDate(year, month, day);
+          }
+          if (selectedDate && selectedDate.toDateString() === current.toDateString()) {
+              d.classList.add('selected');
+          }
+          calendarDays.appendChild(d);
       }
-      
-      const totalCells = calendarDays.children.length;
-      const remainingCells = 35 - totalCells;
-      for (let i = 1; i <= remainingCells; i++) {
-        const dayBtn = document.createElement('button');
-        dayBtn.className = 'calendar-day other-month';
-        dayBtn.textContent = i;
-        dayBtn.type = 'button';
-        calendarDays.appendChild(dayBtn);
-      }
-    }
+  }
 
-    let idservicio = <?php echo $_GET['idservicio'] ?? 'null'; ?>;
-    let reservasExistentes = [];
+  function selectDate(y,m,d) {
+      selectedDate = new Date(y, m, d);
+      const formatted = `${d} de ${monthNames[m]} de ${y}`;
+      selectedDateText.textContent = formatted;
+      fechaSeleccionadaInput.value = `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+      document.querySelectorAll('.calendar-day').forEach(btn => btn.classList.remove('selected'));
+      event.target.classList.add('selected');
+  }
 
-    // Cargar reservas existentes al iniciar
-    function cargarReservasExistentes() {
-        if (!idservicio) return;
-        
-        fetch('../conexion/controllerReserva.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: `action=obtener_reservas&idservicio=${idservicio}`
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                reservasExistentes = data.reservas;
-                renderCalendar(); // Volver a renderizar el calendario
-            }
-        });
-    }
-
-    // Modificar la función selectDate
-    function selectDate(year, month, day) {
-        const dateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-        
-        // Verificar si la fecha está reservada
-        const reservada = reservasExistentes.some(r => r.fecha === dateString);
-        if (reservada) {
-            alert('Esta fecha ya está reservada');
-            return;
-        }
-        
-        selectedDate = new Date(year, month, day);
-        const formattedDate = day + ' de ' + monthNames[month] + ' de ' + year;
-        selectedDateText.textContent = formattedDate;
-        
-        const dateForPHP = year + '-' + String(month + 1).padStart(2, '0') + '-' + String(day).padStart(2, '0');
-        fechaSeleccionadaInput.value = dateForPHP;
-        
-        renderCalendar();
-    }
-
-    prevMonthBtn.onclick = function() {
-      currentDate.setMonth(currentDate.getMonth() - 1);
-      renderCalendar();
-    };
-
-    nextMonthBtn.onclick = function() {
-      currentDate.setMonth(currentDate.getMonth() + 1);
-      renderCalendar();
-    };
-
-    document.getElementById('formReserva').onsubmit = function(e) {
-      e.preventDefault();
-
-      const horaSeleccionada = document.querySelector('input[name="hora"]:checked');
-      if (!selectedDate || !horaSeleccionada || !idservicio) {
-        alert('Seleccioná una fecha, una hora y asegurate de que el servicio sea válido.');
-        return;
-      }
-
+  function cargarReservasExistentes() {
+      if (!idservicio) return;
       fetch('../conexion/controllerReserva.php', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        body: new URLSearchParams({
-          'action': 'crear_reserva',
-          'idservicio': idservicio,
-          'fecha': fechaSeleccionadaInput.value,
-          'hora': horaSeleccionada.value
-        })
+          method: 'POST',
+          headers: {'Content-Type':'application/x-www-form-urlencoded'},
+          body: `action=obtener_reservas&idservicio=${idservicio}`
       })
-      .then(res => res.json())
-      .then(data => {
-        if (data.success) {
-          alert('✅ Reserva creada exitosamente');
-          window.location.href = 'perfil-cliente.php';
-        } else {
-          alert('❌ Error al crear la reserva: ' + (data.error || 'Error desconocido'));
-        }
-      })
-      .catch(err => alert('Error de conexión con el servidor'));
-    };
+      .then(res=>res.json())
+      .then(data=>{
+          if (data.success) reservasExistentes = data.reservas;
+          renderCalendar();
+      });
+  }
 
-
-    // Cargar reservas al iniciar
-    document.addEventListener('DOMContentLoaded', function() {
-        cargarReservasExistentes();
-    });
-
-    renderCalendar();
-  </script>
-
-  <script>
-    const notificationBell = document.getElementById('notificationBell');
-    const notificationModal = document.getElementById('notificationModal');
-    const closeNotifications = document.getElementById('closeNotifications');
-
-    notificationBell.onclick = function() {
-      notificationModal.classList.toggle('active');
-    };
-
-    closeNotifications.onclick = function() {
-      notificationModal.classList.remove('active');
-    };
-
-    document.onclick = function(e) {
-      if (!notificationBell.contains(e.target) && !notificationModal.contains(e.target)) {
-        notificationModal.classList.remove('active');
+  formReserva.addEventListener('submit', e => {
+      e.preventDefault();
+      const horaSeleccionada = document.querySelector('input[name="hora"]:checked');
+      if (!fechaSeleccionadaInput.value || !horaSeleccionada) {
+          alert('Seleccioná fecha y hora antes de continuar');
+          return;
       }
-    };
-  </script>
+      fetch('../conexion/controllerReserva.php', {
+          method: 'POST',
+          headers: {'Content-Type':'application/x-www-form-urlencoded'},
+          body: new URLSearchParams({
+              action: 'crear_reserva',
+              idservicio: idservicio,
+              fecha: fechaSeleccionadaInput.value,
+              hora: horaSeleccionada.value
+          })
+      })
+      .then(res=>res.json())
+      .then(data=>{
+          if (data.success) {
+              alert('✅ Reserva creada exitosamente');
+              window.location.href = 'perfil-cliente.php';
+          } else {
+              alert('❌ Error: ' + (data.error || JSON.stringify(data.debug)));
+          }
+      })
+      .catch(err => alert('Error de conexión: ' + err));
+  });
+
+  prevMonthBtn.onclick = () => { currentDate.setMonth(currentDate.getMonth()-1); renderCalendar(); };
+  nextMonthBtn.onclick = () => { currentDate.setMonth(currentDate.getMonth()+1); renderCalendar(); };
+
+  document.addEventListener('DOMContentLoaded', cargarReservasExistentes);
+</script>
 </body>
 </html>

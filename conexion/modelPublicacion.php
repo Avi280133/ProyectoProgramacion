@@ -266,18 +266,54 @@ public function crearCategoria() {
 
 
     public static function crearReserva($idservicio, $idcliente, $fecha, $hora) {
-        $cx = (new ClaseConexion())->getConexion();
-        $sql = "INSERT INTO reserva (idservicio, idcliente, fecha, hora, estado) 
-                VALUES (?, ?, ?, ?, 'pendiente')";
-        
-        $st = $cx->prepare($sql);
-        $st->bind_param("isss", $idservicio, $idcliente, $fecha, $hora);
-        $result = $st->execute();
-        
-        $st->close();
-        $cx->close();
-        return $result;
+    $cx = (new ClaseConexion())->getConexion();
+
+    $estado = 'pendiente';
+    $ok = false;
+
+    $sql = "INSERT INTO reserva (idservicio, idcliente, fecha, hora, estado)
+            VALUES (?, ?, ?, ?, ?)";
+    $st = $cx->prepare($sql);
+
+    if (!$st) {
+        error_log("❌ [crearReserva] Error preparar SQL: " . $cx->error);
+        return false;
     }
+
+    $st->bind_param("sssss", $idservicio, $idcliente, $fecha, $hora, $estado);
+    if ($st->execute()) {
+        $ok = true;
+    } else {
+        error_log("❌ [crearReserva] Error ejecutar SQL: " . $st->error);
+    }
+
+    $st->close();
+
+    if ($ok) {
+        // Crear notificación para el proveedor
+        $sqlNotif = "
+            INSERT INTO notificacion (idusuario, mensaje, tipo)
+            SELECT s.idproveedor, 
+                   CONCAT('📅 Nueva reserva del cliente ', u.nombre, ' ', u.apellido, 
+                          ' para el día ', DATE_FORMAT(?, '%d/%m/%Y'), ' a las ', ?), 
+                   'reserva'
+            FROM servicio s
+            JOIN usuario u ON u.cedula = ?
+            WHERE s.idservicio = ?;
+        ";
+
+        $stNotif = $cx->prepare($sqlNotif);
+        if ($stNotif) {
+            $stNotif->bind_param("sssi", $fecha, $hora, $idcliente, $idservicio);
+            $stNotif->execute();
+            $stNotif->close();
+        }
+    }
+
+    $cx->close();
+    return $ok;
+}
+
 
     public static function obtenerReservasProveedor($idProveedor) {
     $cx = (new ClaseConexion())->getConexion();

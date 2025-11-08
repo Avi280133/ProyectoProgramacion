@@ -36,7 +36,7 @@
             <p>Conecta con expertos calificados para cualquier servicio que necesites</p>
              <form action="../conexion/controllerPublicacion.php" method="POST">
             <div class="search-container">
-                <input type="text" name="titulo" value="titulo" placeholder="Busca plomero, electricista, programador...">
+                <input type="text" name="titulo" placeholder="Busca plomero, electricista, programador...">
                 <!--<button><i class="fas fa-search"></i></button>-->
                 <button type="submit" name="action" value="buscar"><i class="fas fa-search"></i></button>
             </div>

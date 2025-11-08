@@ -292,7 +292,7 @@ footer {
 
     <section class="search-section">
         <div class="search-bar">
-            <input type="text" class="search-input" placeholder="Buscar servicios profesionales..." value="programadores">
+            <input type="text" class="search-input" placeholder="Buscar servicios profesionales...">
             <button class="search-btn">
                 <i class="fa-solid fa-magnifying-glass" style="color: #ffffff;"></i>
             </button>

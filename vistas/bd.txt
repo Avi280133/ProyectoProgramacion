@@ -1,184 +1,258 @@
-create table reserva (
-idreserva int auto_increment primary key,
-idservicio int not null,
-idcliente char(8) not null,
-fecha date not null,
-hora time not null,
-estado enum('pendiente', 'confirmada', 'cancelada') not null,
-foreign key (idservicio) references servicio(idservicio) on delete cascade,
-foreign key (idcliente) references cliente(idcliente) on delete cascade
-);
+DROP DATABASE IF EXISTS SkillMatch;
+CREATE DATABASE SkillMatch CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE SkillMatch;
 
+CREATE TABLE usuario (
+    cedula      CHAR(8)     PRIMARY KEY,
+    nombre      VARCHAR(50)  NOT NULL,
+    apellido    VARCHAR(50)  NOT NULL,
+    username    VARCHAR(50)  NOT NULL UNIQUE,
+    email       VARCHAR(100) NOT NULL UNIQUE,
+    contrasena  VARCHAR(100) NOT NULL,
+    fotoperfil  VARCHAR(255),
+    edad        INT CHECK (edad >= 18),
+    localidad   VARCHAR(100)
+) ENGINE=InnoDB;
 
-CREATE TABLE IF NOT EXISTS reporte (
-  idreporte INT AUTO_INCREMENT PRIMARY KEY,
-  idservicio INT NOT NULL,
-  idreportador CHAR(8) NOT NULL,
-  motivo VARCHAR(150) NOT NULL,
-  detalle VARCHAR(500) DEFAULT NULL,
-  dia DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (idservicio) REFERENCES servicio(idservicio) ON DELETE CASCADE,
-  FOREIGN KEY (idreportador) REFERENCES usuario(cedula) ON DELETE CASCADE
-);
+CREATE TABLE administrador (
+    idadministrador CHAR(8) PRIMARY KEY,
+    FOREIGN KEY (idadministrador) REFERENCES usuario(cedula)
+      ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB;
 
-INSERT INTO servicio (titulo, ubicacion, precio, descripcion, imagen, categoria)
-VALUES
-('Diseño de páginas web', 'Montevideo', 25000, 'Creación de sitios web modernos y responsivos para negocios o emprendimientos.', 'imagenes/webdesign.jpg', 'Tecnología');
+CREATE TABLE cliente (
+    idcliente CHAR(8) PRIMARY KEY,
+    FOREIGN KEY (idcliente) REFERENCES usuario(cedula)
+      ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB;
 
+CREATE TABLE proveedor (
+    idproveedor CHAR(8) PRIMARY KEY,
+    experiencia VARCHAR(500) NULL,
+    habilidad   VARCHAR(200) NULL,
+    FOREIGN KEY (idproveedor) REFERENCES usuario(cedula)
+      ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB;
 
+CREATE TABLE servicio (
+    idservicio   INT AUTO_INCREMENT PRIMARY KEY,
+    titulo       VARCHAR(100) NOT NULL,
+    ubicacion    VARCHAR(100),
+    precio       FLOAT CHECK (precio >= 0),
+    descripcion  VARCHAR(300) NOT NULL,
+    imagen       VARCHAR(255),
+    categoria    VARCHAR(30),
+    idproveedor  CHAR(8),
+    FOREIGN KEY (idproveedor)
+      REFERENCES proveedor(idproveedor)
+      ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB;
 
-ALTER TABLE reporte DROP COLUMN motivo;
-ALTER TABLE reporte DROP COLUMN detalle;
+CREATE TABLE categoria (
+    idcategoria INT AUTO_INCREMENT PRIMARY KEY,
+    nombre      VARCHAR(30)
+) ENGINE=InnoDB;
 
-ALTER TABLE ofrece
-CHANGE COLUMN dia tiempo DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-DROP COLUMN hora,
-DROP PRIMARY KEY,
-ADD PRIMARY KEY (idproveedor, idservicio, tiempo);
+CREATE TABLE ofrece (
+    idservicio   INT      NOT NULL,
+    idproveedor  CHAR(8)  NOT NULL,
+    tiempo       DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (idproveedor, idservicio, tiempo),
+    FOREIGN KEY (idproveedor) REFERENCES usuario(cedula)
+      ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (idservicio)  REFERENCES servicio(idservicio)
+      ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB;
 
-ALTER TABLE proveedor
-MODIFY experiencia varchar(500) NULL, MODIFY habilidad varchar(200) NULL;
+CREATE TABLE mensaje (
+    idemisor   CHAR(8)   NOT NULL,
+    idreceptor CHAR(8)   NOT NULL,
+    contenido  VARCHAR(200) NOT NULL,
+    tiempo     DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (idemisor, idreceptor, tiempo),
+    FOREIGN KEY (idemisor)   REFERENCES usuario(cedula)
+      ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (idreceptor) REFERENCES usuario(cedula)
+      ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB;
 
-ALTER TABLE usuario
-MODIFY COLUMN fotoperfil VARCHAR(255);
+CREATE TABLE contrata (
+    idcliente  CHAR(8)   NOT NULL,
+    idservicio INT       NOT NULL,
+    tiempo     DATETIME  NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    puntaje    INT CHECK (puntaje BETWEEN 1 AND 5),
+    comentario VARCHAR(300),
+    PRIMARY KEY (idcliente, idservicio, tiempo),
+    FOREIGN KEY (idcliente)  REFERENCES cliente(idcliente)
+      ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (idservicio) REFERENCES servicio(idservicio)
+      ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB;
 
-ALTER TABLE usuario
-DROP COLUMN calle,
-DROP COLUMN numeropuerta,
-ADD COLUMN localidad VARCHAR(100);
+CREATE TABLE comenta (
+    idproveedor CHAR(8)   NOT NULL,
+    idservicio  INT       NOT NULL,
+    idcliente   CHAR(8)   NOT NULL,
+    contenido   VARCHAR(200) NOT NULL,
+    dia         DATE      NOT NULL,
+    hora        TIME      NOT NULL,
+    PRIMARY KEY (idproveedor, idservicio, idcliente),
+    FOREIGN KEY (idproveedor) REFERENCES proveedor(idproveedor)
+      ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (idservicio)  REFERENCES servicio(idservicio)
+      ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (idcliente)   REFERENCES cliente(idcliente)
+      ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB;
 
+CREATE TABLE reserva (
+    idreserva   INT AUTO_INCREMENT PRIMARY KEY,
+    idservicio  INT      NOT NULL,
+    idcliente   CHAR(8)  NOT NULL,
+    fecha       DATE     NOT NULL,
+    hora        TIME     NOT NULL,
+    estado      ENUM('pendiente','confirmada','cancelada') NOT NULL DEFAULT 'pendiente',
+    FOREIGN KEY (idservicio) REFERENCES servicio(idservicio) ON DELETE CASCADE,
+    FOREIGN KEY (idcliente)  REFERENCES cliente(idcliente)  ON DELETE CASCADE
+) ENGINE=InnoDB;
 
-select * from servicio;
+CREATE TABLE gestiona (
+    idadministrador CHAR(8) NOT NULL,
+    idproveedor     CHAR(8) NOT NULL,
+    idservicio      INT     NOT NULL,
+    PRIMARY KEY (idadministrador, idproveedor, idservicio),
+    FOREIGN KEY (idadministrador) REFERENCES administrador(idadministrador)
+      ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (idproveedor)     REFERENCES proveedor(idproveedor)
+      ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (idservicio)      REFERENCES servicio(idservicio)
+      ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB;
 
-CREATE TABLE IF NOT EXISTS notificacion (
-  idnotificacion INT AUTO_INCREMENT PRIMARY KEY,
-  idusuario CHAR(8) NOT NULL,                       -- receptor (proveedor, cliente o admin)
-  tipo ENUM('reporte','solicitud','calificacion') NOT NULL,
-  referencia INT DEFAULT NULL,                       -- id relacionado (idservicio, idreserva, idcalificacion...)
-  mensaje VARCHAR(255) NOT NULL,
-  leida TINYINT(1) NOT NULL DEFAULT 0,
-  fecha DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (idusuario) REFERENCES usuario(cedula) ON DELETE CASCADE,
-  INDEX (idusuario),
-  INDEX (leida),
-  INDEX (tipo)
-);
+CREATE TABLE supervisa (
+    idadministrador CHAR(8) NOT NULL,
+    cedula          CHAR(8) NOT NULL,
+    PRIMARY KEY (idadministrador, cedula),
+    FOREIGN KEY (idadministrador) REFERENCES administrador(idadministrador)
+      ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (cedula)          REFERENCES usuario(cedula)
+      ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB;
 
-CREATE TABLE IF NOT EXISTS calificacion (
-  idcalificacion INT AUTO_INCREMENT PRIMARY KEY,
-  idservicio INT NOT NULL,
-  idcliente  CHAR(8) NOT NULL,
-  puntaje    TINYINT NOT NULL CHECK (puntaje BETWEEN 1 AND 5),
-  comentario VARCHAR(300) DEFAULT NULL,
-  fecha DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (idservicio) REFERENCES servicio(idservicio) ON DELETE CASCADE,
-  FOREIGN KEY (idcliente)  REFERENCES cliente(idcliente)   ON DELETE CASCADE
-);
+CREATE TABLE imagen (
+    idimagen   INT AUTO_INCREMENT PRIMARY KEY,
+    idservicio INT   NOT NULL,
+    imagen     BLOB  NOT NULL,
+    FOREIGN KEY (idservicio) REFERENCES servicio(idservicio)
+      ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB;
 
-DROP TABLE IF EXISTS notificacion;
+CREATE TABLE reporte (
+    idreporte     INT AUTO_INCREMENT PRIMARY KEY,
+    idservicio    INT     NOT NULL,
+    idreportador  CHAR(8) NOT NULL,
+    dia           DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (idservicio)    REFERENCES servicio(idservicio) ON DELETE CASCADE,
+    FOREIGN KEY (idreportador)  REFERENCES usuario(cedula)      ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+CREATE TABLE calificacion (
+    idcalificacion INT AUTO_INCREMENT PRIMARY KEY,
+    idservicio     INT     NOT NULL,
+    idcliente      CHAR(8) NOT NULL,
+    puntaje        TINYINT NOT NULL CHECK (puntaje BETWEEN 1 AND 5),
+    comentario     VARCHAR(300) DEFAULT NULL,
+    fecha          DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (idservicio) REFERENCES servicio(idservicio) ON DELETE CASCADE,
+    FOREIGN KEY (idcliente)  REFERENCES cliente(idcliente)   ON DELETE CASCADE
+) ENGINE=InnoDB;
 
 CREATE TABLE notificacion (
-  idnotificacion INT AUTO_INCREMENT PRIMARY KEY,
-  idusuario_receptor CHAR(8) NOT NULL,                    -- quién recibe (cliente, proveedor o admin)
-  tipo ENUM('reporte','solicitud','calificacion') NOT NULL,
-  referencia INT DEFAULT NULL,                            -- id del evento fuente (idreporte, idreserva, idcalificacion)
-  actor CHAR(8) DEFAULT NULL,                             -- emisor (quién generó el evento)
-  mensaje VARCHAR(255) NOT NULL,
-  url VARCHAR(255) DEFAULT NULL,                          -- hacia dónde navegar en tu frontend
-  leida TINYINT(1) NOT NULL DEFAULT 0,
-  fecha DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (idusuario_receptor) REFERENCES usuario(cedula) ON DELETE CASCADE,
-  INDEX (idusuario_receptor),
-  INDEX (leida),
-  INDEX (tipo),
-  INDEX (fecha)
-);
+    idnotificacion       INT AUTO_INCREMENT PRIMARY KEY,
+    idusuario_receptor   CHAR(8) NOT NULL,
+    tipo                 ENUM('reporte','solicitud','calificacion') NOT NULL,
+    referencia           INT DEFAULT NULL,
+    actor                CHAR(8) DEFAULT NULL,
+    mensaje              VARCHAR(255) NOT NULL,
+    url                  VARCHAR(255) DEFAULT NULL,
+    leida                TINYINT(1) NOT NULL DEFAULT 0,
+    fecha                DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (idusuario_receptor) REFERENCES usuario(cedula) ON DELETE CASCADE,
+    INDEX (idusuario_receptor),
+    INDEX (leida),
+    INDEX (tipo),
+    INDEX (fecha)
+) ENGINE=InnoDB;
 
-
-DELIMITER $$
-
+-- TRIGGERS DE NOTIFICACIÓN
 DELIMITER //
 
 DROP TRIGGER IF EXISTS trg_reserva_after_insert //
+DROP TRIGGER IF EXISTS trg_reporte_after_insert //
+DROP TRIGGER IF EXISTS trg_calificacion_after_insert //
+
 CREATE TRIGGER trg_reserva_after_insert
 AFTER INSERT ON reserva
 FOR EACH ROW
 BEGIN
   DECLARE v_proveedor CHAR(8);
-
-  SELECT o.idproveedor
-    INTO v_proveedor
+  SELECT o.idproveedor INTO v_proveedor
   FROM ofrece o
   WHERE o.idservicio = NEW.idservicio
+  ORDER BY o.tiempo DESC
   LIMIT 1;
-
   IF v_proveedor IS NOT NULL THEN
     INSERT INTO notificacion
       (idusuario_receptor, tipo, referencia, actor, mensaje, url)
     VALUES
-      (v_proveedor,
-       'solicitud',
-       NEW.idreserva,
-       NEW.idcliente,
-       CONCAT('Nueva solicitud para el servicio #', NEW.idservicio,
-              ' el ', DATE_FORMAT(NEW.fecha, '%d/%m/%Y'), ' a las ',
-              DATE_FORMAT(NEW.hora, '%H:%i')),
-       NULL);
+      (
+        v_proveedor,
+        'solicitud',
+        NEW.idreserva,
+        NEW.idcliente,
+        CONCAT('Nueva solicitud para el servicio #', NEW.idservicio,
+               ' el ', DATE_FORMAT(NEW.fecha, '%d/%m/%Y'), ' a las ',
+               DATE_FORMAT(NEW.hora, '%H:%i')),
+        NULL
+      );
   END IF;
 END //
 
-DELIMITER ;
-
-
-DELIMITER //
-
-DROP TRIGGER IF EXISTS trg_reporte_after_insert //
 CREATE TRIGGER trg_reporte_after_insert
 AFTER INSERT ON reporte
 FOR EACH ROW
 BEGIN
   DECLARE v_proveedor CHAR(8);
-
-  SELECT o.idproveedor
-    INTO v_proveedor
+  SELECT o.idproveedor INTO v_proveedor
   FROM ofrece o
   WHERE o.idservicio = NEW.idservicio
+  ORDER BY o.tiempo DESC
   LIMIT 1;
-
   IF v_proveedor IS NOT NULL THEN
     INSERT INTO notificacion
       (idusuario_receptor, tipo, referencia, actor, mensaje, url)
     VALUES
-      (v_proveedor,
-       'reporte',
-       NEW.idreporte,
-       NEW.idreportador,
-       CONCAT('Tu servicio #', NEW.idservicio, ' fue reportado.'),
-       NULL);
+      (
+        v_proveedor,
+        'reporte',
+        NEW.idreporte,
+        NEW.idreportador,
+        CONCAT('Tu servicio #', NEW.idservicio, ' fue reportado.'),
+        NULL
+      );
   END IF;
 END //
 
-DELIMITER ;
-
-
-
-
-DELIMITER //
-
-DROP TRIGGER IF EXISTS trg_calificacion_after_insert //
 CREATE TRIGGER trg_calificacion_after_insert
 AFTER INSERT ON calificacion
 FOR EACH ROW
 BEGIN
   DECLARE v_proveedor CHAR(8);
-
-  /* Dueño del servicio calificado */
-  SELECT o.idproveedor
-    INTO v_proveedor
+  SELECT o.idproveedor INTO v_proveedor
   FROM ofrece o
   WHERE o.idservicio = NEW.idservicio
+  ORDER BY o.tiempo DESC
   LIMIT 1;
-
   IF v_proveedor IS NOT NULL THEN
     INSERT INTO notificacion
       (idusuario_receptor, tipo, referencia, actor, mensaje, url)
@@ -188,90 +262,14 @@ BEGIN
         'calificacion',
         NEW.idcalificacion,
         NEW.idcliente,
-        CONCAT('Nuevo puntaje ', NEW.puntaje, '/5 en tu servicio #', NEW.idservicio,
-               IF(NEW.comentario IS NULL OR NEW.comentario = '', '', CONCAT(': "', LEFT(NEW.comentario, 120), '"'))),
+        CONCAT(
+          'Nuevo puntaje ', NEW.puntaje, '/5 en tu servicio #', NEW.idservicio,
+          IF(NEW.comentario IS NULL OR NEW.comentario = '', '',
+             CONCAT(': "', LEFT(NEW.comentario, 120), '"'))
+        ),
         'vistas-prov.php'
       );
   END IF;
 END //
 
 DELIMITER ;
-
-
-
-
-INSERT INTO servicio (titulo, ubicacion, precio, descripcion, imagen, categoria)
-VALUES ('Servicio de Prueba para Notificaciones', 'Montevideo', 1234.00,
-        'Servicio creado para probar triggers de notificaciones.',
-        'serv_demo.jpg', 'Tecnología');
-
-SET @svc_id = LAST_INSERT_ID();
-
--- Vincular servicio con el proveedor en OFRECE
--- (usa columna 'tiempo' DATETIME según tu esquema final)
-INSERT INTO ofrece (idservicio, idproveedor, tiempo)
-VALUES (@svc_id, '12345679', NOW());
-
-INSERT INTO usuario (cedula, nombre, apellido, username, email, contrasena, fotoperfil, edad, localidad)
-VALUES ('11111111', 'Cliente', 'Demo', 'cli_demo', 'cli@example.com', 'x', 'cli.jpg', 28, 'Montevideo')
-ON DUPLICATE KEY UPDATE
-  username = VALUES(username),
-  email    = VALUES(email),
-  edad     = VALUES(edad),
-  localidad= VALUES(localidad);
-
-INSERT INTO cliente (idcliente)
-VALUES ('11111111')
-ON DUPLICATE KEY UPDATE idcliente = VALUES(idcliente);
-
-
-
-INSERT INTO servicio (titulo, ubicacion, precio, descripcion, imagen, categoria)
-VALUES ('Servicio de Prueba para Notificaciones', 'Montevideo', 1234.00,
-        'Servicio creado para probar triggers de notificaciones.',
-        'serv_demo.jpg', 'Tecnología');
-
-SET @svc_id = LAST_INSERT_ID();
-
--- Vincular servicio con el proveedor en OFRECE
--- (usa columna 'tiempo' DATETIME según tu esquema final)
-INSERT INTO ofrece (idservicio, idproveedor, tiempo)
-VALUES (@svc_id, '12345679', NOW());
-
-
-
--- 3.1) SOLICITUD (reserva) -> debe crear notificación tipo 'solicitud' al proveedor 12345679
-INSERT INTO reserva (idservicio, idcliente, fecha, hora, estado)
-VALUES (@svc_id, '11111111', CURDATE() + INTERVAL 2 DAY, '15:00:00', 'pendiente');
-
--- 3.2) REPORTE -> debe crear notificación tipo 'reporte' al proveedor 12345679
--- (tu versión final de 'reporte' no tiene motivo/detalle)
-INSERT INTO reporte (idservicio, idreportador)
-VALUES (@svc_id, '11111111');
-
--- 3.3) CALIFICACION -> debe crear notificación tipo 'calificacion' al proveedor 12345679
-INSERT INTO calificacion (idservicio, idcliente, puntaje, comentario)
-VALUES (@svc_id, '11111111', 5, 'Excelente servicio, súper recomendable.');
-
-
-SELECT idnotificacion, tipo, referencia, actor, mensaje, url, leida, fecha
-FROM notificacion
-WHERE idusuario_receptor = '12345679'
-ORDER BY fecha DESC;
-
--- Para confirmar los IDs de los eventos fuente:
-SELECT * FROM reserva     WHERE idservicio = @svc_id ORDER BY idreserva DESC LIMIT 3;
-SELECT * FROM reporte     WHERE idservicio = @svc_id ORDER BY idreporte DESC LIMIT 3;
-SELECT * FROM calificacion WHERE idservicio = @svc_id ORDER BY idcalificacion DESC LIMIT 3;
-
-select * from usuario;
-
-
-
-
-AVRIL MODIFY
-
-alter table ofrece drop foreign key ofrece_ibfk_1;
-
-alter table ofrece add constraint fk_ofrece_usuario 
-foreign key (idproveedor) references usuario(cedula) on delete cascade on update cascade;
