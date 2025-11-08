@@ -42,6 +42,8 @@ switch ($action) {
             } else {
                 echo "Faltan campos obligatorios para registrar.";
             }
+
+            
         }
     break;
 

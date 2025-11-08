@@ -67,8 +67,20 @@ class Usuario {
     // Redirigir al perfil del proveedor
     header('Location: ../vistas/perfil.php');
     exit;
+}elseif ($this->tipo === 'admin') {
+    if (session_status() === PHP_SESSION_NONE) { session_start(); }
+    $_SESSION['cedula'] = $this->cedula;
+
+
+    // Redirigir al perfil del proveedor
+    header('Location: ../vistas/panel.php');
+    exit;
 }
-}
+
+    $st->close();
+    $cx->close();
+    return $n;
+   }
 
 
 
@@ -107,6 +119,12 @@ class Usuario {
         $st->execute(); $r=$st->get_result()->fetch_assoc(); $cx->close(); return $r;
     }
 
+
+    public static function cargarUsuarioPanel($cedula){
+        $cx=(new ClaseConexion())->getConexion();
+        $st=$cx->prepare("SELECT * FROM usuario WHERE cedula=?"); $st->bind_param("s",$cedula);
+        $st->execute(); $r=$st->get_result()->fetch_assoc(); $cx->close(); return $r;
+    }
 
     public static function eliminar($cedula){
         $cx=(new ClaseConexion())->getConexion();
@@ -183,6 +201,7 @@ public function login($email, $contrasena) {
     $st->execute();
     $res = $st->get_result();
     $r = $res->fetch_all(MYSQLI_ASSOC);
+
     $cx->close();
     return $r;
 }

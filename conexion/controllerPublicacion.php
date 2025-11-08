@@ -3,7 +3,7 @@
 //echo "<pre>Datos recibidos:\n";
 //print_r($_POST);
 //echo "</pre>";
-
+require_once('modelUsuario.php');  
 require_once('modelPublicacion.php');  // Incluir el modelo Usuario
 require_once('ClaseConexion.php'); // Incluir la clase de conexión
 // Registrar Publicacion
@@ -68,7 +68,24 @@ if (isset($_FILES['imagen']) && is_uploaded_file($_FILES['imagen']['tmp_name']))
     if ($ok > 0) {
       // Volver al panel del proveedor con aviso
      // header('Location: ../vistas/vistas-prov.php?service=published');
-      include('../vistas/vistas-prov.php');
+    
+
+   $role = Usuario::detectarRol($_SESSION['cedula'] ?? '');
+            $_SESSION['role'] = $role;
+
+            switch ($role) {
+                case 'admin':
+                    include('../vistas/panel.php');
+                    break;
+                case 'proveedor':
+                    include('../vistas/vistas-prov.php');
+                    break;
+                default:
+                    echo "❌ Rol no reconocido.";
+                    break;
+            }
+
+
       exit;
     } else {
       echo "No se pudo publicar el servicio. Intentá nuevamente.";
@@ -95,48 +112,6 @@ if (isset($_FILES['imagen']) && is_uploaded_file($_FILES['imagen']['tmp_name']))
     }
     break;
 
-
-case 'publicarPanel':
-  
-    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-      http_response_code(405);
-      echo "Método no permitido";
-      exit;
-    }
-
-    // Campos obligatorios
-    $required = ['titulo','ubicacion','precio','descripcion','idproveedor'];
-    foreach ($required as $f) {
-      if (!isset($_POST[$f]) || trim($_POST[$f]) === '') {
-        echo "Falta el campo: $f";
-        exit;
-      }
-    }
-
-// Sanitizar
-$titulo      = trim($_POST['titulo']);
-$ubicacion   = trim($_POST['ubicacion']);
-$categoria   = isset($_POST['categoria']) ? trim($_POST['categoria']) : '';
-$precioRaw   = str_replace(['.', ','], ['', '.'], trim($_POST['precio']));
-$precio      = (float)$precioRaw;
-$descripcion = trim($_POST['descripcion']);
-$idproveedor = trim($_POST['idproveedor']);
-// Subir imagen (opcional)
-$imagen = '';
-    // Publicar usando el modelo
-    $servicio   = new Servicio($idproveedor, $titulo, $ubicacion, $precio, $descripcion,'', $categoria);
-    $ok         = $servicio->publicarServicioPanel();
-
-    if ($ok > 0) {
-      // Volver al panel del proveedor con aviso
-     // header('Location: ../vistas/vistas-prov.php?service=published');
-      //include('../vistas/vistas-prov.php');
-      exit;
-    } else {
-      echo "No se pudo publicar el servicio. Intentá nuevamente.";
-      exit;
-    }
-    break;
 
 
 
